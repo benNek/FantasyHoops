@@ -15,9 +15,9 @@
 * Other community or team contact
 
 ### Team members ###
-- Marius Jurkėnas		      - mjurkenas@gmail.com			      - +37060413922
-- Donatas Kareckas		    - donatas.kareckas@gmail.com	  - +37067732515
-- Mantas Naidzinavičius	  - naidzinavicius.m@gmail.com 	  - +37063361827
-- Benas Nekrošius		      - benas@nekrosius.com			      - +37064355380
-- Paulius Prakapavičius	  - p.prakapavicius@gmail.com     - +37063997646
-- Vilius Šapauskas 		    - viliussapauskas2g2@gmail.com  - +37061251005
+- [Marius Jurkėnas](https://github.com/Jurkenas)		      - mjurkenas@gmail.com			      - +37060413922
+- [Donatas Kareckas](https://github.com/donciakss)		    - donatas.kareckas@gmail.com	  - +37067732515
+- [Mantas Naidzinavičius](https://github.com/Naidze)	  - naidzinavicius.m@gmail.com 	  - +37063361827
+- [Benas Nekrošius](https://github.com/benNek)		      - benas@nekrosius.com			      - +37064355380
+- [Paulius Prakapavičius](https://github.com/Prakapavicius)	  - p.prakapavicius@gmail.com     - +37063997646
+- [Vilius Šapauskas](https://github.com/viliuusss) 		    - viliussapauskas2g2@gmail.com  - +37061251005
