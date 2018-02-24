@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fantasy-hoops", "fantasy-hoops\fantasy-hoops.csproj", "{859A5C31-C8F3-452E-BEC1-5C2366797DA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fantasy-hoops", "fantasy-hoops\fantasy-hoops.csproj", "{649DA3C2-E99A-4F08-A0C0-0E2406C2595A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{859A5C31-C8F3-452E-BEC1-5C2366797DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{859A5C31-C8F3-452E-BEC1-5C2366797DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{859A5C31-C8F3-452E-BEC1-5C2366797DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{859A5C31-C8F3-452E-BEC1-5C2366797DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{649DA3C2-E99A-4F08-A0C0-0E2406C2595A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{649DA3C2-E99A-4F08-A0C0-0E2406C2595A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{649DA3C2-E99A-4F08-A0C0-0E2406C2595A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{649DA3C2-E99A-4F08-A0C0-0E2406C2595A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9284A009-D516-4AF2-A059-ACF63C8DD25A}
+		SolutionGuid = {DB19DD01-DCE8-4BE2-93E6-A7247946355E}
 	EndGlobalSection
 EndGlobal
