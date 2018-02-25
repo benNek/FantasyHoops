@@ -1,0 +1,15 @@
+﻿.card {
+  width: 20rem;
+}
+
+.card-block {
+  background-color: white;
+}
+
+.card-img-top {
+  max-height: 150px;
+}
+
+.card {
+  text-align: center;
+}
