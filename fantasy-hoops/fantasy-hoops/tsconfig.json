@@ -8,10 +8,13 @@
     "sourceMap": true,
     "skipDefaultLibCheck": true,
     "strict": true,
-    "types": ["webpack-env"]
+    "types": [ "webpack-env" ],
+    "allowJs": true
   },
   "exclude": [
-      "bin",
-      "node_modules"
+    "bin",
+    "node_modules",
+    "ClientApp/dist",
+    "wwwroot"
   ]
 }
