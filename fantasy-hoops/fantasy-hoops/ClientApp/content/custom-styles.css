@@ -3,7 +3,11 @@
 }
 
 .card-block {
-  background-color: white;
+  background-color: black;
+}
+
+.card-title {
+  color: white;
 }
 
 .card-img-top {
@@ -12,4 +16,35 @@
 
 .card {
   text-align: center;
+}
+
+.price-badge {
+  width: 40px;
+  height: 25px;
+  padding-left: 155px;
+  padding-top: 5px;
+  position: absolute;
+  float: right;
+  font-size: 17px;
+}
+
+.player-position {
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  padding: 5px;
+  font-size: 17px;
+}
+.btn-circle.btn-lg {
+  width: 40px;
+  height: 40px;
+  font-size: 12px;
+  border-radius: 20px;
+  position: absolute;
+}
+
+.button {
+  padding-left: 150px;
+  padding-top: 125px;
+  position: absolute;
 }
