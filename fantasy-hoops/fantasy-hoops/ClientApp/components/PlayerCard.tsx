@@ -17,18 +17,21 @@ export class PlayerCard extends React.Component<any, any> {
       return <div>Sorry, but the player was not found</div>
     }
 
-    return (<div className="card" style={{ backgroundColor: `${player.teamColor}` }}>
-    
-    <div className="button">{this.buttonState()}</div>
-      <div className="player-position">{player.position}</div>
-      <div className="price-badge">
-        <span className="badge badge-dark">{player.price}</span>
+    return (
+      <div className="card" style={{ backgroundColor: `${player.teamColor}` }}>
+        <div className="ppg">{player.ppg}</div>
+        <div className="ppg ppg-label">PPG</div>
+        <div className="player-position">{player.position}</div>
+        <div className="button">{this.buttonState()}</div>
+        <div className="price-badge">
+          <span className="badge badge-dark">{player.price}</span>
+        </div>
+        <img className="card-img-top" src={player.img} alt="Card image cap"></img>
+        < div className="card-block" >
+          <h2 className="card-title">{player.name[0]}. {player.surname}</h2>
+        </div>
       </div>
-      <img className="card-img-top" src={player.img} alt="Card image cap"></img>
-      < div className="card-block" >
-        <h2 className="card-title">{player.name} {player.surname}</h2>
-      </div>
-    </div>);
+    );
   }
 
   buttonState() {

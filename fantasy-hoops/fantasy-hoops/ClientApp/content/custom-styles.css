@@ -3,15 +3,19 @@
 }
 
 .card-block {
+  max-height: 50px;
   background-color: black;
 }
 
 .card-title {
   color: white;
+  overflow-x: hidden;
+  height: 100px;
+  white-space: nowrap;
 }
 
 .card-img-top {
-  max-height: 150px;
+  max-height: 140px;
 }
 
 .card {
@@ -21,30 +25,46 @@
 .price-badge {
   width: 40px;
   height: 25px;
-  padding-left: 155px;
-  padding-top: 5px;
+  padding: 5px 10px;
   position: absolute;
   float: right;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .player-position {
   color: white;
   font-weight: bold;
   position: absolute;
-  padding: 5px;
-  font-size: 17px;
-}
-.btn-circle.btn-lg {
-  width: 40px;
-  height: 40px;
+  padding: 32px 12px;
   font-size: 12px;
-  border-radius: 20px;
+}
+
+.ppg {
+  color: white;
+  width: 350px;
+  float: right;
+  font-weight: bold;
   position: absolute;
+  overflow: hidden;
+  font-size: 15px;
+  padding-top: 10px;
+  padding-right: 15px;
+}
+
+.ppg-label {
+  font-size: 12px;
+  padding-top: 27px;
+}
+
+.btn-circle.btn-lg {
+  width: 44px;
+  height: 44px;
+  font-size: 10px;
+  border-radius: 22px;
 }
 
 .button {
-  padding-left: 150px;
-  padding-top: 125px;
+  padding-left: 145px;
+  padding-top: 110px;
   position: absolute;
 }
