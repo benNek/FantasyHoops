@@ -1,0 +1,12 @@
+Game score (GS) = (Points)+0.4*(Field Goals Made)+0.7*(Offensive Rebounds)+0.3*(Defensive rebounds)+(Steals)+0.7*(Assists)+0.7*(Blocked Shots)- 
+0.7*(Field Goal Attempts)-0.4*(Free Throws Missed) – 0.4*(Personal Fouls)-(Turnovers)
+
+Fantasy points per game (FPPG) = 1*(Points)+1.2*(Rebounds)+1.5*(Assists)+3*(Steals)+3*(Blocks)-1*(Turnovers)
+
+FPPG prades skaiciuoti nuo sezono pradzios sudedant kiekvienu rungtyniu Fantasy Points ir gaunant ju vidurki,
+praejus vienoms varzyboms, vidurkis perskaiciuojamas
+
+Kad gauti zaidejo kaina, reikia apskaiciuoti zaidejo paskutiniu 5 rungtyniu game score vidurki (GSvid), prie jo prideti
+fantasy points per game ir suma padauginti is 1300
+
+Zaidejo kaina = (GSvid + FPPG) * 1300
