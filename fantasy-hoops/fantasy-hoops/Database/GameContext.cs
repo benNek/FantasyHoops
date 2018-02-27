@@ -29,7 +29,7 @@ namespace fantasy_hoops.Database
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json",
               optional: true, reloadOnChange: true);
             var config = builder.Build();
-            optionsBuilder.UseSqlServer("Server=BENAS-PC;Database=fantasyhoops;Trusted_Connection=Yes;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;");
         }
 
     }

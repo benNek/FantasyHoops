@@ -31,7 +31,7 @@ namespace fantasy_hoops
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var optionsBuilder = new DbContextOptionsBuilder<GameContext>();
-            optionsBuilder.UseSqlServer("Server=BENAS-PC;Database=fantasyhoops;Trusted_Connection=Yes;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;");
             Seed.Initialize(new GameContext(optionsBuilder.Options));
         }
 
