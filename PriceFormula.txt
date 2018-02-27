@@ -7,6 +7,11 @@ FPPG prades skaiciuoti nuo sezono pradzios sudedant kiekvienu rungtyniu Fantasy 
 praejus vienoms varzyboms, vidurkis perskaiciuojamas
 
 Kad gauti zaidejo kaina, reikia apskaiciuoti zaidejo paskutiniu 5 rungtyniu game score vidurki (GSvid), prie jo prideti
-fantasy points per game ir suma padauginti is 1300
+fantasy points per game, suma padauginti is 4000 ir padalinti is 3
 
-Zaidejo kaina = (GSvid + FPPG) * 1300
+Zaidejo kaina = (GSvid + FPPG) * 4000 / 3
+
+Zaidejo kaina tures ribas
+
+Max = 100k
+Min = 25k
