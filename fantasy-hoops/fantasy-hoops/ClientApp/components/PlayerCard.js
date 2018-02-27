@@ -1,14 +1,14 @@
-﻿import * as React from 'react';
+﻿import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import PlayerAPI from '../mocked/players.js';
 
-export class PlayerCard extends React.Component<any, any> {
+export class PlayerCard extends Component {
   constructor() {
     super();
     this.state = { selected: false };
   }
 
-  public render() {
+  render() {
     const player = PlayerAPI.get(
       parseInt(this.props.match.params.id)
     )
