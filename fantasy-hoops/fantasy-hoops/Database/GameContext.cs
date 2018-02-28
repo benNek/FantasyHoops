@@ -12,7 +12,7 @@ namespace fantasy_hoops.Database
     public class GameContext : DbContext
     {
 
-        public GameContext() : base()
+        public GameContext() : base((new DbContextOptionsBuilder<GameContext>()).UseSqlServer("Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;").Options)
         {
         }
 

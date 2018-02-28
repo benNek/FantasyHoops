@@ -1,8 +1,4 @@
-﻿using fantasy_hoops.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace fantasy_hoops.Models
 {
@@ -14,7 +10,7 @@ namespace fantasy_hoops.Models
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public int TeamID { get; set; }
-        public Position Position { get; set; }
+        public String Position { get; set; }
         public int Number { get; set; }
 
         public virtual Team Team{ get; set; }
