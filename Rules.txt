@@ -20,15 +20,9 @@ Point guards can also be the shortest player on the team as they use their intel
 Point guards need to have a good long distance shooting, though it's not quite as crucial as for shooting guards. However, some point guards take as many shots as shooting guards.
 
 BUDGET
-When purchasing players for your team, you want to make sure that you remain within your budget (the starting budget is $30M). Ultimately, you want to choose players whose values will increase overtime. The objective is to make a profit when selling players at a later time.
-Player salaries are determined by the relation between fantasy scoring and the system projected fpts per game. For example when player x, which the system projected his average fpts for the season will be 34, scores 26 fpts in his last game, his salary will decrease in a few thousands of fantasy dollars. Note that the minimal salary of a player is $500,000. Player salaries are calculated daily, usually a couple of hours after the last game of the day. You will be able to view all salary changes in the Price Movers page. Your team’s overall budget will be influenced by the players’ salary changes.
-
-
-SCORE IS DEPENDENT ON REAL STATS
-
+When purchasing players for your team, you want to make sure that you remain within your budget (the  budget is $300K). Budget constant for every day, changing only the price of players. Ultimately, you want to choose players whose values will not be too high budget that day.
+Player salaries are determined by the relation between fantasy scoring and the sychanging stem projected fpts per game. For example when player x, which the system projected his average fpts for the season will be 34, scores 26 fpts in his last game, his price will decrease in a few thousands of fantasy dollars. Note that the minimal price of a player is $5000. The player‘s price are calculated in the last 5 matches. Player price are calculated daily, usually a couple of hours after the last game of the day. You will be able to view all price changes in the Price Movers page. 
 
 DON'T ALLOW TO CHOOSE LINEUP IF THERE ARE NO GAMES ON THAT DAY
-
-For each game day, NBA players will get their recent stats and scores a few hours after the last game is finished. In addition, player salaries are also calculated even if the player did not play the previous day. These daily updates reflects your fantasy team score and value.
-Every roster will be frozen 2 hours prior the first game of each day until the next scoring update. No trades will be allowed during that time.
+For each game day, NBA players will get their recent stats and scores a few hours after the last game is finished. In addition, players price are also calculated even if the player did not play the previous day. These daily updates reflects your fantasy team score and value.
 
