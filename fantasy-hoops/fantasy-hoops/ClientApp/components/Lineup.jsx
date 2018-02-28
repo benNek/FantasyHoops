@@ -8,14 +8,15 @@ export class Lineup extends Component {
   constructor() {
     super();
     this.selectPlayer = this.selectPlayer.bind(this);
+    this.filter = this.filter.bind(this);
 
     this.state = {
-      position: 'PG',
-      pg: <PlayerCard isUnknown="true" position="PG" />,
-      sg: <PlayerCard isUnknown="true" position="SG" />,
-      sf: <PlayerCard isUnknown="true" position="SF" />,
-      pf: <PlayerCard isUnknown="true" position="PF" />,
-      c: <PlayerCard isUnknown="true" position="C" />
+      position: '',
+      pg: <PlayerCard filter={this.filter} status={0} position="PG" />,
+      sg: <PlayerCard filter={this.filter} status={0} position="SG" />,
+      sf: <PlayerCard filter={this.filter} status={0} position="SF" />,
+      pf: <PlayerCard filter={this.filter} status={0} position="PF" />,
+      c: <PlayerCard filter={this.filter} status={0} position="C" />
     };
   }
 
@@ -24,33 +25,32 @@ export class Lineup extends Component {
     return (
       <div className="container mt-4">
         <div className="row">
-          <a href="#" className="no-color">
-            {this.state.pg}
-          </a>
-          <a href="#" className="no-color">
-            {this.state.sg}
-          </a>
-          <a href="#" className="no-color">
-            {this.state.sf}
-          </a>
-          <a href="#" className="no-color">
-            {this.state.pf}
-          </a>
-          <a href="#" className="no-color">
-            {this.state.c}
-          </a>
+          {this.state.pg}
+          {this.state.sg}
+          {this.state.sf}
+          {this.state.pf}
+          {this.state.c}
         </div>
         <div className="row">
-          <PlayerPool position={this.state.position} players={players} selectPlayer={this.selectPlayer} />
+          <PlayerPool position={this.state.position} players={players} selectPlayer={this.selectPlayer} filter={this.filter} />
         </div>
       </div>
     );
   }
 
-  selectPlayer(player) {
+  filter(pos) {
+    this.setState({
+      position: pos
+    });
+  }
+
+  selectPlayer(player, status) {
+    const playerCard = player.selected
+      ? <PlayerCard status={2} filter={this.filter} player={player} selectPlayer={this.selectPlayer} position={player.position} />
+      : <PlayerCard status={0} filter={this.filter} position={player.position} />;
     const pos = player.position.toLowerCase();
     this.setState({
-      [pos]: <PlayerCard player={player} />
+      [pos]: playerCard
     });
   }
 }

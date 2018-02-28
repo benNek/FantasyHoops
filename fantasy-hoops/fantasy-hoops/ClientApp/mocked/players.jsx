@@ -8,7 +8,8 @@
             position: 'PG',
             teamColor: '#552583',
             ppg: '24.7',
-            img: 'https://nba-players.herokuapp.com/players/ball/lonzo'
+            img: 'https://nba-players.herokuapp.com/players/ball/lonzo',
+            status: 1
         },
         {
             id: 1,
@@ -18,7 +19,8 @@
             position: 'PG',
             teamColor: '#008248',
             ppg: '31.2',
-            img: 'https://nba-players.herokuapp.com/players/irving/kyrie'
+            img: 'https://nba-players.herokuapp.com/players/irving/kyrie',
+            status: 1
         },
         {
             id: 2,
@@ -28,7 +30,8 @@
             position: 'C',
             teamColor: '#CD1141',
             ppg: '19.8',
-            img: 'https://nba-players.herokuapp.com/players/valanciunas/jonas'
+            img: 'https://nba-players.herokuapp.com/players/valanciunas/jonas',
+            status: 1
         },
         {
             id: 3,
@@ -38,7 +41,8 @@
             position: 'SF',
             teamColor: '#C4CED4',
             ppg: '23.8',
-            img: 'https://nba-players.herokuapp.com/players/leonard/kawhi'
+            img: 'https://nba-players.herokuapp.com/players/leonard/kawhi',
+            status: 1
         },
         {
             id: 4,
@@ -48,7 +52,8 @@
             position: 'PF',
             teamColor: '#007DC5',
             ppg: '7.9',
-            img: 'https://nba-players.herokuapp.com/players/nowitzki/dirk'
+            img: 'https://nba-players.herokuapp.com/players/nowitzki/dirk',
+            status: 1
         },
         {
             id: 5,
@@ -58,7 +63,8 @@
             position: 'SG',
             teamColor: '#000000',
             ppg: '16.4',
-            img: 'https://nba-players.herokuapp.com/players/dinwiddie/spencer'
+            img: 'https://nba-players.herokuapp.com/players/dinwiddie/spencer',
+            status: 1
         },
         {
             id: 6,
@@ -68,7 +74,8 @@
             position: 'SF',
             teamColor: '#00471B',
             ppg: '32.7',
-            img: 'https://nba-players.herokuapp.com/players/antetokounmpo/giannis'
+            img: 'https://nba-players.herokuapp.com/players/antetokounmpo/giannis',
+            status: 1
         }
     ],
     all: function () { return this.players },
