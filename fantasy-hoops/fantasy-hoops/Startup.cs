@@ -32,7 +32,7 @@ namespace fantasy_hoops
 
             var optionsBuilder = new DbContextOptionsBuilder<GameContext>();
             optionsBuilder.UseSqlServer("Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;");
-            Seed.Initialize(new GameContext(optionsBuilder.Options));
+            Seed.InitializeAsync(new GameContext(optionsBuilder.Options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
