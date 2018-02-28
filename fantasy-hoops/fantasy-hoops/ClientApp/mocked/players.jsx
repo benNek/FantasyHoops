@@ -76,6 +76,127 @@
             ppg: '32.7',
             img: 'https://nba-players.herokuapp.com/players/antetokounmpo/giannis',
             status: 1
+        },
+        {
+            id: 7,
+            name: 'Kent',
+            surname: 'Bazemore',
+            price: '26K',
+            position: 'SG',
+            teamColor: '#E03A3E',
+            ppg: '12.7',
+            img: 'https://nba-players.herokuapp.com/players/bazemore/kent',
+            status: 1
+        },
+        {
+            id: 8,
+            name: 'Lebron',
+            surname: 'James',
+            price: '97K',
+            position: 'SF',
+            teamColor: '#6F2633',
+            ppg: '36.2',
+            img: 'https://nba-players.herokuapp.com/players/james/lebron',
+            status: 1
+        },
+        {
+            id: 9,
+            name: 'Kevin',
+            surname: 'Love',
+            price: '67K',
+            position: 'PF',
+            teamColor: '#6F2633',
+            ppg: '22.2',
+            img: 'https://nba-players.herokuapp.com/players/love/kevin',
+            status: 1
+        },
+        {
+            id: 10,
+            name: 'Domantas',
+            surname: 'Sabonis',
+            price: '45K',
+            position: 'PF',
+            teamColor: '#002D62',
+            ppg: '16.9',
+            img: 'https://nba-players.herokuapp.com/players/sabonis/domantas',
+            status: 1
+        },
+        {
+            id: 11,
+            name: 'Dwight',
+            surname: 'Howard',
+            price: '49K',
+            position: 'C',
+            teamColor: '#1D1160',
+            ppg: '18.2',
+            img: 'https://nba-players.herokuapp.com/players/howard/dwight',
+            status: 1
+        },
+        {
+            id: 12,
+            name: 'Zach',
+            surname: 'Lavine',
+            price: '72K',
+            position: 'SG',
+            teamColor: '#CE1141',
+            ppg: '26.5',
+            img: 'https://nba-players.herokuapp.com/players/lavine/zach',
+            status: 1
+        },
+        {
+            id: 13,
+            name: 'Nikola',
+            surname: 'Jokic',
+            price: '91K',
+            position: 'C',
+            teamColor: '#00285E',
+            ppg: '34.2',
+            img: 'https://nba-players.herokuapp.com/players/jokic/nikola',
+            status: 1
+        },
+        {
+            id: 14,
+            name: 'Stephen',
+            surname: 'Curry',
+            price: '92K',
+            position: 'PG',
+            teamColor: '#243E90',
+            ppg: '32.2',
+            img: 'https://nba-players.herokuapp.com/players/curry/stephen',
+            status: 1
+        },
+        {
+            id: 15,
+            name: 'Chris',
+            surname: 'Paul',
+            price: '76K',
+            position: 'PG',
+            teamColor: '#CE1141',
+            ppg: '26.4',
+            img: 'https://nba-players.herokuapp.com/players/paul/chris',
+            status: 1
+        },
+        {
+            id: 16,
+            name: 'Russell',
+            surname: 'Westbrook',
+            price: '88K',
+            position: 'PG',
+            teamColor: '#007AC1',
+            ppg: '30.1',
+            img: 'https://nba-players.herokuapp.com/players/westbrook/russell',
+            status: 1
+        },
+        {
+            id: 17,
+            name: 'Damian',
+            surname: 'Lillard',
+            price: '72K',
+            position: 'PG',
+            teamColor: '#E13A3E',
+            ppg: '25.6',
+            img: 'https://nba-players.herokuapp.com/players/lillard/damian',
+            status: 1
         }
     ],
     all: function () { return this.players },
