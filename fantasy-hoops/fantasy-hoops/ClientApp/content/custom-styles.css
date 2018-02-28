@@ -5,11 +5,9 @@
 
 .card-block {
   max-height: 50px;
-  background-color: #2E2E2E;
 }
 
 .card-title {
-  color: white;
   overflow-x: hidden;
   height: 100px;
   white-space: nowrap;
