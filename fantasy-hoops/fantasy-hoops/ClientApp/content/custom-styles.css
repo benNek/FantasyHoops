@@ -73,3 +73,8 @@
   box-shadow: none !important;
   border: 0 !important;
 }
+
+a.no-color {
+  color:#000000 !important;
+  text-decoration: none !important;
+}

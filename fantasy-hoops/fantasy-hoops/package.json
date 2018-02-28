@@ -17,7 +17,7 @@
     "babel-loader": "^7.1.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "bootstrap": "3.3.7",
+    "bootstrap": "^4.0.0-alpha.6",
     "css-loader": "0.28.4",
     "event-source-polyfill": "0.0.9",
     "extract-text-webpack-plugin": "2.1.2",
@@ -25,6 +25,7 @@
     "isomorphic-fetch": "2.2.1",
     "jquery": "3.2.1",
     "json-loader": "0.5.4",
+    "lodash": "^4.17.5",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "3.0.0-beta.7",
@@ -35,5 +36,8 @@
     "url-loader": "0.5.9",
     "webpack": "^2.5.1",
     "webpack-hot-middleware": "2.18.2"
+  },
+  "dependencies": {
+    "react-bootstrap": "^0.32.1"
   }
 }
