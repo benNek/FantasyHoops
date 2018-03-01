@@ -47,7 +47,7 @@ export class PlayerCard extends Component {
         C: require('../content/images/c.png')
       }
       return (
-        <div onClick={this.filter} className="card">
+        <div onClick={this.filter} className="card" tabIndex="1">
           <img className="card-img-top"
             style={{ backgroundColor: `` }}
             src={photos[this.props.position]}
