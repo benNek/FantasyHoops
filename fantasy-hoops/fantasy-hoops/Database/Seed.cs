@@ -10,8 +10,6 @@ namespace fantasy_hoops.Database
 {
     public class Seed
     {
-        static private string apiKey = "afxmpc3rs38baa4tt3tggmgh";
-
         public static void Initialize()
         {
             // Checking if the tables are seeded already
@@ -22,13 +20,13 @@ namespace fantasy_hoops.Database
             }
             context.Dispose();
 
-
+            
             List<Team> teamsList = new List<Team>();
             List<Player> playersList = new List<Player>();
             HttpClient client = new HttpClient();
 
             string apiResponse =
-                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=" + apiKey);
+                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=afxmpc3rs38baa4tt3tggmgh");
             System.Threading.Thread.Sleep(1000);
 
             JObject json = JObject.Parse(apiResponse);
@@ -93,7 +91,7 @@ namespace fantasy_hoops.Database
                 context.Players.Add(player);
             }
             context.SaveChanges();
-
+            
         }
 
         private static string GetResponse(string url)
