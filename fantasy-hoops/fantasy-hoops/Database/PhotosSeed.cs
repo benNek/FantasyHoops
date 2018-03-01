@@ -1,11 +1,6 @@
-﻿using fantasy_hoops.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net;
-using System.Diagnostics;
 using System.IO;
 
 namespace fantasy_hoops.Database
@@ -78,7 +73,7 @@ namespace fantasy_hoops.Database
         private static string ResponseToString(HttpWebResponse response)
         {
             string stringResponse = "";
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(response.GetResponseStream()))
+            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
             {
                 stringResponse = sr.ReadToEnd();
             }
