@@ -4,15 +4,20 @@ import { PlayerCard } from './PlayerCard';
 import _ from 'lodash';
 
 export class PlayerPool extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+      players: this.props.players
+    }
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   render() {
     const players = _.map(
-      this.props.players,
+      this.state.players,
       (player) => {
-        if (player.position === this.props.position)
+        if (player.position === this.props.position
+          || this.props.position === '')
           return <div className="col-3">
             <PlayerCard
               id={player.id}
@@ -20,7 +25,7 @@ export class PlayerPool extends Component {
               status={1}
               player={player}
               selectPlayer={this.props.selectPlayer}
-              filter={this.props.filter}
+              handleSelect={this.handleSelect}
             />
           </div>
       }
@@ -32,5 +37,20 @@ export class PlayerPool extends Component {
         </div>
       </div>
     );
+  }
+
+  handleSelect(id, position) {
+    let players = this.state.players;
+    const p = _.map(players,
+      p => {
+        if (this.props.position == ''
+          || p.position === this.props.position) {
+          if (p.position === position) {
+            if (p.id === id)
+              p.selected = p.selected;
+            else p.selected = false;
+          }
+        }
+      })
   }
 }

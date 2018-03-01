@@ -32,7 +32,11 @@ export class Lineup extends Component {
           {this.state.c}
         </div>
         <div className="row">
-          <PlayerPool position={this.state.position} players={players} selectPlayer={this.selectPlayer} filter={this.filter} />
+          <PlayerPool
+            position={this.state.position}
+            players={players}
+            selectPlayer={this.selectPlayer}
+          />
         </div>
       </div>
     );
@@ -44,7 +48,7 @@ export class Lineup extends Component {
     });
   }
 
-  selectPlayer(player, status) {
+  selectPlayer(player) {
     const playerCard = player.selected
       ? <PlayerCard status={2} filter={this.filter} player={player} selectPlayer={this.selectPlayer} position={player.position} />
       : <PlayerCard status={0} filter={this.filter} position={player.position} />;

@@ -4,11 +4,9 @@ import { RouteComponentProps } from 'react-router';
 export class PlayerCard extends Component {
   constructor() {
     super();
-    this.state = {
-      status: 0
-    }
     this.filter = this.filter.bind(this);
     this.select = this.select.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   render() {
@@ -16,14 +14,14 @@ export class PlayerCard extends Component {
       const innerHTML = this.props.player.selected
         ? <a className="glyphicon glyphicon-remove"></a>
         : <a className="glyphicon glyphicon-plus"></a>;
-      const buttonState = this.props.status == 2
-        ? <div></div>
-        : <div className="button">
+      const buttonState = this.props.status == 1
+        ? <div className="button">
           <button className={`btn btn-circle btn-lg ${this.props.player.selected ? 'btn-danger' : 'btn-primary'} text-center`}
             onClick={() => { this.select() }}>
             {innerHTML}
           </button>
-        </div>;
+        </div>
+        : '';
       return (
         <div onClick={this.props.status == 2 ? this.filter : ''} className="card">
           <div className="ppg">{this.props.player.ppg}</div>
@@ -65,10 +63,16 @@ export class PlayerCard extends Component {
 
   select() {
     this.props.player.selected = !this.props.player.selected;
-    this.props.selectPlayer(this.props.player, this.props.status);
+    this.props.player.status = this.props.player.selected ? 2 : 1;
+    this.props.selectPlayer(this.props.player);
+    this.handleSelect();
   }
 
   filter() {
     this.props.filter(this.props.position);
+  }
+
+  handleSelect() {
+    this.props.handleSelect(this.props.player.id, this.props.player.position);
   }
 }
