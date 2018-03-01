@@ -4,16 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
-using System;
 
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180228161838_UpdatedTables")]
+    partial class UpdatedTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +31,7 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("Number");
 
-                    b.Property<string>("Position");
+                    b.Property<int>("Position");
 
                     b.Property<int>("TeamID");
 
@@ -49,7 +47,7 @@ namespace fantasy_hoops.Migrations
                     b.Property<int>("TeamID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("APIID");
+                    b.Property<string>("Abbreviation");
 
                     b.Property<string>("City");
 

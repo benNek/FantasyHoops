@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using fantasy_hoops.Database;
-using fantasy_hoops.Migrations;
-using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,9 +22,7 @@ namespace fantasy_hoops
             services.AddMvc();
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            var optionsBuilder = new DbContextOptionsBuilder<GameContext>();
-            optionsBuilder.UseSqlServer("Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;");
-            Seed.Initialize(new GameContext(optionsBuilder.Options));
+            Seed.Initialize();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
