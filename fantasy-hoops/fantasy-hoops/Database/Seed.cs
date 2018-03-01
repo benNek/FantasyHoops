@@ -48,7 +48,7 @@ namespace fantasy_hoops.Database
 
                         var key = teams[k].SelectToken("id");
                         string url = @"http://api.sportradar.us/nba/trial/v4/en/teams/" +
-                               key + "/profile.json?api_key=" + apiKey;
+                               key + "/profile.json?api_key=afxmpc3rs38baa4tt3tggmgh";
                         string playerResponse = GetResponse(url);
 
                         JObject jobject = JObject.Parse(playerResponse);

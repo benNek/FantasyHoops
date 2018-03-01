@@ -23,6 +23,7 @@ namespace fantasy_hoops
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             Seed.Initialize();
+            PhotosSeed.Initialize();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
