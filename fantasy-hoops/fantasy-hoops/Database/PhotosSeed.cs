@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace fantasy_hoops.Database
 {
@@ -10,7 +11,7 @@ namespace fantasy_hoops.Database
         static string playersAPI = ResponseToString(responseAPI);
         const string photosDir = "./ClientApp/content/images/players/";
 
-        public static void Initialize()
+        public async static Task Initialize()
         {
             if (!Directory.Exists(photosDir))
                 Directory.CreateDirectory(photosDir);
@@ -25,7 +26,7 @@ namespace fantasy_hoops.Database
                     string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
                     try
                     {
-                        SavePhoto(localFileName, remoteFileUrl);
+                        await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
                     }
                     catch (WebException)
                     {
