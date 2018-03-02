@@ -1,7 +1,6 @@
-﻿using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using System.Net;
+﻿using System.Net;
 using System.IO;
+using System.Linq;
 
 namespace fantasy_hoops.Database
 {
@@ -9,36 +8,37 @@ namespace fantasy_hoops.Database
     {
         static HttpWebResponse responseAPI = GetResponse("http://data.nba.net/10s/prod/v1/2017/players.json");
         static string playersAPI = ResponseToString(responseAPI);
+        const string photosDir = "./ClientApp/content/images/players/";
 
         public static void Initialize()
         {
-            WebClient webClient = new WebClient();
-            HttpClient client = new HttpClient();
+            if (!Directory.Exists(photosDir))
+                Directory.CreateDirectory(photosDir);
 
-            JObject json = JObject.Parse(playersAPI);
-            JArray players = (JArray)json["league"]["standard"];
-            foreach (JObject player in players)
+            using (var context = new GameContext())
             {
-                string personId = (string)player["personId"];
-                string remoteFileUrl =
-                    "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
-                string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
-                try
+                foreach (var player in context.Players)
                 {
-                    if (!File.Exists(localFileName))
+                    int personId = ;
+                    string remoteFileUrl =
+                        "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
+                    string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
+                    try
+                    {
                         SavePhoto(localFileName, remoteFileUrl);
-                }
-                catch (WebException)
-                {
-                    continue;
+                    }
+                    catch (WebException)
+                    {
+                        continue;
+                    }
                 }
             }
         }
 
-        private static void SavePhoto(string fileName, string url)
+        private static void SavePhoto(string localFile, string urlFile)
         {
             byte[] content;
-            WebResponse response = GetResponse(url);
+            WebResponse response = GetResponse(urlFile);
             Stream stream = response.GetResponseStream();
             using (BinaryReader br = new BinaryReader(stream))
             {
@@ -47,7 +47,10 @@ namespace fantasy_hoops.Database
             }
             response.Close();
 
-            FileStream fs = new FileStream(fileName, FileMode.Create);
+            if (!NeedDownload(localFile, content))
+                return;
+
+            FileStream fs = new FileStream(localFile, FileMode.Create);
             BinaryWriter bw = new BinaryWriter(fs);
             try
             {
@@ -78,6 +81,22 @@ namespace fantasy_hoops.Database
                 stringResponse = sr.ReadToEnd();
             }
             return stringResponse;
+        }
+
+        private static bool NeedDownload(string localFile, byte[] urlBytes)
+        {
+            System.Console.WriteLine(localFile);
+            if (!File.Exists(localFile))
+                return true;
+
+            byte[] localFileBytes = File.ReadAllBytes(localFile);
+            if (localFileBytes.Length != urlBytes.Length)
+                return true;
+
+            if (localFileBytes.SequenceEqual(urlBytes))
+                return false;
+
+            return false;
         }
     }
 }
