@@ -2,39 +2,39 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Database
 {
     public class PhotosSeed
     {
+        const string photosDir = "./ClientApp/content/images/players/";
 
-        public static async void LoadPlayerPhotoAsync(int id, GameContext context)
+        public async static Task Initialize(GameContext context)
         {
-            string remoteFileUrl =
-                    "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + id + ".png";
-            string localFileName = "./ClientApp/content/images/players/" + id + ".png";
-            try
+            if (!Directory.Exists(photosDir))
+                Directory.CreateDirectory(photosDir);
+
+            foreach (var player in context.Players)
             {
-                await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
-            }
-            catch (WebException)
-            {
-                return;
+                int personId = player.NbaID;
+                string remoteFileUrl =
+                    "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
+                string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
+                try
+                {
+                    await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
+                }
+                catch (WebException)
+                {
+                    continue;
+                }
             }
         }
 
         private static void SavePhoto(string localFile, string urlFile)
         {
             byte[] content;
-            WebResponse response;
-            try
-            {
-                response = GetResponse(urlFile);
-            } catch(System.Net.WebException)
-            {
-                return;
-            }
+            WebResponse response = GetResponse(urlFile);
             Stream stream = response.GetResponseStream();
             using (BinaryReader br = new BinaryReader(stream))
             {

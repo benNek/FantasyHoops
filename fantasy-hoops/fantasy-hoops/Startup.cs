@@ -31,7 +31,9 @@ namespace fantasy_hoops
             _context = new GameContext();
             _context.Database.Migrate();
 
-            Seed.InitializeAsync(_context);
+            var task = Seed.InitializeAsync(_context);
+            task.Wait();
+            PhotosSeed.Initialize(_context);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

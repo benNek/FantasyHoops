@@ -4,20 +4,15 @@ using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net;
-using System.IO;
+using System.Threading.Tasks;
 
 namespace fantasy_hoops.Database
 {
     public class Seed
     {
-        const string photosDir = "./ClientApp/content/images/players/";
 
-        public static async void InitializeAsync(GameContext context)
+        public static async Task InitializeAsync(GameContext context)
         {
-            // Creating players' photo folder
-            if (!Directory.Exists(photosDir))
-                Directory.CreateDirectory(photosDir);
-
             // Checking if the tables are seeded already
             if (context.Teams.Any())
             {
@@ -70,7 +65,6 @@ namespace fantasy_hoops.Database
                                     Team = team
                                 };
                                 context.Players.Add(player);
-                                PhotosSeed.LoadPlayerPhotoAsync(player.NbaID, context);
                             }
                             catch (ArgumentNullException)
                             {
