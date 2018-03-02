@@ -2,44 +2,39 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Database
 {
     public class PhotosSeed
     {
-        static HttpWebResponse responseAPI = GetResponse("http://data.nba.net/10s/prod/v1/2017/players.json");
-        static string playersAPI = ResponseToString(responseAPI);
-        const string photosDir = "./ClientApp/content/images/players/";
 
-        public async static Task Initialize()
+        public static async void LoadPlayerPhotoAsync(int id, GameContext context)
         {
-            if (!Directory.Exists(photosDir))
-                Directory.CreateDirectory(photosDir);
-
-            using (var context = new GameContext())
+            string remoteFileUrl =
+                    "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + id + ".png";
+            string localFileName = "./ClientApp/content/images/players/" + id + ".png";
+            try
             {
-                foreach (var player in context.Players)
-                {
-                    int personId = player.NbaID;
-                    string remoteFileUrl =
-                        "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
-                    string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
-                    try
-                    {
-                        await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
-                    }
-                    catch (WebException)
-                    {
-                        continue;
-                    }
-                }
+                await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
+            }
+            catch (WebException)
+            {
+                return;
             }
         }
 
         private static void SavePhoto(string localFile, string urlFile)
         {
             byte[] content;
-            WebResponse response = GetResponse(urlFile);
+            WebResponse response;
+            try
+            {
+                response = GetResponse(urlFile);
+            } catch(System.Net.WebException)
+            {
+                return;
+            }
             Stream stream = response.GetResponseStream();
             using (BinaryReader br = new BinaryReader(stream))
             {
@@ -72,16 +67,6 @@ namespace fantasy_hoops.Database
             request.ContentType = "application/json";
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return response;
-        }
-
-        private static string ResponseToString(HttpWebResponse response)
-        {
-            string stringResponse = "";
-            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-            {
-                stringResponse = sr.ReadToEnd();
-            }
-            return stringResponse;
         }
 
         private static bool NeedDownload(string localFile, byte[] urlBytes)

@@ -1,28 +1,29 @@
 ﻿using fantasy_hoops.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.IO;
 
 namespace fantasy_hoops.Database
 {
     public class Seed
     {
-        public static void Initialize()
+        const string photosDir = "./ClientApp/content/images/players/";
+
+        public static async void InitializeAsync(GameContext context)
         {
+            // Creating players' photo folder
+            if (!Directory.Exists(photosDir))
+                Directory.CreateDirectory(photosDir);
+
             // Checking if the tables are seeded already
-            var context = new GameContext();
             if (context.Teams.Any())
             {
                 return;
             }
-            context.Dispose();
 
-            
-            List<Team> teamsList = new List<Team>();
-            List<Player> playersList = new List<Player>();
             HttpClient client = new HttpClient();
 
             string apiResponse =
@@ -68,30 +69,20 @@ namespace fantasy_hoops.Database
                                     Number = (int)players[l].SelectToken("jersey_number"),
                                     Team = team
                                 };
-                                playersList.Add(player);
+                                context.Players.Add(player);
+                                PhotosSeed.LoadPlayerPhotoAsync(player.NbaID, context);
                             }
                             catch (ArgumentNullException)
                             {
                                 continue;
                             }
                         }
-                        teamsList.Add(team);
+                        context.Teams.Add(team);
+                        await context.SaveChangesAsync();
                         System.Threading.Thread.Sleep(1000);
                     }
                 }
             }
-
-            context = new GameContext();
-            foreach (Team team in teamsList)
-            {
-                context.Teams.Add(team);
-            }
-            foreach (Player player in playersList)
-            {
-                context.Players.Add(player);
-            }
-            context.SaveChanges();
-            
         }
 
         private static string GetResponse(string url)
