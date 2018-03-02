@@ -19,7 +19,7 @@ namespace fantasy_hoops.Database
             {
                 foreach (var player in context.Players)
                 {
-                    int personId = ;
+                    int personId = player.NbaID;
                     string remoteFileUrl =
                         "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
                     string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
