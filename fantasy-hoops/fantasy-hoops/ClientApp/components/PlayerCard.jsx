@@ -25,7 +25,7 @@ export class PlayerCard extends Component {
       const buttonState = this.props.status == 1
         ? <div className="button">
           <button className={`btn btn-circle btn-lg ${this.props.player.selected ? 'btn-danger' : 'btn-primary'} text-center`}
-            onClick={() => { this.select() }}>
+            onClick={this.select}>
             {innerHTML}
           </button>
         </div>
