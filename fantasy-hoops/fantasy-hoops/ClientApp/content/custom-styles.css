@@ -114,3 +114,16 @@
   outline: none !important;
   z-index: 1000;
 }
+
+.container {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}

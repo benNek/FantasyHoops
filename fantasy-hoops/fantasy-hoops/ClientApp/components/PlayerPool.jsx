@@ -18,7 +18,7 @@ export class PlayerPool extends Component {
       (player) => {
         if (player.position === this.props.position
           || this.props.position === '')
-          return <div className="col-3">
+          return <div className="ml-3 mt-3">
             <PlayerCard
               id={player.id}
               key={player.id}

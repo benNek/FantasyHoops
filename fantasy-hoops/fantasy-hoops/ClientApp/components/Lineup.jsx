@@ -24,7 +24,7 @@ export class Lineup extends Component {
     let players = PlayerAPI.all();
     return (
       <div className="container mt-4">
-        <div className="row">
+        <div className="center row justify-content-center" style={{ width: '90%' }}>
           {this.state.pg}
           {this.state.sg}
           {this.state.sf}
