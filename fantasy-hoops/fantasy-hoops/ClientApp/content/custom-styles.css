@@ -1,24 +1,23 @@
 ﻿.card {
   width: 20rem;
-  height: 193px;
+  text-align: center;
 }
 
 .card-block {
-  max-height: 50px;
+  size: 10px;
+  height: 50px;
 }
 
 .card-title {
   overflow-x: hidden;
-  height: 100px;
   white-space: nowrap;
+  position: relative;
+  bottom: 15px;
+  font-size: 20px;
 }
 
 .card-img-top {
   max-height: 140px;
-}
-
-.card {
-  text-align: center;
 }
 
 .price-badge {

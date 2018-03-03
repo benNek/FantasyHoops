@@ -2,6 +2,7 @@ using fantasy_hoops.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,8 @@ namespace fantasy_hoops
 {
     public class Startup
     {
+        private GameContext _context;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,7 +25,15 @@ namespace fantasy_hoops
             services.AddMvc();
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            Seed.Initialize();
+            services.AddDbContext<GameContext>();
+            services.AddScoped<GameContext>(); // 'scoped' in ASP.NET means "per HTTP request"
+
+            _context = new GameContext();
+            _context.Database.Migrate();
+
+            var task = Seed.InitializeAsync(_context);
+            task.Wait();
+            PhotosSeed.Initialize(_context);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

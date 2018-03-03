@@ -11,13 +11,21 @@ export class PlayerCard extends Component {
 
   render() {
     if (this.props.status > 0) {
+      const pos = this.props.player.position.toLowerCase();
+      let photo = '';
+      try {
+        photo = require(`../content/images/players/${this.props.player.id}.png`)
+      }
+      catch (err) {
+        photo = require(`../content/images/${pos}.png`);
+      }
       const innerHTML = this.props.player.selected
         ? <a className="glyphicon glyphicon-remove"></a>
         : <a className="glyphicon glyphicon-plus"></a>;
       const buttonState = this.props.status == 1
         ? <div className="button">
           <button className={`btn btn-circle btn-lg ${this.props.player.selected ? 'btn-danger' : 'btn-primary'} text-center`}
-            onClick={() => { this.select() }}>
+            onClick={this.select}>
             {innerHTML}
           </button>
         </div>
@@ -31,7 +39,12 @@ export class PlayerCard extends Component {
           <div className="price-badge">
             <span className="badge badge-dark">{this.props.player.price}</span>
           </div>
-          <img className="card-img-top" style={{ backgroundColor: `${this.props.player.teamColor}` }} src={this.props.player.img} alt="Card image cap"></img>
+          <img
+            className="card-img-top"
+            style={{ backgroundColor: `${this.props.player.teamColor}` }}
+            src={photo}
+            alt="Card image cap">
+          </img>
           <div className="card-block" >
             <h2 className="card-title">{this.props.player.name[0]}. {this.props.player.surname}</h2>
           </div>

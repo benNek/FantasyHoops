@@ -22,6 +22,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 dist/
+fantasy-hoops/fantasy-hoops/ClientApp/content/images/players/
 
 # Visual Studio 2015 cache/options directory
 .vs/
