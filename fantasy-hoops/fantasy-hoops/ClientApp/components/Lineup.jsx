@@ -32,13 +32,16 @@ export class Lineup extends Component {
         sf: '',
         pf: '',
         c: ''
-      }
+      },
+      remaining: budget
     };
   }
 
-  componentDidUpdate(){
-    if(!this.state.updated)
-    this.updateProgressBar();
+  componentDidUpdate() {
+    if (!this.state.updated) {
+      this.updateProgressBar();
+      this.calculateRemaining();
+    }
   }
 
   render() {
@@ -52,6 +55,10 @@ export class Lineup extends Component {
           {this.state.pf}
           {this.state.c}
         </div>
+        <div className="row mt-4 justify-content-center" style={{
+          fontSize: '25px',
+          color: this.state.remaining < 0 ? 'red' : 'black'
+        }}>Remaining {this.state.remaining}K</div>
         <div className="row mt-4 justify-content-center">
           <div className="progress" style={{ width: '66%' }}>
             <div className="progress-bar" role="progressbar"
@@ -131,6 +138,18 @@ export class Lineup extends Component {
         pf: (this.state.pf.props.status == 2 ? parseInt(this.state.pf.props.player.price.replace('K', '')) : 0) / budget * 100,
         c: (this.state.c.props.status == 2 ? parseInt(this.state.c.props.player.price.replace('K', '')) : 0) / budget * 100
       }
+    });
+  }
+
+  calculateRemaining() {
+    this.setState({
+      updated: true,
+      remaining: budget
+        - (this.state.pg.props.status == 2 ? parseInt(this.state.pg.props.player.price.replace('K', '')) : 0)
+        - (this.state.sg.props.status == 2 ? parseInt(this.state.sg.props.player.price.replace('K', '')) : 0)
+        - (this.state.sf.props.status == 2 ? parseInt(this.state.sf.props.player.price.replace('K', '')) : 0)
+        - (this.state.pf.props.status == 2 ? parseInt(this.state.pf.props.player.price.replace('K', '')) : 0)
+        - (this.state.c.props.status == 2 ? parseInt(this.state.c.props.player.price.replace('K', '')) : 0)
     });
   }
 }
