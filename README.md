@@ -2,6 +2,11 @@
 
 # git-schwifty
 
+### NBA API's ##
+* Main - http://data.nba.net/10s/prod/v1/today.json
+* Injuries - https://www.fantasylabs.com/api/players/news/2/
+* Photos - https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{{playerID}}.png
+
 ### Contribution guidelines ###
 
 * Writing tests
