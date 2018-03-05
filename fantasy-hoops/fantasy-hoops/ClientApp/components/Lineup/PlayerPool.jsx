@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router';
 import { PlayerCard } from './PlayerCard';
 import _ from 'lodash';
 
@@ -18,10 +17,10 @@ export class PlayerPool extends Component {
       (player) => {
         if (player.position === this.props.position
           || this.props.position === '')
-          return <div className="col-3">
+          return <div className="ml-3 mt-3">
             <PlayerCard
-              id={player.id}
               key={player.id}
+              id={player.id}
               status={1}
               player={player}
               selectPlayer={this.props.selectPlayer}

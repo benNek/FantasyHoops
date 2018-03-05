@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router';
 import { PlayerPool } from './PlayerPool';
 import { PlayerCard } from './PlayerCard';
-import PlayerAPI from '../mocked/players';
+import PlayerAPI from '../../mocked/players';
+import { ProgressBar } from './ProgressBar';
 
 export class Lineup extends Component {
   constructor() {
@@ -23,15 +23,16 @@ export class Lineup extends Component {
   render() {
     let players = PlayerAPI.all();
     return (
-      <div className="container mt-4">
-        <div className="row">
+      <div className="container mt-5">
+        <div className="row justify-content-center">
           {this.state.pg}
           {this.state.sg}
           {this.state.sf}
           {this.state.pf}
           {this.state.c}
         </div>
-        <div className="row">
+        <ProgressBar players={this.state} />
+        <div className="center row justify-content-center" style={{ width: '90%' }}>
           <PlayerPool
             position={this.state.position}
             players={players}

@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router';
 
 export class PlayerCard extends Component {
   constructor() {
@@ -14,10 +13,10 @@ export class PlayerCard extends Component {
       const pos = this.props.player.position.toLowerCase();
       let photo = '';
       try {
-        photo = require(`../content/images/players/${this.props.player.id}.png`)
+        photo = require(`../../content/images/players/${this.props.player.id}.png`)
       }
       catch (err) {
-        photo = require(`../content/images/${pos}.png`);
+        photo = require(`../../content/images/${pos}.png`);
       }
       const innerHTML = this.props.player.selected
         ? <a className="glyphicon glyphicon-remove"></a>
@@ -53,11 +52,11 @@ export class PlayerCard extends Component {
     }
     else {
       const photos = {
-        PG: require('../content/images/pg.png'),
-        SG: require('../content/images/sg.png'),
-        SF: require('../content/images/sf.png'),
-        PF: require('../content/images/pf.png'),
-        C: require('../content/images/c.png')
+        PG: require('../../content/images/pg.png'),
+        SG: require('../../content/images/sg.png'),
+        SF: require('../../content/images/sf.png'),
+        PF: require('../../content/images/pf.png'),
+        C: require('../../content/images/c.png')
       }
       return (
         <div onClick={this.filter} className="card" tabIndex="1">

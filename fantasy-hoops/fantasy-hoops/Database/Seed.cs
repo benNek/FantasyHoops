@@ -22,7 +22,7 @@ namespace fantasy_hoops.Database
             HttpClient client = new HttpClient();
 
             string apiResponse =
-                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=afxmpc3rs38baa4tt3tggmgh");
+                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=zerbknhxk7ubqyb55yxkx2q3");
             System.Threading.Thread.Sleep(1000);
 
             JObject json = JObject.Parse(apiResponse);
@@ -44,7 +44,7 @@ namespace fantasy_hoops.Database
 
                         var key = teams[k].SelectToken("id");
                         string url = @"http://api.sportradar.us/nba/trial/v4/en/teams/" +
-                               key + "/profile.json?api_key=afxmpc3rs38baa4tt3tggmgh";
+                               key + "/profile.json?api_key=zerbknhxk7ubqyb55yxkx2q3";
                         string playerResponse = GetResponse(url);
 
                         JObject jobject = JObject.Parse(playerResponse);
