@@ -14,7 +14,7 @@ export class PlayerCard extends Component {
       const pos = this.props.player.position.toLowerCase();
       let photo = '';
       try {
-        photo = require(`../content/images/players/${this.props.player.id}.png`)
+        photo = require(`../content/images/players/${this.props.player.nbaID}.png`)
       }
       catch (err) {
         photo = require(`../content/images/${pos}.png`);
@@ -31,13 +31,13 @@ export class PlayerCard extends Component {
         </div>
         : '';
       return (
-        <div onClick={this.props.status == 2 ? this.filter : ''} className="card">
-          <div className="ppg">{this.props.player.ppg}</div>
+        <div onClick={this.props.status == 2 ? this.filter : ''} className="card" tabIndex="1">
+          <div className="ppg">{this.props.player.ppg.toFixed(1)}</div>
           <div className="ppg ppg-label">PPG</div>
           <div className="player-position">{this.props.player.position}</div>
           {buttonState}
           <div className="price-badge">
-            <span className="badge badge-dark">{this.props.player.price}</span>
+            <span className="badge badge-dark">{this.props.player.price/1000 + 'K'}</span>
           </div>
           <img
             className="card-img-top"
@@ -46,7 +46,7 @@ export class PlayerCard extends Component {
             alt="Card image cap">
           </img>
           <div className="card-block" >
-            <h2 className="card-title">{this.props.player.name[0]}. {this.props.player.surname}</h2>
+            <h2 className="card-title">{this.getDisplayName(this.props.player)}</h2>
           </div>
         </div>
       );
@@ -87,5 +87,15 @@ export class PlayerCard extends Component {
 
   handleSelect() {
     this.props.handleSelect(this.props.player.id, this.props.player.position);
+  }
+
+  getDisplayName(player) {
+    if(!player)
+      return;
+
+    if(player.firstName.length > 1)
+      return `${player.firstName[0]}. ${player.lastName}`;
+    else
+      return player.lastName;
   }
 }

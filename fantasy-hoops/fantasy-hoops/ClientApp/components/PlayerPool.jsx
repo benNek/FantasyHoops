@@ -12,6 +12,15 @@ export class PlayerPool extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.players == this.props.players) {
+      return;
+    }
+    this.setState({
+      players: this.props.players
+    });
+  }
+
   render() {
     const players = _.map(
       this.state.players,

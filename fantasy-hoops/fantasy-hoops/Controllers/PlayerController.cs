@@ -20,9 +20,9 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Player> Get()
+        public IEnumerable<Object> Get()
         {
-            return context.Players.ToList();
+            return context.Players.Select(x => new { x.FirstName,  x.LastName,  x.NbaID,  x.Price, x.Position, TeamColor = x.Team.Color, x.PPG }).ToList();
         }
 
         [HttpGet("{id}")]

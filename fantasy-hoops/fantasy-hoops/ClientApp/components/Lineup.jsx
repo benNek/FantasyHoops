@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { PlayerPool } from './PlayerPool';
 import { PlayerCard } from './PlayerCard';
-import PlayerAPI from '../mocked/players';
 
 export class Lineup extends Component {
   constructor() {
@@ -20,8 +19,19 @@ export class Lineup extends Component {
     };
   }
 
+  componentDidMount() {
+    fetch(`http://localhost:51407/api/player`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          players: res
+        });
+      });
+  }
+
   render() {
-    let players = PlayerAPI.all();
     return (
       <div className="container mt-4">
         <div className="row">
@@ -34,7 +44,7 @@ export class Lineup extends Component {
         <div className="row">
           <PlayerPool
             position={this.state.position}
-            players={players}
+            players={this.state.players}
             selectPlayer={this.selectPlayer}
           />
         </div>

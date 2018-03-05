@@ -31,8 +31,7 @@ namespace fantasy_hoops.Database
             {
                 for (int j = 0; j < json["conferences"][i]["divisions"].Count(); j++)
                 {
-                    for(int k = 0; k < 1; k++)
-                    //for (int k = 0; k <= json["conferences"][i]["divisions"][j].Count(); k++)
+                    for (int k = 0; k <= json["conferences"][i]["divisions"][j].Count(); k++)
                     {
                         teams = (JArray)json["conferences"][i]["divisions"][j]["teams"];
                         var team = new Team
@@ -64,6 +63,7 @@ namespace fantasy_hoops.Database
                                     NbaID = (int)players[l].SelectToken("reference"),
                                     Number = (int)players[l].SelectToken("jersey_number"),
                                     Price = 60000,
+                                    PPG = 10.0,
                                     TeamID = team.TeamID,
                                     Team = team,
                                 };
