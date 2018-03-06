@@ -62,9 +62,13 @@ namespace fantasy_hoops.Database
                                     Position = (String)players[l].SelectToken("primary_position"),
                                     NbaID = (int)players[l].SelectToken("reference"),
                                     Number = (int)players[l].SelectToken("jersey_number"),
+                                    Price = 60000,
+                                    PPG = 10.0,
+                                    TeamID = team.TeamID,
                                     Team = team
                                 };
                                 context.Players.Add(player);
+                                team.Players.Add(player);
                             }
                             catch (ArgumentNullException)
                             {

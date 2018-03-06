@@ -33,7 +33,11 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("Number");
 
+                    b.Property<double>("PPG");
+
                     b.Property<string>("Position");
+
+                    b.Property<int>("Price");
 
                     b.Property<int>("TeamID");
 
@@ -48,8 +52,6 @@ namespace fantasy_hoops.Migrations
                 {
                     b.Property<int>("TeamID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("APIID");
 
                     b.Property<string>("City");
 

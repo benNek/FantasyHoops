@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { PlayerPool } from './PlayerPool';
 import { PlayerCard } from './PlayerCard';
-import PlayerAPI from '../../mocked/players';
 import { ProgressBar } from './ProgressBar';
 
 export class Lineup extends Component {
@@ -20,8 +19,19 @@ export class Lineup extends Component {
     };
   }
 
+  componentDidMount() {
+    fetch(`http://localhost:51407/api/player`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          players: res
+        });
+      });
+  }
+
   render() {
-    let players = PlayerAPI.all();
     return (
       <div className="container mt-5">
         <div className="row justify-content-center">
@@ -35,7 +45,7 @@ export class Lineup extends Component {
         <div className="center row justify-content-center" style={{ width: '90%' }}>
           <PlayerPool
             position={this.state.position}
-            players={players}
+            players={this.state.players}
             selectPlayer={this.selectPlayer}
           />
         </div>
