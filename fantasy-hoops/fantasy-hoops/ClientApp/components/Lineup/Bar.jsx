@@ -2,13 +2,21 @@ import React, { Component } from 'react';
 const budget = 300000;
 
 export class Bar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      color: '',
+      width: ''
+    }
+  }
+
   render() {
-    const params = this.updateProgressBar();
+    this.updateProgressBar();
     return (
       <div className="progress-bar" role="progressbar"
         style={{
-          backgroundColor: params.color,
-          width: `${params.width}%`
+          backgroundColor: this.state.color,
+          width: `${this.state.width}%`
         }}>
       </div>
     );
@@ -16,8 +24,7 @@ export class Bar extends Component {
 
   updateProgressBar() {
     const player = this.props.player;
-    const color = player.props.status == 2 ? player.props.player.teamColor : color;
-    const width = (player.props.status == 2 ? parseInt(player.props.player.price) : 0) / budget * 100000;
-    return {color, width};
+    this.state.color = player.props.status == 2 ? player.props.player.teamColor : this.state.color;
+    this.state.width = (player.props.status == 2 ? player.props.player.price : 0) / budget * 100;
   }
 }
