@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Bar } from './Bar';
-const budget = 300; // thousands
+const budget = 300000; // thousands
 
 export class ProgressBar extends Component {
   render() {
@@ -38,7 +38,7 @@ export class ProgressBar extends Component {
 
   price(player) {
     const playerPrice = (player.props.status == 2
-      ? parseInt(player.props.player.price.replace('K', ''))
+      ? parseInt(player.props.player.price)
       : 0)
     return playerPrice;
   }

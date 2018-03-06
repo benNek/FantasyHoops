@@ -33,6 +33,8 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("Number");
 
+                    b.Property<double>("PPG");
+
                     b.Property<string>("Position");
 
                     b.Property<int>("Price");

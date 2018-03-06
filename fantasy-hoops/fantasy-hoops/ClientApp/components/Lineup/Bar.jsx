@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-const budget = 300; // thousands
+const budget = 300000;
 
 export class Bar extends Component {
   render() {
@@ -17,7 +17,7 @@ export class Bar extends Component {
   updateProgressBar() {
     const player = this.props.player;
     const color = player.props.status == 2 ? player.props.player.teamColor : color;
-    const width = (player.props.status == 2 ? parseInt(player.props.player.price.replace('K', '')) : 0) / budget * 100;
+    const width = (player.props.status == 2 ? parseInt(player.props.player.price) : 0) / budget * 100000;
     return {color, width};
   }
 }

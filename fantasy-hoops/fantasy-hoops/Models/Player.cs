@@ -12,6 +12,7 @@ namespace fantasy_hoops.Models
         public String Position { get; set; }
         public int Number { get; set; }
         public int Price { get; set; }
+        public double PPG { get; set; }
         public int TeamID { get; set; }
 
         public virtual Team Team{ get; set; }
