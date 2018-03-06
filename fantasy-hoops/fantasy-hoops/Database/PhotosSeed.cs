@@ -71,6 +71,7 @@ namespace fantasy_hoops.Database
 
         private static bool NeedDownload(string localFile, byte[] urlBytes)
         {
+            System.Console.WriteLine(localFile);
             if (!File.Exists(localFile))
                 return true;
 

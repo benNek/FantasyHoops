@@ -11,9 +11,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180304232700_AddPriceToPlayer")]
+    partial class AddPriceToPlayer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,8 +33,6 @@ namespace fantasy_hoops.Migrations
                     b.Property<int>("NbaID");
 
                     b.Property<int>("Number");
-
-                    b.Property<double>("PPG");
 
                     b.Property<string>("Position");
 

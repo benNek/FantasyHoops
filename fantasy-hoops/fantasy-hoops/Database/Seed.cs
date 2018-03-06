@@ -22,7 +22,7 @@ namespace fantasy_hoops.Database
             HttpClient client = new HttpClient();
 
             string apiResponse =
-                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=zerbknhxk7ubqyb55yxkx2q3");
+                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=afxmpc3rs38baa4tt3tggmgh");
             System.Threading.Thread.Sleep(1000);
 
             JObject json = JObject.Parse(apiResponse);
@@ -44,7 +44,7 @@ namespace fantasy_hoops.Database
 
                         var key = teams[k].SelectToken("id");
                         string url = @"http://api.sportradar.us/nba/trial/v4/en/teams/" +
-                               key + "/profile.json?api_key=zerbknhxk7ubqyb55yxkx2q3";
+                               key + "/profile.json?api_key=afxmpc3rs38baa4tt3tggmgh";
                         string playerResponse = GetResponse(url);
 
                         JObject jobject = JObject.Parse(playerResponse);
@@ -62,9 +62,13 @@ namespace fantasy_hoops.Database
                                     Position = (String)players[l].SelectToken("primary_position"),
                                     NbaID = (int)players[l].SelectToken("reference"),
                                     Number = (int)players[l].SelectToken("jersey_number"),
-                                    Team = team
+                                    Price = 60000,
+                                    PPG = 10.0,
+                                    TeamID = team.TeamID,
+                                    Team = team,
                                 };
                                 context.Players.Add(player);
+                                team.Players.Add(player);
                             }
                             catch (ArgumentNullException)
                             {
