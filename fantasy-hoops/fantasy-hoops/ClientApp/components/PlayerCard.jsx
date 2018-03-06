@@ -14,7 +14,7 @@ export class PlayerCard extends Component {
       const pos = this.props.player.position.toLowerCase();
       let photo = '';
       try {
-        photo = require(`../content/images/players/${this.props.player.nbaID}.png`)
+        photo = require(`../content/images/players/${this.props.player.id}.png`)
       }
       catch (err) {
         photo = require(`../content/images/${pos}.png`);
