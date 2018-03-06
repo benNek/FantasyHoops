@@ -31,12 +31,12 @@ export class PlayerCard extends Component {
         : '';
       return (
         <div onClick={this.props.status == 2 ? this.filter : ''} className="card">
-          <div className="ppg">{this.props.player.ppg.toFixed(1)}</div>
+          <div className="ppg">{this.props.player.fppg.toFixed(1)}</div>
           <div className="ppg ppg-label">PPG</div>
           <div className="player-position">{this.props.player.position}</div>
           {buttonState}
           <div className="price-badge">
-            <span className="badge badge-dark">{this.props.player.price / 1000 + 'K'}</span>
+            <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
           </div>
           <img
             className="card-img-top"

@@ -1,8 +1,11 @@
-﻿namespace fantasy_hoops.Models
+﻿using System;
+
+namespace fantasy_hoops.Models
 {
-    public class GameLog
+    public class Stats
     {
-        public int GameID { get; set; }
+        public int StatsID { get; set; }
+        public DateTime Date { get; set; }
         public int PTS { get; set; }
         public int FGM { get; set; }
         public int OREB { get; set; }
@@ -15,6 +18,7 @@
         public int FTA { get; set; }
         public int FLS { get; set; }
         public int TOV { get; set; }
+        public int PlayerID { get; set; }
 
         public virtual Player Player { get; set; }
     }

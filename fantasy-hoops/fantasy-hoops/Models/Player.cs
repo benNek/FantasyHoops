@@ -22,6 +22,6 @@ namespace fantasy_hoops.Models
         public int TeamID { get; set; }
 
         public virtual Team Team{ get; set; }
-        public virtual ICollection<GameLog> GameLog { get; set; }
+        public virtual ICollection<Stats> Stats { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Bar } from './Bar';
-const budget = 300000; // thousands
+const budget = 300; // thousands
 
 export class ProgressBar extends Component {
   render() {

@@ -33,7 +33,7 @@ namespace fantasy_hoops
 
             var task = Seed.InitializeAsync(_context);
             task.Wait();
-            PhotosSeed.Initialize(_context);
+            task = PhotosSeed.Initialize(_context);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
