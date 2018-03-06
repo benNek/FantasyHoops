@@ -5,18 +5,20 @@ using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
+using fantasy_hoops.Models;
+using System.Globalization;
 
 namespace fantasy_hoops.Database
 {
     public class StatsSeed
     {
-        readonly static string today = DateTime.Today.AddDays(-1).ToShortDateString().Replace("-", string.Empty);
+        readonly static string today = DateTime.Today.AddDays(-2).ToShortDateString().Replace("-", string.Empty);
 
-        public static void Initialize(GameContext context)
+        public static async Task Initialize(GameContext context)
         {
             string url = "http://data.nba.net/10s/prod/v2/" + today + "/scoreboard.json";
             JArray games = GetGames(url);
-            Calculate(games);
+            await Calculate(games, context);
         }
 
         private static HttpWebResponse GetResponse(string url)
@@ -56,15 +58,38 @@ namespace fantasy_hoops.Database
             return json;
         }
 
-        private static void Calculate(JArray games)
+        private static async Task Calculate(JArray games, GameContext context)
         {
+            DateTime date = DateTime.ParseExact(today, "yyyyMMdd", CultureInfo.InvariantCulture);
             foreach (JObject game in games)
             {
-                Debug.WriteLine(game["gameId"]);
                 string boxscore = "http://data.nba.net/10s/prod/v1/" + today + "/" + game["gameId"] + "_boxscore.json";
                 JObject bs = GetBoxscore(boxscore);
                 var stats = bs["stats"]["activePlayers"];
-                Debug.WriteLine(stats);
+                JArray players = (JArray)stats;
+                foreach (var player in players)
+                {
+                    var statsObj = new Stats
+                    {
+                        Date = date,
+                        PTS = (int)player["points"],
+                        FGM = (int)player["fgm"],
+                        OREB = (int)player["offReb"],
+                        DREB = (int)player["defReb"],
+                        STL = (int)player["steals"],
+                        AST = (int)player["assists"],
+                        BLK = (int)player["blocks"],
+                        FGA = (int)player["fga"],
+                        FTM = (int)player["ftm"],
+                        FTA = (int)player["fta"],
+                        FLS = (int)player["pFouls"],
+                        TOV = (int)player["turnovers"],
+                        PlayerID = (int)player["personId"]
+                    };
+                    statsObj.Player = context.Players.Where(x => x.NbaID == statsObj.PlayerID).FirstOrDefault();
+                    context.Stats.Add(statsObj);
+                    await context.SaveChangesAsync();
+                }
             }
         }
     }
