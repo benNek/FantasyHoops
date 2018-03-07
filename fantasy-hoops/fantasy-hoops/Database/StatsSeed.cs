@@ -12,13 +12,12 @@ namespace fantasy_hoops.Database
 {
     public class StatsSeed
     {
-        readonly static string today = DateTime.Today.AddDays(-2).ToShortDateString().Replace("-", string.Empty);
 
         public static async Task Initialize(GameContext context)
         {
-            string url = "http://data.nba.net/10s/prod/v2/" + today + "/scoreboard.json";
-            JArray games = GetGames(url);
-            await Calculate(games, context);
+            // Gets each day's stats the number of days before today
+            int daysFromToday = 30;
+            await Calculate(context, daysFromToday);
         }
 
         private static HttpWebResponse GetResponse(string url)
@@ -41,8 +40,9 @@ namespace fantasy_hoops.Database
             return resp;
         }
 
-        private static JArray GetGames(string url)
+        private static JArray GetGames(string date)
         {
+            string url = "http://data.nba.net/10s/prod/v2/" + date + "/scoreboard.json";
             HttpWebResponse webResponse = GetResponse(url);
             string apiResponse = ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
@@ -58,39 +58,75 @@ namespace fantasy_hoops.Database
             return json;
         }
 
-        private static async Task Calculate(JArray games, GameContext context)
+        private static async Task Calculate(GameContext context, int days)
         {
-            DateTime date = DateTime.ParseExact(today, "yyyyMMdd", CultureInfo.InvariantCulture);
-            foreach (JObject game in games)
+            while (days > 0)
             {
-                string boxscore = "http://data.nba.net/10s/prod/v1/" + today + "/" + game["gameId"] + "_boxscore.json";
-                JObject bs = GetBoxscore(boxscore);
-                var stats = bs["stats"]["activePlayers"];
-                JArray players = (JArray)stats;
-                foreach (var player in players)
+                string gameDate = DateTime.Today.AddDays(-days).ToShortDateString().Replace("-", string.Empty);
+                JArray games = GetGames(gameDate);
+                DateTime date = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+
+                foreach (JObject game in games)
                 {
-                    var statsObj = new Stats
+                    string boxscore = "http://data.nba.net/10s/prod/v1/" + gameDate + "/" + game["gameId"] + "_boxscore.json";
+                    JObject bs = GetBoxscore(boxscore);
+                    var stats = bs["stats"]["activePlayers"];
+                    JArray players = (JArray)stats;
+                    foreach (var player in players)
                     {
-                        Date = date,
-                        PTS = (int)player["points"],
-                        FGM = (int)player["fgm"],
-                        OREB = (int)player["offReb"],
-                        DREB = (int)player["defReb"],
-                        STL = (int)player["steals"],
-                        AST = (int)player["assists"],
-                        BLK = (int)player["blocks"],
-                        FGA = (int)player["fga"],
-                        FTM = (int)player["ftm"],
-                        FTA = (int)player["fta"],
-                        FLS = (int)player["pFouls"],
-                        TOV = (int)player["turnovers"],
-                        PlayerID = (int)player["personId"]
-                    };
-                    statsObj.Player = context.Players.Where(x => x.NbaID == statsObj.PlayerID).FirstOrDefault();
+                        if (!context.Players.Any(x => x.NbaID.Equals((int)player["personId"])))
+                            continue;
+                        AddToDatabase(context, player, date);
+                    }
+                }
+                await context.SaveChangesAsync();
+                days--;
+            }
+        }
+
+        private static void AddToDatabase(GameContext context, JToken player, DateTime date)
+        {
+            var statsObj = new Stats
+            {
+                Date = date,
+                PTS = (int)player["points"],
+                FGM = (int)player["fgm"],
+                OREB = (int)player["offReb"],
+                DREB = (int)player["defReb"],
+                STL = (int)player["steals"],
+                AST = (int)player["assists"],
+                BLK = (int)player["blocks"],
+                FGA = (int)player["fga"],
+                FTM = (int)player["ftm"],
+                FTA = (int)player["fta"],
+                FLS = (int)player["pFouls"],
+                TOV = (int)player["turnovers"],
+                PlayerID = (int)player["personId"]
+            };
+            statsObj.Player = context.Players.Where(x => x.NbaID == statsObj.PlayerID).FirstOrDefault();
+            bool shouldAdd = !context.Stats.Any(x => x.Date == date && x.Player.NbaID == statsObj.PlayerID);
+            int count = context.Stats.Where(x => x.Player.NbaID == statsObj.PlayerID).Count();
+
+            Debug.WriteLine(shouldAdd + " " + statsObj.Player.FirstName + " " + statsObj.Player.LastName + " " + count);
+            if (shouldAdd)
+            {
+                if (count < 5)
+                {
                     context.Stats.Add(statsObj);
-                    await context.SaveChangesAsync();
+                    return;
+                }
+                else
+                {
+                    var rmObj = context.Stats
+                        .Where(x => x.Player.NbaID == statsObj.PlayerID)
+                        .OrderByDescending(x => x.Date)
+                        .First();
+                    context.Stats.Remove(rmObj);
+                    context.Stats.Add(statsObj);
+                    return;
                 }
             }
+            else return;
         }
     }
 }

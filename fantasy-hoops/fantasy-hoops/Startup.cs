@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace fantasy_hoops
 {
@@ -33,8 +34,8 @@ namespace fantasy_hoops
 
             var task = Seed.InitializeAsync(_context);
             task.Wait();
-            StatsSeed.Initialize(_context);
-            PhotosSeed.Initialize(_context);
+            Task.Run(() => StatsSeed.Initialize(_context));
+            Task.Run(() => PhotosSeed.Initialize(_context));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
