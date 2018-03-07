@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using System.Globalization;
@@ -68,9 +67,11 @@ namespace fantasy_hoops.Database
 
                 foreach (JObject game in games)
                 {
-                    string boxscore = "http://data.nba.net/10s/prod/v1/" + gameDate + "/" + game["gameId"] + "_boxscore.json";
-                    JObject bs = GetBoxscore(boxscore);
-                    var stats = bs["stats"]["activePlayers"];
+                    string bsUrl = "http://data.nba.net/10s/prod/v1/" + gameDate + "/" + game["gameId"] + "_boxscore.json";
+                    JObject boxscore = GetBoxscore(bsUrl);
+                    if (boxscore["stats"] == null)
+                        continue;
+                    var stats = boxscore["stats"]["activePlayers"];
                     JArray players = (JArray)stats;
                     foreach (var player in players)
                     {
@@ -78,8 +79,8 @@ namespace fantasy_hoops.Database
                             continue;
                         AddToDatabase(context, player, date);
                     }
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
                 days--;
             }
         }
@@ -106,8 +107,6 @@ namespace fantasy_hoops.Database
             statsObj.Player = context.Players.Where(x => x.NbaID == statsObj.PlayerID).FirstOrDefault();
             bool shouldAdd = !context.Stats.Any(x => x.Date == date && x.Player.NbaID == statsObj.PlayerID);
             int count = context.Stats.Where(x => x.Player.NbaID == statsObj.PlayerID).Count();
-
-            Debug.WriteLine(shouldAdd + " " + statsObj.Player.FirstName + " " + statsObj.Player.LastName + " " + count);
             if (shouldAdd)
             {
                 if (count < 5)
@@ -119,10 +118,13 @@ namespace fantasy_hoops.Database
                 {
                     var rmObj = context.Stats
                         .Where(x => x.Player.NbaID == statsObj.PlayerID)
-                        .OrderByDescending(x => x.Date)
+                        .OrderBy(x => x.Date)
                         .First();
-                    context.Stats.Remove(rmObj);
-                    context.Stats.Add(statsObj);
+                    if (rmObj != null)
+                    {
+                        context.Stats.Remove(rmObj);
+                        context.Stats.Add(statsObj);
+                    }
                     return;
                 }
             }
