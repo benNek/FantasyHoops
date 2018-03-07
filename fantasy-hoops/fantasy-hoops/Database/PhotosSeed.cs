@@ -20,14 +20,7 @@ namespace fantasy_hoops.Database
                 string remoteFileUrl =
                     "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
                 string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
-                try
-                {
-                    await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
-                }
-                catch (WebException)
-                {
-                    continue;
-                }
+                await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
             }
         }
 
@@ -35,6 +28,8 @@ namespace fantasy_hoops.Database
         {
             byte[] content;
             WebResponse response = GetResponse(urlFile);
+            if (response == null)
+                return;
             Stream stream = response.GetResponseStream();
             using (BinaryReader br = new BinaryReader(stream))
             {
@@ -61,12 +56,19 @@ namespace fantasy_hoops.Database
 
         private static HttpWebResponse GetResponse(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.KeepAlive = true;
-            request.ContentType = "application/json";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            return response;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.KeepAlive = true;
+                request.ContentType = "application/json";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                return response;
+            }
+            catch (WebException)
+            {
+                return null;
+            }
         }
 
         private static bool NeedDownload(string localFile, byte[] urlBytes)

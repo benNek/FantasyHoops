@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-const budget = 300000;
+const budget = 300;
 
 export class Bar extends Component {
   constructor(props) {
