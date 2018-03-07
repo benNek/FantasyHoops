@@ -61,7 +61,7 @@ namespace fantasy_hoops.Database
         {
             while (days > 0)
             {
-                string gameDate = DateTime.Today.AddDays(-days).ToShortDateString().Replace("-", string.Empty);
+                string gameDate = DateTime.Today.AddDays(-days).ToString("yyyyMMdd");
                 JArray games = GetGames(gameDate);
                 DateTime date = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture);
 
