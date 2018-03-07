@@ -1,7 +1,6 @@
 ﻿using fantasy_hoops.Models;
 using System;
 using System.Linq;
-using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -18,8 +17,6 @@ namespace fantasy_hoops.Database
             {
                 return;
             }
-
-            HttpClient client = new HttpClient();
 
             string apiResponse =
                 GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=zerbknhxk7ubqyb55yxkx2q3");
@@ -81,6 +78,31 @@ namespace fantasy_hoops.Database
                     }
                 }
             }
+        }
+
+        public static void UpdateTeamColors(GameContext context)
+        {
+            // Hardcoding like a champ
+            string[] colors = { /* Raptors */ "#CD1141", /* Celtics */ "#008248",
+                /* 76ers */ "#006BB6", /* Knicks */ "#006BB6", /* Nets */ "#000000",
+                /* Cavaliers */ "#6F2633", /* Pacers */ "#002D62", /* Bucks */ "#00471B",
+                /* Pistons */ "#E01E38", /* Bulls */ "#CE1141", /* Wizards */ "#002B5C",
+                /* Heat */ "#98002E", /* Hornets */ "#1D1160", /* Magic */ "#0B77BD",
+                /* Hawks */ "#E03A3E", /* Trail Blazers */ "#E13A3E", /* Timberwolves */ "#002B5C",
+                /* Thunder */ "#007AC1", /* Nuggets */ "#00285E", /* Jazz */ "#0C2340",
+                /* Warriors */ "#243E90", /* Clippers */ "#ED174C", /* Lakers */ "#552583",
+                /* Kings */ "#5A2D81", /* Suns */ "#E56020", /* Rockets */ "#CE1141",
+                /* Pelicans */ "#0C2340", /* Spurs */ "#C4CED4", /* Mavericks */ "#007DC5",
+                /* Grizzlies */ "#00285E"};
+
+            int i = 0;
+            foreach (var team in context.Teams)
+            {
+                if(i < colors.Count())
+                    team.Color = colors[i];
+                i++;
+            }
+            context.SaveChanges();
         }
 
         private static string GetResponse(string url)
