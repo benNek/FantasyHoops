@@ -169,6 +169,7 @@ namespace fantasy_hoops.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+                });
                     
             modelBuilder.Entity("fantasy_hoops.Models.Paragraph", b =>
                 {
