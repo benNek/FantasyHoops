@@ -10,6 +10,8 @@ namespace fantasy_hoops.Database
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Stats> Stats { get; set; }
+        public DbSet<Paragraph> Paragraphs { get; set; }
+        public DbSet<News> News { get; set; }
 
         private static string connectionString = "Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;";
 
