@@ -11,9 +11,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180308131130_AddNewsModel")]
+    partial class AddNewsModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,30 +147,6 @@ namespace fantasy_hoops.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("fantasy_hoops.Models.User", b =>
-                {
-                    b.Property<string>("UserID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Email")
-                        .IsRequired();
-
-                    b.Property<string>("FavoriteTeam");
-
-                    b.Property<string>("Password")
-                        .IsRequired();
-
-                    b.Property<string>("Phone");
-
-                    b.Property<string>("Username")
-                        .IsRequired();
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("Users");
-                    
             modelBuilder.Entity("fantasy_hoops.Models.Paragraph", b =>
                 {
                     b.HasOne("fantasy_hoops.Models.News", "News")
