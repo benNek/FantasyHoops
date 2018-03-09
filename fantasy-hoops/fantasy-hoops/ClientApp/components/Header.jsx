@@ -7,9 +7,9 @@ export class Header extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
         <a className="navbar-brand" href="#">
-          <img src="http://www.zillakgames.com/web/game-thumbnails/C/classic%20basketball.png" width="30" height="30" alt="" />
+          <img src={require('../../wwwroot/favicon.ico')} width="40" height="40" alt="Fantasy Hoops" />
           Fantasy Hoops
         </a>
         <button className="navbar-toggler"

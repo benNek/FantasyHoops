@@ -19,11 +19,11 @@ export class PlayerCard extends Component {
         photo = require(`../../content/images/${pos}.png`);
       }
       const innerHTML = this.props.player.selected
-        ? <a className="glyphicon glyphicon-remove"></a>
-        : <a className="glyphicon glyphicon-plus"></a>;
+        ? <a className="fa fa-remove"></a>
+        : <i className="fa fa-plus"></i>;
       const buttonState = this.props.status == 1
         ? <div className="button">
-          <button className={`btn btn-circle btn-lg ${this.props.player.selected ? 'btn-danger' : 'btn-primary'} text-center`}
+          <button className={`btn center btn-circle btn-lg ${this.props.player.selected ? 'btn-danger' : 'btn-primary'} text-center`}
             onClick={this.select}>
             {innerHTML}
           </button>

@@ -6,7 +6,7 @@ export class ProgressBar extends Component {
   render() {
     const remaining = this.calculateRemaining();
     return (
-      <div>
+      <div style={{height: '100px'}}>
         <div className="row mt-4 justify-content-center"
           style={{
             fontSize: '25px',

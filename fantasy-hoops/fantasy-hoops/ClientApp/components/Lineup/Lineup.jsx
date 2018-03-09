@@ -33,22 +33,20 @@ export class Lineup extends Component {
 
   render() {
     return (
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          {this.state.pg}
-          {this.state.sg}
-          {this.state.sf}
-          {this.state.pf}
-          {this.state.c}
-        </div>
-        <ProgressBar players={this.state} />
-        <div className="center row justify-content-center" style={{ width: '90%' }}>
-          <PlayerPool
-            position={this.state.position}
-            players={this.state.players}
-            selectPlayer={this.selectPlayer}
-          />
-        </div>
+      <div className="body container mt-5">
+          <div className="row justify-content-center">
+            {this.state.pg}
+            {this.state.sg}
+            {this.state.sf}
+            {this.state.pf}
+            {this.state.c}
+          </div>
+          <ProgressBar players={this.state} />
+        <PlayerPool
+          position={this.state.position}
+          players={this.state.players}
+          selectPlayer={this.selectPlayer}
+        />
       </div>
     );
   }

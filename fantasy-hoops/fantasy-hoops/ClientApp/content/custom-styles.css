@@ -30,32 +30,30 @@
 
 .ppg {
   color: white;
-  /* width: 350px; */
-  text-align: center;
-  /* float: right; */
   font-weight: bold;
   position: absolute;
-  /* overflow: hidden; */
-  /* font-size: 15px; */
-  padding-top: 10px;
-  padding-left: 9.5rem;
+  padding-top: 0.6rem;
+  padding-left: 10rem;
 }
 
 .ppg-label {
+  text-align: right;
   font-size: 12px;
-  padding-top: 27px;
+  padding-top: 1.75rem;
+  padding-left: 10.5rem;
 }
 
 .btn-circle.btn-lg {
-  width: 44px;
-  height: 44px;
-  font-size: 10px;
-  border-radius: 22px;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 0.9rem;
+  border-radius: 1.375rem;
 }
 
 .button {
-  padding-left: 145px;
-  padding-top: 110px;
+  color: white;
+  padding-left: 9rem;
+  padding-top: 7rem;
   position: absolute;
 }
 
@@ -113,23 +111,17 @@
 
 .container {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
   width: 100%;
-}
-
-.center {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
 }
 
 .navbar-login
 {
-    width: 305px;
-    padding: 10px;
+    width: 19rem;
+    padding: 0.625rem;
     padding-bottom: 0px;
 }
 
-
-
+.body {
+  padding-top: 3rem;
+}
