@@ -121,10 +121,6 @@
     padding: 0.625rem;
 }
 
-.body {
-  padding-top: 3rem;
-}
-
 .btn-no-outline {
   outline: none !important;
   box-shadow: none !important;

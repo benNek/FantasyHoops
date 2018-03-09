@@ -34,7 +34,7 @@ export class Lineup extends Component {
 
   render() {
     return (
-      <div className="body container mt-5 bg-light">
+      <div className="container mt-5 bg-light">
         <div className="sticky-top bg-light" style={{top: '4em'}}>
           <div className="row justify-content-center pt-3">
             {this.state.pg}
