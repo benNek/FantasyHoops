@@ -124,3 +124,10 @@
 .body {
   padding-top: 3rem;
 }
+
+.btn-no-outline {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  cursor: pointer;
+}
