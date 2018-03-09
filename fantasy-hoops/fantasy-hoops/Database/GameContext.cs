@@ -10,6 +10,7 @@ namespace fantasy_hoops.Database
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Stats> Stats { get; set; }
+        public DbSet<Injuries> Injuries { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Paragraph> Paragraphs { get; set; }
         public DbSet<News> News { get; set; }
