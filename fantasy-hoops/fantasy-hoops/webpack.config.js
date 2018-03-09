@@ -17,41 +17,9 @@ module.exports = (env) => {
     },
     module: {
       rules: [
-        {
-          test: /\.css$/,
-          use: ['style-loader', 'css-loader']
-        }, {
-          test: /\.(gif|png|jpe?g|svg)$/i,
-          use: [
-            'file-loader',
-            {
-              loader: 'image-webpack-loader',
-              options: {
-                gifsicle: {
-                  interlaced: false
-                },
-                optipng: {
-                  optimizationLevel: 4
-                },
-                bypassOnDebug: true
-              }
-            }
-          ]
-        },
-        {
-          test: /\.(html)$/,
-          use: {
-            loader: 'html-loader',
-            options: {
-              attrs: [':data-src']
-            }
-          }
-        },
-        {
-          test: /\.ico$/,
-          loader: 'url-loader',
-          query: { mimetype: 'image/x-icon' }
-        },
+        { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' },
+        { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
+        { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
         {
           test: /\.jsx?$/,
           exclude: /node_modules/,
@@ -65,6 +33,11 @@ module.exports = (env) => {
             presets: ['react', 'es2015'],
             plugins: ['react-hot-loader/babel']
           }
+        },
+        {
+          test: /\.ico$/,
+          loader: 'url-loader',
+          query: { mimetype: 'image/x-icon' }
         }
       ]
     },
