@@ -12,7 +12,7 @@ export class PlayerPool extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.players == this.props.players) {
+    if (this.state.players == this.props.players) {
       return;
     }
     this.setState({
@@ -40,7 +40,7 @@ export class PlayerPool extends Component {
     );
     return (
       <div className="container mt-4">
-        <div className="row">
+        <div className="row justify-content-center">
           {players}
         </div>
       </div>

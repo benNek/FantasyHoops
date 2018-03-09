@@ -29,26 +29,27 @@ export class Lineup extends Component {
           players: res
         });
       });
+      this.filter('PG');
   }
 
   render() {
     return (
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          {this.state.pg}
-          {this.state.sg}
-          {this.state.sf}
-          {this.state.pf}
-          {this.state.c}
+      <div className="container mt-5 bg-light">
+        <div className="sticky-top bg-light" style={{top: '4em'}}>
+          <div className="row justify-content-center pt-3">
+            {this.state.pg}
+            {this.state.sg}
+            {this.state.sf}
+            {this.state.pf}
+            {this.state.c}
+          </div>
+          <ProgressBar players={this.state} />
         </div>
-        <ProgressBar players={this.state} />
-        <div className="center row justify-content-center" style={{ width: '90%' }}>
-          <PlayerPool
-            position={this.state.position}
-            players={this.state.players}
-            selectPlayer={this.selectPlayer}
-          />
-        </div>
+        <PlayerPool
+          position={this.state.position}
+          players={this.state.players}
+          selectPlayer={this.selectPlayer}
+        />
       </div>
     );
   }
