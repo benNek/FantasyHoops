@@ -13,7 +13,7 @@ export class ProgressBar extends Component {
             color: remaining < 0 ? 'red' : 'black'
           }}>Remaining {remaining}K</div>
         <div className="row mt-4 justify-content-center">
-          <div className="progress" style={{ width: '66%' }}>
+          <div className="progress" style={{ width: '91%' }}>
             <Bar player={this.props.players.pg} />
             <Bar player={this.props.players.sg} />
             <Bar player={this.props.players.sf} />
