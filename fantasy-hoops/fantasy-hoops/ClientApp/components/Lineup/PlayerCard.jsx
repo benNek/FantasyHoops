@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import Scroll from 'react-scroll'
 
 export class PlayerCard extends Component {
   constructor() {
@@ -91,6 +92,7 @@ export class PlayerCard extends Component {
   }
 
   filter() {
+    Scroll.animateScroll.scrollToTop();
     this.props.filter(this.props.position);
   }
 

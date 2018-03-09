@@ -34,7 +34,8 @@ export class Lineup extends Component {
   render() {
     return (
       <div className="body container mt-5">
-          <div className="row justify-content-center">
+        <div className="sticky-top bg-light" style={{top: '4em'}}>
+          <div className="row justify-content-center pt-3">
             {this.state.pg}
             {this.state.sg}
             {this.state.sf}
@@ -42,6 +43,7 @@ export class Lineup extends Component {
             {this.state.c}
           </div>
           <ProgressBar players={this.state} />
+        </div>
         <PlayerPool
           position={this.state.position}
           players={this.state.players}

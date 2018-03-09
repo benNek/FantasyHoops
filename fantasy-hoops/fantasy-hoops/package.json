@@ -38,6 +38,7 @@
     "webpack-hot-middleware": "2.18.2"
   },
   "dependencies": {
-    "react-bootstrap": "^0.32.1"
+    "react-bootstrap": "^0.32.1",
+    "react-scroll": "^1.7.7"
   }
 }
