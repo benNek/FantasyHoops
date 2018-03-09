@@ -29,11 +29,12 @@ export class Lineup extends Component {
           players: res
         });
       });
+      this.filter('PG');
   }
 
   render() {
     return (
-      <div className="body container mt-5">
+      <div className="body container mt-5 bg-light">
         <div className="sticky-top bg-light" style={{top: '4em'}}>
           <div className="row justify-content-center pt-3">
             {this.state.pg}
