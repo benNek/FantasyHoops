@@ -23,10 +23,10 @@ export class Header extends Component {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" href="#">News feed<span className="sr-only">(current)</span></a>
+              <a className="nav-link" href="/news">News feed<span className="sr-only">(current)</span></a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">Injuries feed</a>
+              <a className="nav-link" href="/injuries">Injuries feed</a>
             </li>
             <li className="nav-item dropdown">
               <a
@@ -69,7 +69,7 @@ export class Header extends Component {
                         <p className="text-left"><strong>hooper420</strong></p>
                         <p className="text-left small">fantasy@hoops.com</p>
                         <p className="text-left">
-                          <a href="#" className="btn btn-primary btn-block btn-sm">Edit profile</a>
+                          <a href="/edit-profile" className="btn btn-primary btn-block btn-sm">Edit profile</a>
                         </p>
                       </div>
                     </div>

@@ -38,7 +38,7 @@
 
 .ppg-label {
   text-align: right;
-  font-size: 12px;
+  font-size: 0.75rem;
   padding-top: 1.75rem;
   padding-left: 10.5rem;
 }
@@ -106,7 +106,7 @@
 }
 
 .progress-bar {
-  border-radius: 8px;
+  border-radius: 0.5rem;
 }
 
 .container {
@@ -119,7 +119,6 @@
 {
     width: 19rem;
     padding: 0.625rem;
-    padding-bottom: 0px;
 }
 
 .body {
