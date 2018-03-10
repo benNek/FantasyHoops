@@ -270,8 +270,6 @@
   opacity: 1 !important;
 }
 .injury-container {
-  max-width: 800px;
-  min-width: 640px;
   margin: 0 auto;
 }
 .injury-container:before,

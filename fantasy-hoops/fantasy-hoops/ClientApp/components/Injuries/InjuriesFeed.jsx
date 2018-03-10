@@ -14,8 +14,10 @@ export class InjuriesFeed extends Component {
       }
     );
     return (
-      <div className="row">
-        {players}
+      <div className="container mt-4 bg-light" style={{ paddingTop: '5em' }}>
+        <div className="row">
+          {players}
+        </div>
       </div>
     );
   }

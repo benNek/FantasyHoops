@@ -7,7 +7,7 @@ export class InjuryCard extends Component {
 
   render() {
     return (
-      <div className='injury-container col-sm'>
+      <div className='injury-container ml-3 mt-3'>
         <div className='column'>
           <div className='post-module'>
             <div className='thumbnail'>
