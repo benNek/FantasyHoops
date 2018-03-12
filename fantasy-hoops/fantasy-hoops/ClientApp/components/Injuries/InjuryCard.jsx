@@ -15,9 +15,10 @@ export class InjuryCard extends Component {
       photo = require(`../../content/images/${pos}.png`);
     }
     let status = '';
-    if (this.props.player.status === "Active")
+    if (this.props.player.status.toLowerCase().includes("active"))
       status = 'injury-active';
-    else if (this.props.player.status === "Out")
+    else if (this.props.player.status.toLowerCase().includes("out")
+      || this.props.player.status.toLowerCase().includes("injured"))
       status = 'injury-out';
     else
       status = 'injury-questionable';
@@ -34,7 +35,7 @@ export class InjuryCard extends Component {
                 style={{ backgroundColor: this.props.player.teamColor }} />
             </div>
             <div className='post-content'>
-              <div className={'category '+status}>{this.props.player.status}</div>
+              <div className={'category ' + status}>{this.props.player.status}</div>
               <h1 className='title'>{this.props.player.name[0]}. {this.props.player.surname}</h1>
               <h2 className='sub_title'>{this.props.player.subTitle}</h2>
               <p className='description'>{this.props.player.news}</p>

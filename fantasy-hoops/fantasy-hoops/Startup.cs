@@ -39,6 +39,7 @@ namespace fantasy_hoops
 
         private static async void Run(GameContext _context)
         {
+            await Task.Run(() => InjuriesSeed.Initialize(_context));
             await Task.Run(() => Seed.UpdateTeamColors(_context));
             await Task.Run(() => PhotosSeed.Initialize(_context));
             await Task.Run(() => StatsSeed.Initialize(_context));
