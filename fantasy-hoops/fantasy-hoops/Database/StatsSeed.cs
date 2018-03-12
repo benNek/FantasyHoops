@@ -109,6 +109,13 @@ namespace fantasy_hoops.Database
             int count = context.Stats.Where(x => x.Player.NbaID == statsObj.PlayerID).Count();
             if (shouldAdd)
             {
+                statsObj.GS = Math.Round(statsObj.PTS + 0.4 * statsObj.FGM + 0.7 * statsObj.OREB
+                    + 0.3 * statsObj.DREB + statsObj.STL + 0.7 * statsObj.AST + 0.7 * statsObj.BLK
+                    - 0.7 * statsObj.FGA - 0.4 * statsObj.FTM - 0.4 * statsObj.FLS - statsObj.TOV, 2);
+
+                statsObj.FP = Math.Round(statsObj.PTS + 1.2 * (statsObj.DREB + statsObj.OREB)
+                    + 1.5 * statsObj.AST + 3 * statsObj.STL + 3 * statsObj.BLK - statsObj.TOV, 2);
+
                 if (count < 5)
                 {
                     context.Stats.Add(statsObj);
