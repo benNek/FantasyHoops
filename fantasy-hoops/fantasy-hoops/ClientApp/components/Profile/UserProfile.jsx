@@ -108,7 +108,7 @@ export class UserProfile extends Component {
                       teamColor='#552583'
                     />
                     <UserCard
-                      userName='Duhas'
+                      userName='Benas Nekrosius'
                       avatar='https://scontent.fkun1-1.fna.fbcdn.net/v/t1.0-1/22008227_1547763031950103_6781077529679133042_n.jpg?oh=aae2c5d83b199de386a5160861333d37&oe=5B49B5DF'
                       teamColor='#008248'
                     />
