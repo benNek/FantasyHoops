@@ -6,8 +6,8 @@ import { InjuriesFeed } from './components/Injuries/InjuriesFeed';
 import { Registration } from './components/Authentication/Registration';
 
 export const routes = <div>
-    <Route exact path='/register' component={Registration} />
     <Route path='/' component={Header} />
+    <Route exact path='/register' component={Registration} />
     <Route path='/lineup' component={Lineup} />
     <Route path='/injuries' component={InjuriesFeed} />
 </div>;

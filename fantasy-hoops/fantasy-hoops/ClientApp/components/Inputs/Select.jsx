@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import shortid from 'shortid';
 
-export class Input extends Component {
+export class Select extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -14,18 +15,18 @@ export class Input extends Component {
     else
       e.target.className = "form-control";
 
-    if(this.props.match) {
+    if (this.props.match) {
       const passwordValue = document.getElementById(this.props.match).value;
-      if(passwordValue !== value)
+      if (passwordValue !== value)
         e.target.className = "form-control is-invalid";
       else
         e.target.className = "form-control";
     }
 
-    if(this.props.children) {
+    if (this.props.children) {
       const passwordValue = document.getElementById(this.props.children).value;
-      if(passwordValue.length > 0) {
-        if(value !== passwordValue) {
+      if (passwordValue.length > 0) {
+        if (value !== passwordValue) {
           document.getElementById(this.props.children).className = "form-control is-invalid";
         }
         else {
@@ -37,18 +38,23 @@ export class Input extends Component {
   }
 
   render() {
+    let values = this.props.options.map(option => {
+      return (
+        <option key={shortid()} value={option.value}>{option.name}</option>
+      );
+    });
     return (
       <div>
-        <input
-          type={this.props.type}
-          className="form-control"
+        <select
           id={this.props.id}
-          maxLength="40"
-          placeholder={this.props.placeholder}
+          className="form-control custom-select"
           value={this.props.value}
-          onChange={this.handleChange}
+          onChange={this.props.onChange}
           required={this.props.notRequired ? false : true}
-        />
+        >
+          <option value="" defaultValue>Choose your favourite team</option>
+          {values}
+        </select>
         <div className="invalid-feedback">
           {this.props.error}
         </div>
