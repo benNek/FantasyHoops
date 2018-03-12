@@ -285,7 +285,6 @@
 }
 .about-me {
   display: block;
-  word-break: break-all;
   word-wrap: break-word;
 }
 .src-image {
