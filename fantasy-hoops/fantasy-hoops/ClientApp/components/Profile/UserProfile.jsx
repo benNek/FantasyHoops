@@ -21,13 +21,13 @@ export class UserProfile extends Component {
           <div className="col-lg-8 order-lg-2">
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a href="" data-target="#profile" data-toggle="tab" id="navLinkProfile" className="nav-link active">Profile</a>
+                <a href="" data-target="#profile" data-toggle="tab" id="navLinkProfile" className="nav-link active btn-no-outline">Profile</a>
               </li>
               <li className="nav-item">
-                <a href="" data-target="#messages" data-toggle="tab" id="navLinkMessages" className="nav-link">Friends</a>
+                <a href="" data-target="#messages" data-toggle="tab" id="navLinkMessages" className="nav-link btn-no-outline">Friends</a>
               </li>
               <li className="nav-item">
-                <a href="" data-target="#edit" data-toggle="tab" id="navLinkEdit" className="nav-link">Edit</a>
+                <a href="" data-target="#edit" data-toggle="tab" id="navLinkEdit" className="nav-link btn-no-outline">Edit</a>
               </li>
             </ul>
             <div className="tab-content py-4">
@@ -203,9 +203,9 @@ export class UserProfile extends Component {
       profile.className = "tab-pane";
       messages.className = "tab-pane";
       edit.className = "tab-pane active show";
-      profileLink.className = "nav-link";
-      messagesLink.className = "nav-link";
-      editLink.className = "nav-link active show";
+      profileLink.className = "nav-link btn-no-outline";
+      messagesLink.className = "nav-link btn-no-outline";
+      editLink.className = "nav-link active show btn-no-outline";
     }
   }
 }

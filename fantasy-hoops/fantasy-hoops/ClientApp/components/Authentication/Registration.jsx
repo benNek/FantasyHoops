@@ -75,7 +75,7 @@ export class Registration extends Component {
         <br />
         <h2>Registration</h2>
         <form onSubmit={this.handleSubmit} id="form">
-          <div required className="form-group">
+          <div className="form-group">
             <label>Username</label>
             <Input
               type="text"
