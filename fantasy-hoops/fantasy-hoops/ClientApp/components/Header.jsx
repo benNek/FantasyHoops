@@ -62,14 +62,14 @@ export class Header extends Component {
                     <div className="row">
                       <div className="col-lg-4">
                         <p className="text-center">
-                          <img src="https://i.imgur.com/0i1KEYY.png" width="100" height="100" alt="" />
+                          <a href='/profile'><img src="https://i.imgur.com/0i1KEYY.png" width="100" height="100" alt="" /></a>
                         </p>
                       </div>
                       <div className="col-lg-8">
                         <p className="text-left"><strong>hooper420</strong></p>
                         <p className="text-left small">fantasy@hoops.com</p>
                         <p className="text-left">
-                          <a href="/edit-profile" className="btn btn-primary btn-block btn-sm">Edit profile</a>
+                          <a href="/profile/edit" className="btn btn-primary btn-block btn-sm">Edit profile</a>
                         </p>
                       </div>
                     </div>

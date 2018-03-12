@@ -6,7 +6,7 @@ import { InjuriesFeed } from './components/Injuries/InjuriesFeed';
 import { UserProfile } from './components/UserProfile';
 
 export const routes = <div>
-    <Route path='/profile' component={UserProfile} />
+    <Route path='/profile/:edit?' component={UserProfile} />
     <Route path='/' component={Header} />
     <Route path='/lineup' component={Lineup} />
     <Route path='/injuries' component={InjuriesFeed} />

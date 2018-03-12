@@ -277,3 +277,14 @@
   display: block;
   clear: both;
 }
+
+/*My profile*/
+.team-badge {
+  transform: scale(2);
+  padding-left: 5.5rem;
+}
+.about-me {
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+}
