@@ -8,32 +8,6 @@ export class Select extends Component {
   }
 
   handleChange(e) {
-    const value = e.target.value;
-    const regex = new RegExp(this.props.regex);
-    if (!regex.test(value))
-      e.target.className = "form-control is-invalid";
-    else
-      e.target.className = "form-control";
-
-    if (this.props.match) {
-      const passwordValue = document.getElementById(this.props.match).value;
-      if (passwordValue !== value)
-        e.target.className = "form-control is-invalid";
-      else
-        e.target.className = "form-control";
-    }
-
-    if (this.props.children) {
-      const passwordValue = document.getElementById(this.props.children).value;
-      if (passwordValue.length > 0) {
-        if (value !== passwordValue) {
-          document.getElementById(this.props.children).className = "form-control is-invalid";
-        }
-        else {
-          document.getElementById(this.props.children).className = "form-control";
-        }
-      }
-    }
     this.props.onChange(e);
   }
 
