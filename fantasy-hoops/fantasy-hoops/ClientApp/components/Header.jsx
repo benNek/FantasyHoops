@@ -41,6 +41,7 @@ export class Header extends Component {
                 <a className="dropdown-item btn" href="/lineup">Lineup</a>
                 <a className="dropdown-item" href="#">Daily Top users</a>
                 <a className="dropdown-item" href="#">Most selected players</a>
+                <a className="dropdown-item" href="/rules">Rules</a>
               </div>
             </li>
           </ul>
