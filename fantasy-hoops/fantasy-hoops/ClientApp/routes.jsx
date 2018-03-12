@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { InjuriesFeed } from './components/Injuries/InjuriesFeed';
 import { Registration } from './components/Authentication/Registration';
 import { UserProfile } from './components/Profile/UserProfile';
+import { Rules } from './components/Rules';
 
 export const routes = <div>
     <Route path='/' component={Header} />
@@ -12,4 +13,5 @@ export const routes = <div>
     <Route path='/profile/:edit?' component={UserProfile} />
     <Route path='/lineup' component={Lineup} />
     <Route path='/injuries' component={InjuriesFeed} />
+    <Route path='/rules' component={Rules} />
 </div>;
