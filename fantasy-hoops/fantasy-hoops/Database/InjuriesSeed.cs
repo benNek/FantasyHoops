@@ -10,7 +10,7 @@ namespace fantasy_hoops.Database
 {
     public class InjuriesSeed
     {
-        const int DAYS_TO_SAVE = 3;
+        const int DAYS_TO_SAVE = 1;
         static DateTime dayFrom = DateTime.Today.AddDays(-DAYS_TO_SAVE);
 
         public static async Task Initialize(GameContext context)
@@ -72,6 +72,8 @@ namespace fantasy_hoops.Database
             };
             injuryObj.Player = context.Players.Where(x => x.NbaID == (int)injury["PrimarySourceKey"]).FirstOrDefault();
 
+            if (injuryObj.Player == null)
+                return;
             // If player is in databse, he won't be added
             bool shouldAdd = !context.Injuries.Any(x => x.PlayerID == injuryObj.Player.PlayerID);
 
