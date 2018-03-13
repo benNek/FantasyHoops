@@ -18,6 +18,8 @@ namespace fantasy_hoops.Models
         public int FTA { get; set; }
         public int FLS { get; set; }
         public int TOV { get; set; }
+        public double GS { get; set; }
+        public double FP { get; set; }
         public int PlayerID { get; set; }
 
         public virtual Player Player { get; set; }
