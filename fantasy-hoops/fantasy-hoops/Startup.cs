@@ -1,6 +1,8 @@
 using fantasy_hoops.Database;
+using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,10 +26,20 @@ namespace fantasy_hoops
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<GameContext>();
             services.AddScoped<GameContext>(); // 'scoped' in ASP.NET means "per HTTP request"
+
+            services.AddIdentity<User, IdentityRole>(config => {
+                config.Password.RequireDigit = false;
+                config.Password.RequireLowercase = false;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequiredLength = 8;
+                config.SignIn.RequireConfirmedEmail = false;
+            })
+            .AddEntityFrameworkStores<GameContext>()
+            .AddDefaultTokenProviders();
 
             _context = new GameContext();
             _context.Database.Migrate();
@@ -62,6 +74,8 @@ namespace fantasy_hoops
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

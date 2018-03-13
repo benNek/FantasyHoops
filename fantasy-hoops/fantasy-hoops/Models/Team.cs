@@ -13,5 +13,6 @@ namespace fantasy_hoops.Models
         public String Color { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
