@@ -104,7 +104,7 @@ export class UserProfile extends Component {
                     />
                     <UserCard
                       userName='Tete'
-                      avatar='https://lh6.googleusercontent.com/IZrOBBDE0xJ_5M9uR5pdHUEIYlNODzu30Id5d-vCdJhvWsVGbGxEqHr4rGmK8-Hx-6q_2bYq01P44OHHCtep=w1920-h921'
+                      avatar='https://scontent.fkun1-1.fna.fbcdn.net/v/t1.0-9/12552976_1285246738167436_7192865616759638781_n.jpg?oh=1586dc13094e9366b741d973e8ffbb9f&oe=5B4B4128'
                       teamColor='#552583'
                     />
                     <UserCard

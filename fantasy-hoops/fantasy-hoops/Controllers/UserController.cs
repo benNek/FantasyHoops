@@ -31,17 +31,24 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IActionResult SuperSecret()
         {
-            return BadRequest("Super secret text, if you see this then you're the real hackerman!");
+            var userName = User.Identity.Name;
+            return Ok("Super secret text, if you see this then you're the real hackerman! Also hello " + userName);
         }
 
         public IActionResult RequestToken(LoginViewModel model)
         {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, model.UserName)
+            };
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tai yra raktas musu saugumo sistemai, kuo ilgesnis tuo geriau?"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: "nekrosius.com",
                 audience: "nekrosius.com",
+                claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
 
@@ -76,9 +83,9 @@ namespace fantasy_hoops.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {
-                return Ok();
+                return Ok("Registration successful");
             }
-            return BadRequest();
+            return BadRequest("Unknown error");
         }
     }
 }
