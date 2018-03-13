@@ -42,7 +42,19 @@ export class Login extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    alert('LOGIN SUCCESSFUL!');
+    
+    const data = {
+      UserName: this.state.username,
+      Password: this.state.password
+    };
+    
+    fetch('/api/user/login', {
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
   }
 
   render() {

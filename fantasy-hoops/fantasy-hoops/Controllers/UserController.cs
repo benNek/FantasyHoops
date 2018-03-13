@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
@@ -12,13 +13,25 @@ namespace fantasy_hoops.Controllers
     {
         private readonly GameContext context;
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserController(UserManager<User> userManager)
+        public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             context = new GameContext();
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
+        {
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, lockoutOnFailure: false);
+            if(result.Succeeded)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
