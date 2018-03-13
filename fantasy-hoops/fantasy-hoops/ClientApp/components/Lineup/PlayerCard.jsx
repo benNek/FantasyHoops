@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
 import Scroll from 'react-scroll'
-
 export class PlayerCard extends Component {
   constructor() {
     super();
@@ -8,7 +7,6 @@ export class PlayerCard extends Component {
     this.select = this.select.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
-
   render() {
     if (this.props.status > 0) {
       const pos = this.props.player.position.toLowerCase();
@@ -31,7 +29,7 @@ export class PlayerCard extends Component {
         </div>
         : '';
       return (
-        <div onClick={this.props.status == 2 ? this.filter : ''} className="card">
+        <div onClick={this.props.status == 2 ? this.filter : ''} className="player-card card">
           <div className="ppg">{this.props.player.fppg.toFixed(1)}</div>
           <div className="ppg ppg-label">PPG</div>
           <div className="player-position">{this.props.player.position}</div>
@@ -40,13 +38,13 @@ export class PlayerCard extends Component {
             <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
           </div>
           <img
-            className="card-img-top"
+            className="player-card-img-top card-img-top"
             style={{ backgroundColor: `${this.props.player.teamColor}` }}
             src={photo}
             alt="Card image cap">
           </img>
           <div className="card-block" >
-            <h2 className="card-title">{this.getDisplayName(this.props.player)}</h2>
+            <h2 className="player-card-title card-title">{this.getDisplayName(this.props.player)}</h2>
           </div>
         </div>
       );
@@ -60,42 +58,37 @@ export class PlayerCard extends Component {
         C: require('../../content/images/c.png')
       }
       return (
-        <div onClick={this.filter} className="card" tabIndex="1">
-          <img className="card-img-top"
+        <div onClick={this.filter} className="player-card card" tabIndex="1">
+          <img className="player-card-img-top card-img-top"
             style={{ backgroundColor: `` }}
             src={photos[this.props.position]}
             alt={this.props.position}>
           </img>
           <div className="card-block" >
-            <h2 className="card-title">{this.props.position}</h2>
+            <h2 className="player-card-title card-title">{this.props.position}</h2>
           </div>
         </div>
       );
     }
   }
-
   getDisplayName(player) {
-    if(!player)
+    if (!player)
       return;
-
-    if(player.firstName.length > 1)
+    if (player.firstName.length > 1)
       return `${player.firstName[0]}. ${player.lastName}`;
     else
       return player.lastName;
-  } 
-
+  }
   select() {
     this.props.player.selected = !this.props.player.selected;
     this.props.player.status = this.props.player.selected ? 2 : 1;
     this.props.selectPlayer(this.props.player);
     this.handleSelect();
   }
-
   filter() {
     Scroll.animateScroll.scrollToTop();
     this.props.filter(this.props.position);
   }
-
   handleSelect() {
     this.props.handleSelect(this.props.player.id, this.props.player.position);
   }

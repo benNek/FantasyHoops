@@ -1,8 +1,8 @@
-﻿.card {
+﻿.player-card {
   width: 13rem;
 }
 
-.card-title {
+.player-card-title {
   text-align: center;
   overflow: hidden;
   white-space: nowrap;
@@ -10,7 +10,7 @@
   font-size: 1.25rem;
 }
 
-.card-img-top {
+.player-card-img-top {
   max-height: 8.75rem;
 }
 
@@ -334,30 +334,44 @@
   margin: 2rem;
 }
 
-  /* News fied */
 
-#summary {
-  font-size: 14px;
-  line-height: 1.5;
+/*Read more*/
+.read-more-state {
+  display: none;
 }
 
-#summary p.collapse:not(.show) {
-    height: 42px !important;
-    overflow: hidden;
-  
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;  
+.read-more-target {
+  opacity: 0;
+  max-height: 0;
+  font-size: 0;
+  transition: .25s ease;
 }
 
-#summary p.collapsing {
-    min-height: 42px !important;
+.read-more-state:checked ~ .read-more-wrap .read-more-target {
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
 }
 
-#summary a.collapsed:after  {
-    content: '+ Read More';
+.read-more-state ~ .read-more-trigger:before {
+  content: 'Show more';
 }
 
-#summary a:not(.collapsed):after {
-    content: '- Read Less';
+.read-more-state:checked ~ .read-more-trigger:before {
+  content: 'Show less';
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 .5em;
+  color: #666;
+  font-size: .9em;
+  line-height: 2;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+}
+
+.news-card {
+  max-width: 30em;
 }
