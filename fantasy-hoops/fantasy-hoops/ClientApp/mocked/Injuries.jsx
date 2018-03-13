@@ -20,7 +20,7 @@ const InjuriesAPI = {
       teamColor: '#E56020',
       subTitle: "Devin Booker ruled out Saturday.",
       news: "Booker stated that he's probably not playing in Saturday's contest vs. the Hornets as he is having trouble extending his left arm, and has officially been ruled out. He was previously listed questionable due to a strained left triceps. The Suns are also without TJ Warren (back) and Josh Jackson (knee), while Tyson Chandler (shoulder) has been cleared to play. Elfrid Payton has been a nice source of value in 11 games with Phoenix, averaging 37.18 DraftKings points per game. Davon Reed started the third quarter for the injured Jackson during Thursday's loss and could draw the start again with the depleted wing rotation. He turned in just 7.25 DraftKings points in 16.5 minutes but could be a viable punt play depending on Phoenix's availability. The Suns-Hornets game is not included on any DraftKings slates, but it is contained within the FanDuel late swap slate. When Jackson and Warren have been off the court since the trade deadline, Troy Daniels, who could start with Booker out, has averaged a +6.5% usage rate differential.",
-      status: "Out",
+      status: "Injured",
       date: "2018-03-10",
       link: "https://twitter.com/Suns/status/972583381186703360"
     },
