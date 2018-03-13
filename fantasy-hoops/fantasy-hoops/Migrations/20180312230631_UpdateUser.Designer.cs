@@ -11,9 +11,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180312230631_UpdateUser")]
+    partial class UpdateUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,13 +134,9 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("FLS");
 
-                    b.Property<double>("FP");
-
                     b.Property<int>("FTA");
 
                     b.Property<int>("FTM");
-
-                    b.Property<double>("GS");
 
                     b.Property<int>("OREB");
 

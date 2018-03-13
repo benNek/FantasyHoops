@@ -1,10 +1,16 @@
 using fantasy_hoops.Database;
+using fantasy_hoops.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace fantasy_hoops
@@ -24,10 +30,47 @@ namespace fantasy_hoops
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<GameContext>();
             services.AddScoped<GameContext>(); // 'scoped' in ASP.NET means "per HTTP request"
+
+            services.AddIdentity<User, IdentityRole>(config => {
+                config.Password.RequireDigit = false;
+                config.Password.RequireLowercase = false;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequiredLength = 8;
+                config.SignIn.RequireConfirmedEmail = false;
+            })
+            .AddEntityFrameworkStores<GameContext>()
+            .AddDefaultTokenProviders();
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = "nekrosius.com",
+
+                ValidateAudience = true,
+                ValidAudience = "nekrosius.com",
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tai yra raktas musu saugumo sistemai, kuo ilgesnis tuo geriau?")),
+
+                RequireExpirationTime = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(configureOptions =>
+            {
+                configureOptions.ClaimsIssuer = "nekrosius.com";
+                configureOptions.TokenValidationParameters = tokenValidationParameters;
+                configureOptions.SaveToken = true;
+            });
 
             _context = new GameContext();
             _context.Database.Migrate();
@@ -63,6 +106,8 @@ namespace fantasy_hoops
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

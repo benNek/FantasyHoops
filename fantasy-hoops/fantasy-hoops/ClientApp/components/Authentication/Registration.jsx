@@ -47,7 +47,25 @@ export class Registration extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    alert('REGISTRATION SUCCESSFUL!');
+    const data = {
+      UserName: this.state.username,
+      Email: this.state.email,
+      Password: this.state.password
+      //PhoneNumber: this.state.phone != '' ? this.state.phone : null,
+      //FavoriteTeam: this.state.team != '' ? this.state.team : null
+    };
+    
+    fetch('/api/user/register', {
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .catch(error => console.error(error))
+      .then(res => res.text())
+      .then(res => console.log(res));
+
   }
 
   render() {
