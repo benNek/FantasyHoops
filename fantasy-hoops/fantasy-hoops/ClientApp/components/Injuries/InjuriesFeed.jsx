@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { InjuryCard } from './InjuryCard';
 import InjuriesAPI from '../../mocked/Injuries';
 import _ from 'lodash'
+import shortid from 'shortid';
 
 export class InjuriesFeed extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export class InjuriesFeed extends Component {
   render() {
     const players = _.map(InjuriesAPI.all(),
       (player) => {
-        return <InjuryCard player={player} />
+        return <InjuryCard key={shortid()} player={player} />
       }
     );
     return (
