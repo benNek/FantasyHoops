@@ -63,7 +63,7 @@
   border: 0 !important;
 }
 
-.player-card::before, .card::after {
+.player-card::before, .player-card::after {
   position: absolute;
   top: 0;
   right: 0;

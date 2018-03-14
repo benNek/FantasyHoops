@@ -22,6 +22,4 @@ export class NewsFeed extends Component {
       </div>
     );
   }
-
-  
 }

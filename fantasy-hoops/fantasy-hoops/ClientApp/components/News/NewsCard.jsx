@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Scroll from 'react-scroll'
+
 export class NewsCard extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +50,7 @@ export class NewsCard extends Component {
             className="read-more-state"
             id={this.props.news.id}
           />
-          <p className="read-more-wrap" style={{textAlign: 'justify'}}>{text.substring(0, cutPosition)}
+          <p className="read-more-wrap" style={{ textAlign: 'justify' }}>{text.substring(0, cutPosition)}
             {!this.state.checked ? '...' : ''}
             <span className="read-more-target">
               {text.substring(cutPosition, text.length)}
@@ -60,7 +62,12 @@ export class NewsCard extends Component {
     );
   }
 
-  handleCheck() {
+  handleCheck(e) {
+    if (this.state.checked) {
+      var div = e.target.parentElement.parentElement;
+      Scroll.animateScroll.scrollMore(div.getBoundingClientRect().top - 80);
+      console.log(div.getBoundingClientRect().top);
+    }
     this.setState({
       checked: !this.state.checked
     });
