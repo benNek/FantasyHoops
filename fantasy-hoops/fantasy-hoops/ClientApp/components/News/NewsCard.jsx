@@ -66,7 +66,6 @@ export class NewsCard extends Component {
     if (this.state.checked) {
       var div = e.target.parentElement.parentElement;
       Scroll.animateScroll.scrollMore(div.getBoundingClientRect().top - 80);
-      console.log(div.getBoundingClientRect().top);
     }
     this.setState({
       checked: !this.state.checked
