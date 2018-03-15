@@ -87,25 +87,9 @@ namespace fantasy_hoops.Database
 
         public static void UpdateTeamColors(GameContext context)
         {
-            // Hardcoding like a champ
-            string[] colors = { /* Raptors */ "#CD1141", /* Celtics */ "#008248",
-                /* 76ers */ "#006BB6", /* Knicks */ "#006BB6", /* Nets */ "#000000",
-                /* Cavaliers */ "#6F2633", /* Pacers */ "#002D62", /* Bucks */ "#00471B",
-                /* Pistons */ "#E01E38", /* Bulls */ "#CE1141", /* Wizards */ "#002B5C",
-                /* Heat */ "#98002E", /* Hornets */ "#1D1160", /* Magic */ "#0B77BD",
-                /* Hawks */ "#E03A3E", /* Trail Blazers */ "#E13A3E", /* Timberwolves */ "#002B5C",
-                /* Thunder */ "#007AC1", /* Nuggets */ "#00285E", /* Jazz */ "#0C2340",
-                /* Warriors */ "#243E90", /* Clippers */ "#ED174C", /* Lakers */ "#552583",
-                /* Kings */ "#5A2D81", /* Suns */ "#E56020", /* Rockets */ "#CE1141",
-                /* Pelicans */ "#0C2340", /* Spurs */ "#C4CED4", /* Mavericks */ "#007DC5",
-                /* Grizzlies */ "#00285E"};
-
-            int i = 0;
             foreach (var team in context.Teams)
             {
-                if(i < colors.Count())
-                    team.Color = colors[i];
-                i++;
+                team.Color = GetTeamColor(team.NbaID);
             }
             context.SaveChanges();
         }
@@ -126,6 +110,105 @@ namespace fantasy_hoops.Database
             }
 
             return resp;
+        }
+
+        private static string GetTeamColor(int id)
+        {
+            switch (id)
+            {
+                // RAPTORS
+                case 1610612761:
+                    return "#CD1141";
+                // CELTICS
+                case 1610612738:
+                    return "#008248";
+                // 76ERS
+                case 1610612755:
+                    return "#006BB6";
+                // KNICKS
+                case 1610612752:
+                    return "#006BB6";
+                // NETS
+                case 1610612751:
+                    return "#000000";
+                // CAVALIERS
+                case 1610612739:
+                    return "#6F2633";
+                // PACERS
+                case 1610612754:
+                    return "#002D62";
+                // BUCKS
+                case 1610612749:
+                    return "#00471B";
+                // PISTONS
+                case 1610612765:
+                    return "#E01E38";
+                // BULLS
+                case 1610612741:
+                    return "#CE1141";
+                // WIZARDS
+                case 1610612764:
+                    return "#002B5C";
+                // HEAT
+                case 1610612748:
+                    return "#98002E";
+                // HORNETS
+                case 1610612766:
+                    return "#1D1160";
+                // MAGIC
+                case 1610612753:
+                    return "#0B77BD";
+                // HAWKS
+                case 1610612737:
+                    return "#E03A3E";
+                // TRAIL BLAZERS
+                case 1610612757:
+                    return "#E13A3E";
+                // TIMBERWOLVES
+                case 1610612750:
+                    return "#002B5C";
+                // THUNDER
+                case 1610612760:
+                    return "#007AC1";
+                // NUGGETS
+                case 1610612743:
+                    return "#00285E";
+                // JAZZ
+                case 1610612762:
+                    return "#0C2340";
+                // WARRIORS
+                case 1610612744:
+                    return "#243E90";
+                // CLIPPERS
+                case 1610612746:
+                    return "#ED174C";
+                // LAKERS
+                case 1610612747:
+                    return "#552583";
+                // KINGS
+                case 1610612758:
+                    return "#5A2D81";
+                // SUNS
+                case 1610612756:
+                    return "#E56020";
+                // ROCKETS
+                case 1610612745:
+                    return "#CE1141";
+                // PELICANS
+                case 1610612740:
+                    return "#0C2340";
+                // SPURS
+                case 1610612759:
+                    return "#C4CED4";
+                // MAVERICKS
+                case 1610612742:
+                    return "#007DC5";
+                // GRIZZLIES
+                case 1610612763:
+                    return "#00285E";
+                default:
+                    return "#C4CED4";
+            }
         }
 
     }

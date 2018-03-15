@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Database
 {
@@ -49,6 +50,7 @@ namespace fantasy_hoops.Database
         private static async Task Extract(GameContext context)
         {
             JArray injuries = GetInjuries();
+            context.Database.ExecuteSqlCommand("truncate table [fantasyhoops].[dbo].[Injuries]");
             foreach (JObject injury in injuries)
             {
                 if (dayFrom.CompareTo(DateTime.Parse(injury["CreatedDate"].ToString())) > 0)
@@ -56,7 +58,6 @@ namespace fantasy_hoops.Database
                 AddToDatabase(context, injury);
                 await context.SaveChangesAsync();
             }
-            RemoveOld(context);
         }
 
         private static void AddToDatabase(GameContext context, JToken injury)
@@ -74,21 +75,7 @@ namespace fantasy_hoops.Database
 
             if (injuryObj.Player == null)
                 return;
-            // If player is in databse, he won't be added
-            bool shouldAdd = !context.Injuries.Any(x => x.PlayerID == injuryObj.Player.PlayerID);
-
-            if (shouldAdd)
-                context.Injuries.Add(injuryObj);
-        }
-
-        private static void RemoveOld(GameContext context)
-        {
-            var removableObjects = context.Injuries
-                .Where(x => x.Date.CompareTo(DateTime.Today.AddDays(-DAYS_TO_SAVE)) < 0)
-                .ToList();
-            foreach (var injuryObj in removableObjects)
-                context.Remove(injuryObj);
-            context.SaveChanges();
+            context.Injuries.Add(injuryObj);
         }
     }
 }
