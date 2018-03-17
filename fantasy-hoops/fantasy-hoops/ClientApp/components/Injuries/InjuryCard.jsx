@@ -6,19 +6,19 @@ export class InjuryCard extends Component {
   }
 
   render() {
-    const pos = this.props.player.position.toLowerCase();
+    const pos = this.props.injury.player.position.toLowerCase();
     let photo = '';
     try {
-      photo = require(`../../content/images/players/${this.props.player.id}.png`)
+      photo = require(`../../content/images/players/${this.props.injury.player.nbaID}.png`)
     }
     catch (err) {
       photo = require(`../../content/images/${pos}.png`);
     }
     let status = '';
-    if (this.props.player.status.toLowerCase().includes("active"))
+    if (this.props.injury.status.toLowerCase().includes("active"))
       status = 'injury-active';
-    else if (this.props.player.status.toLowerCase().includes("out")
-      || this.props.player.status.toLowerCase().includes("injured"))
+    else if (this.props.injury.status.toLowerCase().includes("out")
+      || this.props.injury.status.toLowerCase().includes("injured"))
       status = 'injury-out';
     else
       status = 'injury-questionable';
@@ -29,24 +29,24 @@ export class InjuryCard extends Component {
           <div className='post-module'>
             <div className='thumbnail'>
               <div className='date'>
-                <div className='day badge badge-dark'>{this.props.player.position}</div>
+                <div className='day badge badge-dark'>{this.props.injury.player.position}</div>
               </div>
               <img src={photo}
-                style={{ backgroundColor: this.props.player.teamColor }} />
+                style={{ backgroundColor: this.props.injury.player.team.color }} />
             </div>
             <div className='post-content'>
-              <div className={'category ' + status}>{this.props.player.status}</div>
-              <h1 className='title'>{this.props.player.name[0]}. {this.props.player.surname}</h1>
-              <h2 className='sub_title'>{this.props.player.subTitle}</h2>
-              <p className='description'>{this.props.player.news}</p>
+              <div className={'category ' + status}>{this.props.injury.status}</div>
+              <h1 className='title'>{this.props.injury.player.firstName[0]}. {this.props.injury.player.lastName}</h1>
+              <h2 className='sub_title line-clamp'>{this.props.injury.title}</h2>
+              <p className='description'>{this.props.injury.description}</p>
               <div className='post-meta'>
                 <span className='timestamp'>
                   <i className='fa fa-clock-o'></i>
-                  {this.props.player.date}
+                  {this.props.injury.date}
                 </span>
                 <span className='comments'>
                   <i className='fa fa-comments'></i>
-                  <a href={this.props.player.link}>Read more</a>
+                  <a href={this.props.injury.link}>Read more</a>
                 </span>
               </div>
             </div>
