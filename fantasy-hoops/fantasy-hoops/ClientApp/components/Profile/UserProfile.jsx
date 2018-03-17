@@ -1,20 +1,46 @@
 import React, { Component } from 'react';
 import { UserCard } from './UserCard'
+import { Input } from '../Inputs/Input';
+import { Select } from '../Inputs/Select';
 
 export class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: this.props.match.params.edit || ''
+      firstName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      team: '',
+      about: ''
     }
-    this.editProfile = this.editProfile.bind(this);
   }
 
-  componentDidMount() {
-    this.editProfile();
+  handleChange(e) {
+    this.setState({
+      [e.target.id]: e.target.value
+    });
   }
-
+ 
   render() {
+    let teams = [
+      {
+        value: 1,
+        name: "Atlanta Hawks"
+      },
+      {
+        value: 2,
+        name: "Boston Celtics"
+      },
+      {
+        value: 3,
+        name: "Los Angeles Lakers"
+      },
+      {
+        value: 4,
+        name: "San Antonio Spurs"
+      }
+    ];
     return (
       <div className="container mt-4 bg-light" style={{ paddingTop: '5em' }}>
         <div className="row my-2">
@@ -130,37 +156,78 @@ export class UserProfile extends Component {
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">First name</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="text" value="Jane" />
+                      <Input
+                        type="text"
+                        id="firstName"
+                        placeholder="First name"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                        regex={/^.{4,11}$/}
+                        error="Username must be between 4 and 11 symbols long"
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Email</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="email" value="email@gmail.com" />
+                      <Input
+                        type="email"
+                        id="email"
+                        placeholder="Enter email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                        regex={/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i}
+                        error="Invalid email"
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">About me</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="url" value="" />
+                      <div className="form-group">
+                        <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                      </div>
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Favorite team</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="url" value="" />
+                      <Select
+                        options={teams}
+                        id="team"
+                        value={this.state.team}
+                        onChange={this.handleChange}
+                        notRequired={true}
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Password</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="password" value="11111122333" />
+                      <Input
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                        regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/}
+                        error="Password must contain: 8-20 characters. At least one uppercase letter. At least one number."
+                        children="confirmPassword"
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Confirm password</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="password" value="11111122333" />
+                      <Input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Password"
+                        value={this.state.confirmPassword}
+                        onChange={this.handleChange}
+                        match="password"
+                        error="Passwords must match"
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
@@ -209,3 +276,5 @@ export class UserProfile extends Component {
     }
   }
 }
+
+
