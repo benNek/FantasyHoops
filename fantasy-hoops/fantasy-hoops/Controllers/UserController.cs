@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,7 +67,7 @@ namespace fantasy_hoops.Controllers
             {
                 return RequestToken(model);
             }
-            return BadRequest();
+            return StatusCode(401, "You have entered an invalid username or password!");
         }
 
         [HttpPost("register")]
@@ -75,15 +76,21 @@ namespace fantasy_hoops.Controllers
             var user = new User
             {
                 UserName = model.UserName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                FavoriteTeamId = model.FavoriteTeam,
+                Email = model.Email
             };
+
+            // Checking for duplicates usernames
+            if (context.Users.Where(x => x.UserName.ToLower().Equals(user.UserName.ToLower())).Any())
+                return StatusCode(422, "Username is already taken!");
+
+            // Checking for duplicate email addresses
+            if (context.Users.Where(x => x.Email.ToLower().Equals(user.Email.ToLower())).Any())
+                return StatusCode(422, "Email already has an user associated to it!");
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {
-                return Ok("Registration successful");
+                return Ok("You have registered successfully!");
             }
             return BadRequest("Unknown error");
         }

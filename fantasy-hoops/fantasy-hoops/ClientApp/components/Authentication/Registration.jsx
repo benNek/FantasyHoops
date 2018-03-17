@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
-
+import { handleErrors } from '../../utils/errors'
+import { Alert } from '../Alert';
 
 export class Registration extends Component {
   constructor(props) {
@@ -10,7 +11,10 @@ export class Registration extends Component {
       username: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      showAlert: false,
+      alertType: '',
+      alertText: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,25 +62,38 @@ export class Registration extends Component {
       },
       body: JSON.stringify(data)
     })
-      .catch(error => console.error(error))
+      .then(res => handleErrors(res))
       .then(res => res.text())
-      .then(res => console.log(res));
+      .then(res => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: res
+        });
+      })
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        }); 
+      });
 
   }
 
   render() {
     return (
       <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
-        <br />
+        <br/>
         <h2>Registration</h2>
-        <hr/>
+        <hr />
+        <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
         <form onSubmit={this.handleSubmit} id="form">
           <div className="form-group">
             <label>Username</label>
             <Input
               type="text"
               id="username"
-              placeholder="Username"
               value={this.state.username}
               onChange={this.handleChange}
               regex={/^.{4,11}$/}
@@ -84,11 +101,10 @@ export class Registration extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Enter email</label>
+            <label>Email</label>
             <Input
               type="email"
               id="email"
-              placeholder="Enter email"
               value={this.state.email}
               onChange={this.handleChange}
               regex={/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i}
@@ -100,7 +116,6 @@ export class Registration extends Component {
             <Input
               type="password"
               id="password"
-              placeholder="Password"
               value={this.state.password}
               onChange={this.handleChange}
               regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/}
@@ -113,7 +128,6 @@ export class Registration extends Component {
             <Input
               type="password"
               id="confirmPassword"
-              placeholder="Password"
               value={this.state.confirmPassword}
               onChange={this.handleChange}
               match="password"
@@ -123,9 +137,9 @@ export class Registration extends Component {
           <button id="submit" disabled className="btn btn-outline-primary btn-block">Submit</button>
         </form>
         <div className="mt-1">
-          <small style={{color: 'hsl(0, 0%, 45%)'}}>
-            Already on FantasyHoops?
-            <a href="/login"> Login</a>
+          <small style={{ color: 'hsl(0, 0%, 45%)' }}>
+            Already on Fantasy Hoops?
+            <a href="/login"> Sign In</a>
           </small>
         </div>
       </div>

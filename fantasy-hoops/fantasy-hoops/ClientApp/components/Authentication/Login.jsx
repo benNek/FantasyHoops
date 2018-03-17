@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Input } from '../Inputs/Input';
-
+import { handleErrors } from '../../utils/errors'
+import { Alert } from '../Alert';
 
 export class Login extends Component {
   constructor(props) {
@@ -8,6 +9,9 @@ export class Login extends Component {
     this.state = {
       username: '',
       password: '',
+      showAlert: false,
+      alertType: '',
+      alertText: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -56,12 +60,23 @@ export class Login extends Component {
       },
       body: JSON.stringify(data)
     })
+      .then(res => handleErrors(res))
       .then(res => res.json())
       .then(res => {
         localStorage.setItem('accessToken', JSON.stringify(res.token));
-        console.log('Login successful!');
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: 'You have signed in successfully!'
+        })
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        })
+      });
   }
 
   testAuth(e) {
@@ -72,9 +87,16 @@ export class Login extends Component {
         'Authorization': `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`
       }
     })
-      .catch(err => console.error('UNAUTHORIZED'))
+      .then(res => handleErrors(res))
       .then(res => res.text())
-      .then(res => console.log(res));
+      .then(res => console.log(res))
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        })
+      });
   }
 
   render() {
@@ -82,7 +104,8 @@ export class Login extends Component {
       <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
         <br />
         <h2>Login</h2>
-        <hr/>
+        <hr />
+        <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
         <form onSubmit={this.handleSubmit} id="form">
           <div className="form-group">
             <label>Username</label>
