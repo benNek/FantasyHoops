@@ -4,6 +4,7 @@ using System.Linq;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace fantasy_hoops.Controllers
 {
@@ -46,9 +47,16 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpGet("{id}")]
-        public Injuries Get(int id)
+        public IActionResult Get(int id)
         {
-            return context.Injuries.Where(x => x.InjuryID == id).ToList().First();
+            var injury = context.Injuries.Where(x => x.InjuryID == id).ToList().FirstOrDefault();
+            if (injury == null)
+            {
+                var obj = new JObject();
+                obj.Add("error", String.Format("Injury with id {0} has not been found!", id));
+                return NotFound(obj);
+            }
+            return Ok(injury);
         }
     }
 }
