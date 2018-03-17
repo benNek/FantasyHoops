@@ -82,6 +82,7 @@ export class Login extends Component {
       <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
         <br />
         <h2>Login</h2>
+        <hr/>
         <form onSubmit={this.handleSubmit} id="form">
           <div className="form-group">
             <label>Username</label>

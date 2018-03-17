@@ -9,10 +9,8 @@ export class Registration extends Component {
     this.state = {
       username: '',
       email: '',
-      phone: '',
       password: '',
-      confirmPassword: '',
-      team: ''
+      confirmPassword: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,18 +21,18 @@ export class Registration extends Component {
       [e.target.id]: e.target.value
     });
 
-    const btn = document.getElementById('submit'); 
-    if(document.querySelectorAll('.is-invalid').length != 0) {
+    const btn = document.getElementById('submit');
+    if (document.querySelectorAll('.is-invalid').length != 0) {
       btn.className = 'btn btn-outline-primary btn-block';
       btn.disabled = true;
       return;
     }
     else {
       const forms = document.querySelectorAll('.form-control');
-      for(let i = 0; i < forms.length; i++) {
-        if(!forms[i].required)
+      for (let i = 0; i < forms.length; i++) {
+        if (!forms[i].required)
           continue;
-        if(forms[i].value.length === 0) {
+        if (forms[i].value.length === 0) {
           btn.className = 'btn btn-outline-primary btn-block';
           btn.disabled = true;
           return;
@@ -51,14 +49,12 @@ export class Registration extends Component {
       UserName: this.state.username,
       Email: this.state.email,
       Password: this.state.password
-      //PhoneNumber: this.state.phone != '' ? this.state.phone : null,
-      //FavoriteTeam: this.state.team != '' ? this.state.team : null
     };
-    
+
     fetch('/api/user/register', {
       method: 'POST',
       headers: {
-          'Content-type': 'application/json'
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
     })
@@ -69,29 +65,11 @@ export class Registration extends Component {
   }
 
   render() {
-    let teams = [
-      {
-        value: 1,
-        name: "Atlanta Hawks"
-      },
-      {
-        value: 2,
-        name: "Boston Celtics"
-      },
-      {
-        value: 3,
-        name: "Los Angeles Lakers"
-      },
-      {
-        value: 4,
-        name: "San Antonio Spurs"
-      }
-    ];
-
     return (
-      <div className="container mt-5 pb-3 bg-light vertical-center" style={{'maxWidth': '420px'}}>
+      <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
         <br />
         <h2>Registration</h2>
+        <hr/>
         <form onSubmit={this.handleSubmit} id="form">
           <div className="form-group">
             <label>Username</label>
@@ -142,40 +120,14 @@ export class Registration extends Component {
               error="Passwords must match"
             />
           </div>
-          <div className="form-group">
-            <label>Phone number (Not required)</label>
-            <Input
-              type="text"
-              id="phone"
-              placeholder="Phone number"
-              value={this.state.phone}
-              onChange={this.handleChange}
-              regex={/^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/}
-              error="Invalid phone number"
-              notRequired={true}
-            />
-          </div>
-          <div className="form-group">
-            <label>Select your avatar (Not required)</label>
-            <Input
-              type="file"
-              id="avatar"
-              placeholder=""
-              notRequired={true}
-            />
-          </div>
-          <div className="form-group">
-            <label>Favorite team (Not required)</label>
-            <Select
-              options={teams}
-              id="team"
-              value={this.state.team}
-              onChange={this.handleChange}
-              notRequired={true}
-            />
-          </div>
           <button id="submit" disabled className="btn btn-outline-primary btn-block">Submit</button>
         </form>
+        <div className="mt-1">
+          <small style={{color: 'hsl(0, 0%, 45%)'}}>
+            Already on FantasyHoops?
+            <a href="/login"> Login</a>
+          </small>
+        </div>
       </div>
     );
   }
