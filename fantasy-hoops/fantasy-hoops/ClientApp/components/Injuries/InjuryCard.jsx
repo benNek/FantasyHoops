@@ -46,7 +46,7 @@ export class InjuryCard extends Component {
                 </span>
                 <span className='comments'>
                   <i className='fa fa-comments'></i>
-                  <a href={this.props.injury.link}>Read more</a>
+                  <a target="_blank" href={this.props.injury.link}>Read more</a>
                 </span>
               </div>
             </div>
