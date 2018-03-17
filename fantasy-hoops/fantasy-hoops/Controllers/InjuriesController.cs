@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using fantasy_hoops.Database;
-using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace fantasy_hoops.Controllers
 {
@@ -51,11 +49,7 @@ namespace fantasy_hoops.Controllers
         {
             var injury = context.Injuries.Where(x => x.InjuryID == id).ToList().FirstOrDefault();
             if (injury == null)
-            {
-                var obj = new JObject();
-                obj.Add("error", String.Format("Injury with id {0} has not been found!", id));
-                return NotFound(obj);
-            }
+                return NotFound(new { error = String.Format("Injury with id {0} has not been found!", id) });
             return Ok(injury);
         }
     }

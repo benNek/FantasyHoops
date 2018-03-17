@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using fantasy_hoops.Database;
-using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace fantasy_hoops.Controllers
 {
@@ -22,7 +20,15 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Players.Select(x => new { x.FirstName, x.LastName, id = x.NbaID, x.Price, x.Position, TeamColor = x.Team.Color, x.FPPG }).ToList();
+            return context.Players.Select(x => new {
+                x.FirstName,
+                x.LastName,
+                id = x.NbaID,
+                x.Price,
+                x.Position,
+                TeamColor = x.Team.Color,
+                x.FPPG })
+                .ToList();
         }
 
         [HttpGet("{id}")]
@@ -30,11 +36,7 @@ namespace fantasy_hoops.Controllers
         {
             var player = context.Players.Where(x => x.NbaID == id).ToList().FirstOrDefault();
             if (player == null)
-            {
-                var obj = new JObject();
-                obj.Add("error", String.Format("Player with id {0} has not been found!", id));
-                return NotFound(obj);
-            }
+                return NotFound(new { error = String.Format("Player with id {0} has not been found!", id) });
             return Ok(player);
         }
     }
