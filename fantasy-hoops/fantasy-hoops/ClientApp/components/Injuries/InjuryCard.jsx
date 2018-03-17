@@ -22,7 +22,12 @@ export class InjuryCard extends Component {
       status = 'injury-out';
     else
       status = 'injury-questionable';
-
+    const link = this.props.injury.link != ''
+      ? (<span className='comments'>
+        <i className='fa fa-comments'></i>
+        <a target="_blank" href={this.props.injury.link}>Read more</a>
+      </span>)
+      : '';
     return (
       <div className='ml-3 mt-3'>
         <div className='column'>
@@ -44,10 +49,7 @@ export class InjuryCard extends Component {
                   <i className='fa fa-clock-o'></i>
                   {this.props.injury.date}
                 </span>
-                <span className='comments'>
-                  <i className='fa fa-comments'></i>
-                  <a target="_blank" href={this.props.injury.link}>Read more</a>
-                </span>
+                {link}
               </div>
             </div>
           </div>

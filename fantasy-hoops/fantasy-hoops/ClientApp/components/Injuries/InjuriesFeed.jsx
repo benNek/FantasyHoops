@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { InjuryCard } from './InjuryCard';
-import InjuriesAPI from '../../mocked/Injuries';
 import _ from 'lodash'
 import shortid from 'shortid';
 
