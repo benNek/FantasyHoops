@@ -29,7 +29,7 @@ export class InjuryCard extends Component {
         <a target="_blank" href={this.props.injury.link}>Read more</a>
       </span>)
       : '';
-    const pos = this.props.player.position.toLowerCase();
+    const pos = this.props.injury.player.position.toLowerCase();
     return (
       <div className='ml-3 mt-3'>
         <div className='column'>
@@ -38,8 +38,8 @@ export class InjuryCard extends Component {
               <div className='date'>
                 <div className='day badge badge-dark'>{this.props.injury.player.position}</div>
               </div>
-              <img src={playerIMG[`${this.props.player.id}.png`] || posIMG[`${pos}.png`]}
-                style={{ backgroundColor: this.props.player.teamColor }} />
+              <img src={playerIMG[`${this.props.injury.player.nbaID}.png`] || posIMG[`${pos}.png`]}
+                style={{ backgroundColor: this.props.injury.player.team.color }} />
             </div>
             <div className='post-content'>
               <div className={'category ' + status}>{this.props.injury.status}</div>
