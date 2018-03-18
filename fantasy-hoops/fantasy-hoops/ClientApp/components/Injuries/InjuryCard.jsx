@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 
 export class InjuryCard extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this.importAll = this.importAll.bind(this);
   }
 
   render() {
-    const pos = this.props.injury.player.position.toLowerCase();
-    let photo = '';
+    let posIMG = '';
+    let playerIMG = '';
     try {
-      photo = require(`../../content/images/players/${this.props.injury.player.nbaID}.png`)
+      posIMG = this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/));
+      playerIMG = this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/));
     }
     catch (err) {
-      photo = require(`../../content/images/${pos}.png`);
     }
     let status = '';
     if (this.props.injury.status.toLowerCase().includes("active"))
@@ -28,6 +29,7 @@ export class InjuryCard extends Component {
         <a target="_blank" href={this.props.injury.link}>Read more</a>
       </span>)
       : '';
+    const pos = this.props.player.position.toLowerCase();
     return (
       <div className='ml-3 mt-3'>
         <div className='column'>
@@ -36,8 +38,8 @@ export class InjuryCard extends Component {
               <div className='date'>
                 <div className='day badge badge-dark'>{this.props.injury.player.position}</div>
               </div>
-              <img src={photo}
-                style={{ backgroundColor: this.props.injury.player.team.color }} />
+              <img src={playerIMG[`${this.props.player.id}.png`] || posIMG[`${pos}.png`]}
+                style={{ backgroundColor: this.props.player.teamColor }} />
             </div>
             <div className='post-content'>
               <div className={'category ' + status}>{this.props.injury.status}</div>
@@ -56,5 +58,11 @@ export class InjuryCard extends Component {
         </div>
       </div>
     );
+  }
+
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
   }
 }

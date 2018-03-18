@@ -1,5 +1,6 @@
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
+using FluentScheduler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,8 @@ namespace fantasy_hoops
             services.AddDbContext<GameContext>();
             services.AddScoped<GameContext>(); // 'scoped' in ASP.NET means "per HTTP request"
 
-            services.AddIdentity<User, IdentityRole>(config => {
+            services.AddIdentity<User, IdentityRole>(config =>
+            {
                 config.Password.RequireDigit = false;
                 config.Password.RequireLowercase = false;
                 config.Password.RequireUppercase = false;
@@ -82,10 +84,27 @@ namespace fantasy_hoops
 
         private static async void Run(GameContext _context)
         {
-            await Task.Run(() => InjuriesSeed.Initialize(_context));
+            var registry = new Registry();
+            JobManager.Initialize(registry);
+
+            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)), s => s
+                .ToRunNow()
+                .AndEvery(30)
+                .Minutes());
+
+            JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s
+                .ToRunOnceAt(DateTime.Now.AddMinutes(2))
+                .AndEvery(1)
+                .Days()
+                .At(00, 00));
+
+            JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s
+                .ToRunOnceAt(DateTime.Now.AddMinutes(5))
+                .AndEvery(1)
+                .Days()
+                .At(12, 00));
+
             await Task.Run(() => Seed.UpdateTeamColors(_context));
-            await Task.Run(() => PhotosSeed.Initialize(_context));
-            await Task.Run(() => StatsSeed.Initialize(_context));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

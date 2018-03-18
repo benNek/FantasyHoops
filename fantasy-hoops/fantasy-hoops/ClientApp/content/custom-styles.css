@@ -8,10 +8,11 @@
   white-space: nowrap;
   padding-top: 1rem;
   font-size: 1.25rem;
+  height: 2.6rem;
 }
 
 .player-card-img-top {
-  max-height: 8.75rem;
+  height: 8.75rem;
 }
 
 .price-badge {
