@@ -33,15 +33,13 @@
   color: white;
   font-weight: bold;
   position: absolute;
-  padding-top: 0.6rem;
-  padding-left: 10rem;
+  right: 0;
+  margin: 0.5rem;
 }
 
 .ppg-label {
-  text-align: right;
   font-size: 0.75rem;
-  padding-top: 1.75rem;
-  padding-left: 10.5rem;
+  padding-top: 1.1rem;
 }
 
 .btn-circle.btn-lg {

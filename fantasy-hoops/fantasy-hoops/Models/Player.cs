@@ -12,11 +12,13 @@ namespace fantasy_hoops.Models
         public String LastName { get; set; }
         public String Position { get; set; }
         public int Number { get; set; }
+        public int GP { get; set; }
         public double PTS { get; set; }
         public double REB { get; set; }
         public double AST { get; set; }
         public double STL { get; set; }
         public double BLK { get; set; }
+        public double TOV { get; set; }
         public double FPPG { get; set; }
         public int Price { get; set; }
         public int TeamID { get; set; }

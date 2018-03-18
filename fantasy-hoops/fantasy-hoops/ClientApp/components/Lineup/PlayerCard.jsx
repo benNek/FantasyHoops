@@ -9,7 +9,7 @@ export class PlayerCard extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.importAll = this.importAll.bind(this);
   }
-  
+
   render() {
     let posIMG = '';
     let playerIMG = '';
