@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 
 export class InjuryCard extends Component {
   constructor() {
@@ -24,9 +25,9 @@ export class InjuryCard extends Component {
     else
       status = 'injury-questionable';
     const link = this.props.injury.link != ''
-      ? (<span className='comments'>
+      ? (<span style={{ float: 'left' }} className='comments'>
         <i className='fa fa-comments'></i>
-        <a target="_blank" href={this.props.injury.link}>Read more</a>
+        <a target="_blank" href={this.props.injury.link}> Read more </a>
       </span>)
       : '';
     const pos = this.props.injury.player.position.toLowerCase();
@@ -47,16 +48,15 @@ export class InjuryCard extends Component {
               <h2 className='sub_title line-clamp'>{this.props.injury.title}</h2>
               <p className='description'>{this.props.injury.description}</p>
               <div className='post-meta'>
-                <span className='timestamp'>
-                  <i className='fa fa-clock-o'></i>
-                  {this.props.injury.date}
-                </span>
                 {link}
+                <span style={{ float: 'right' }} className='timestamp'>
+                  <i className='fa fa-clock-o'></i> {moment(this.props.injury.date).add(6, "hours").fromNow()}
+                </span>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 

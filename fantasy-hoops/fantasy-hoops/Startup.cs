@@ -78,22 +78,24 @@ namespace fantasy_hoops
             _context.Database.Migrate();
 
             var task = Seed.InitializeAsync(_context);
+            Task.Run(() => Seed.UpdateTeamColors(_context));
+
             task.Wait();
             Run(_context);
         }
 
-        private static async void Run(GameContext _context)
+        private static void Run(GameContext _context)
         {
             var registry = new Registry();
             JobManager.Initialize(registry);
 
             JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)), s => s
-                .ToRunNow()
+                .ToRunOnceAt(DateTime.Now.AddSeconds(10))
                 .AndEvery(30)
                 .Minutes());
 
             JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(2))
+                .ToRunOnceAt(DateTime.Now.AddSeconds(30))
                 .AndEvery(1)
                 .Days()
                 .At(00, 00));
@@ -103,8 +105,6 @@ namespace fantasy_hoops
                 .AndEvery(1)
                 .Days()
                 .At(12, 00));
-
-            await Task.Run(() => Seed.UpdateTeamColors(_context));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
