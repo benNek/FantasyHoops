@@ -6,16 +6,18 @@ import { Alert } from '../Alert';
 export class Login extends Component {
   constructor(props) {
     super(props);
+    
+    const error = this.props.location.state && this.props.location.state.error;
+
     this.state = {
       username: '',
       password: '',
-      showAlert: false,
-      alertType: '',
-      alertText: ''
+      showAlert: error ? true : false,
+      alertType: error ? 'alert-danger' : '',
+      alertText: error ? this.props.location.state.error : ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.testAuth = this.testAuth.bind(this);
   }
 
   handleChange(e) {
@@ -63,33 +65,13 @@ export class Login extends Component {
       .then(res => handleErrors(res))
       .then(res => res.json())
       .then(res => {
-        localStorage.setItem('accessToken', JSON.stringify(res.token));
+        localStorage.setItem('accessToken', res.token);
         this.setState({
           showAlert: true,
           alertType: 'alert-success',
           alertText: 'You have signed in successfully!'
         })
       })
-      .catch(err => {
-        this.setState({
-          showAlert: true,
-          alertType: 'alert-danger',
-          alertText: err.message
-        })
-      });
-  }
-
-  testAuth(e) {
-    e.preventDefault();
-    fetch('/api/user', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`
-      }
-    })
-      .then(res => handleErrors(res))
-      .then(res => res.text())
-      .then(res => console.log(res))
       .catch(err => {
         this.setState({
           showAlert: true,
@@ -129,7 +111,6 @@ export class Login extends Component {
           </div>
           <button id="login" disabled className="btn btn-outline-primary btn-block">Log in</button>
           <a href="/register" className="btn btn-outline-info btn-block">Sign up</a>
-          <a href="#" onClick={this.testAuth} className="btn btn-danger btn-block">Test AUTH</a>
         </form>
       </div>
     );

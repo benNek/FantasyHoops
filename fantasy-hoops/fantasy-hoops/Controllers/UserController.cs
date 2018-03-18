@@ -28,37 +28,6 @@ namespace fantasy_hoops.Controllers
             _signInManager = signInManager;
         }
 
-        [Authorize]
-        [HttpGet]
-        public IActionResult SuperSecret()
-        {
-            var userName = User.Identity.Name;
-            return Ok("Super secret text, if you see this then you're the real hackerman! Also hello " + userName);
-        }
-
-        public IActionResult RequestToken(LoginViewModel model)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, model.UserName)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tai yra raktas musu saugumo sistemai, kuo ilgesnis tuo geriau?"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: "nekrosius.com",
-                audience: "nekrosius.com",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token)
-            });
-        }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
@@ -93,6 +62,28 @@ namespace fantasy_hoops.Controllers
                 return Ok("You have registered successfully!");
             }
             return BadRequest("Unknown error");
+        }
+
+        public IActionResult RequestToken(LoginViewModel model)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, model.UserName)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tai yra raktas musu saugumo sistemai, kuo ilgesnis tuo geriau?"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: "nekrosius.com",
+                audience: "nekrosius.com",
+                claims: claims,
+                expires: DateTime.Now.AddDays(2),
+                signingCredentials: creds);
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token)
+            });
         }
     }
 }
