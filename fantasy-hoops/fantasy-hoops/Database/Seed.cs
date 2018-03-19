@@ -59,7 +59,7 @@ namespace fantasy_hoops.Database
                                     Position = (String)players[l].SelectToken("primary_position"),
                                     NbaID = (int)players[l].SelectToken("reference"),
                                     Number = (int)players[l].SelectToken("jersey_number"),
-                                    Price = 25,
+                                    Price = PlayerSeed.PRICE_FLOOR,
                                     FPPG = 0.0,
                                     PTS = 0.0,
                                     REB = 0.0,

@@ -108,7 +108,7 @@ namespace fantasy_hoops
                 .At(12, 00));
 
             JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(3))
+                .ToRunOnceAt(DateTime.Now.AddMinutes(5))
                 .AndEvery(1)
                 .Days()
                 .At(12, 10));

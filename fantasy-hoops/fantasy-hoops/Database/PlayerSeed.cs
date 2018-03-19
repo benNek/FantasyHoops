@@ -12,6 +12,7 @@ namespace fantasy_hoops.Database
 {
     public class PlayerSeed
     {
+        public static int PRICE_FLOOR = 10;
 
         public static async Task Initialize(GameContext context)
         {
@@ -63,7 +64,7 @@ namespace fantasy_hoops.Database
                 JObject p = GetPlayer(player.NbaID);
                 if (p == null)
                 {
-                    player.Price = 25;
+                    player.Price = PRICE_FLOOR;
                     continue;
                 }
 
@@ -77,7 +78,7 @@ namespace fantasy_hoops.Database
                 player.TOV = gamesPlayed <= 0 ? 0 : (double)stats["topg"];
                 player.GP = gamesPlayed <= 0 ? 0 : gamesPlayed;
                 player.FPPG = gamesPlayed <= 0 ? 0 : FPPG(player);
-                player.Price = gamesPlayed <= 0 ? 25 : Price(context, player);
+                player.Price = gamesPlayed <= 0 ? PRICE_FLOOR : Price(context, player);
             }
             await context.SaveChangesAsync();
         }
@@ -91,7 +92,7 @@ namespace fantasy_hoops.Database
         {
             double GSavg = 0;
             if (context.Stats.Where(x => x.Player.NbaID == p.NbaID).Count() < 1)
-                return 25;
+                return PRICE_FLOOR;
 
             try
             {
@@ -102,8 +103,8 @@ namespace fantasy_hoops.Database
             }
             catch { }
             int price = (int)(GSavg + p.FPPG) * 7 / 5;
-            if (price < 25)
-                return 25;
+            if (price < PRICE_FLOOR)
+                return PRICE_FLOOR;
             return price;
         }
     }
