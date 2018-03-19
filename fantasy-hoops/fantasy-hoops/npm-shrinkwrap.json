@@ -4584,6 +4584,12 @@
         "minimist": "0.0.8"
       }
     },
+    "moment": {
+      "version": "2.21.0",
+      "resolved": "https://registry.npmjs.org/moment/-/moment-2.21.0.tgz",
+      "integrity": "sha512-TCZ36BjURTeFTM/CwRcViQlfkMvL1/vFISuNLO5GkcVm1+QHfbSiNqZuWeMFjj1/3+uAjXswgRk30j1kkLYJBQ==",
+      "dev": true
+    },
     "ms": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
@@ -5916,7 +5922,7 @@
     "react-scroll": {
       "version": "1.7.7",
       "resolved": "https://registry.npmjs.org/react-scroll/-/react-scroll-1.7.7.tgz",
-      "integrity": "sha512-SHZVo+dKCpoYDOVgy5jt5n5s88490EhMaZwy2kIxqJW46v8kg97NBy0LnOVVtXXaxaYlmzRyHxf0k7l6acOIKQ==",
+      "integrity": "sha1-lIxAyaGJtiv0pT7g/VDl2J03Jgo=",
       "requires": {
         "lodash.throttle": "4.1.1",
         "prop-types": "15.5.10"
@@ -5966,7 +5972,7 @@
         "prop-types": {
           "version": "15.6.1",
           "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.6.1.tgz",
-          "integrity": "sha512-4ec7bY1Y66LymSUOH/zARVYObB23AT2h8cf6e/O6ZALB/N0sqZFEx7rq6EYPX2MkOdKORuooI/H5k9TlR4q7kQ==",
+          "integrity": "sha1-NmREU1ZCVd3aORGR+zoSXL32VMo=",
           "dev": true,
           "requires": {
             "fbjs": "0.8.16",
@@ -5977,7 +5983,7 @@
         "react": {
           "version": "16.2.0",
           "resolved": "https://registry.npmjs.org/react/-/react-16.2.0.tgz",
-          "integrity": "sha512-ZmIomM7EE1DvPEnSFAHZn9Vs9zJl5A9H7el0EGTE6ZbW9FKe/14IYAlPbC8iH25YarEQxZL+E8VW7Mi7kfQrDQ==",
+          "integrity": "sha1-oxvS2rib/2XUITT6GH8k0FTCc7o=",
           "dev": true,
           "requires": {
             "fbjs": "0.8.16",
@@ -7022,7 +7028,7 @@
     "uuid": {
       "version": "3.2.1",
       "resolved": "https://registry.npmjs.org/uuid/-/uuid-3.2.1.tgz",
-      "integrity": "sha512-jZnMwlb9Iku/O3smGWvZhauCf6cvvpKi4BKRiliS3cxnI+Gz9j5MEpTz2UFuXiKPJocb7gnsLHwiS05ige5BEA==",
+      "integrity": "sha1-EsUou51Y0LkmXZovbw/ovhf/HxQ=",
       "dev": true
     },
     "validate-npm-package-license": {

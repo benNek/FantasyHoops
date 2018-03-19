@@ -23,7 +23,7 @@ namespace fantasy_hoops.Controllers
             return context.Injuries
                 .Select(x => new {
                     x.InjuryID,
-                    date = x.Date.ToString("yyyy-MM-dd"),
+                    date = x.Date.ToString("yyyy-MM-dd HH:mm"),
                     Player = new {
                         x.Player.NbaID,
                         x.Player.FirstName,
@@ -41,6 +41,7 @@ namespace fantasy_hoops.Controllers
                     x.Title,
                     x.Description,
                     x.Link})
+                    .OrderByDescending(inj => inj.date)
                     .ToList();
         }
 

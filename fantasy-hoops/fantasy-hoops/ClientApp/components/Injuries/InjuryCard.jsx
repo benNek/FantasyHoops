@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 
 export class InjuryCard extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this.importAll = this.importAll.bind(this);
   }
 
   render() {
-    const pos = this.props.injury.player.position.toLowerCase();
-    let photo = '';
+    let posIMG = '';
+    let playerIMG = '';
     try {
-      photo = require(`../../content/images/players/${this.props.injury.player.nbaID}.png`)
+      posIMG = this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/));
+      playerIMG = this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/));
     }
     catch (err) {
-      photo = require(`../../content/images/${pos}.png`);
     }
     let status = '';
     if (this.props.injury.status.toLowerCase().includes("active"))
@@ -23,20 +25,21 @@ export class InjuryCard extends Component {
     else
       status = 'injury-questionable';
     const link = this.props.injury.link != ''
-      ? (<span className='comments'>
+      ? (<span style={{ float: 'left' }} className='comments'>
         <i className='fa fa-comments'></i>
-        <a target="_blank" href={this.props.injury.link}>Read more</a>
+        <a target="_blank" href={this.props.injury.link}> Read more </a>
       </span>)
       : '';
+    const pos = this.props.injury.player.position.toLowerCase();
     return (
-      <div className='ml-3 mt-3'>
+      <div className='ml-3 mt-3 mx-auto' style={{transform: 'scale(0.9, 0.9)'}}>
         <div className='column'>
           <div className='post-module'>
             <div className='thumbnail'>
               <div className='date'>
                 <div className='day badge badge-dark'>{this.props.injury.player.position}</div>
               </div>
-              <img src={photo}
+              <img src={playerIMG[`${this.props.injury.player.nbaID}.png`] || posIMG[`${pos}.png`]}
                 style={{ backgroundColor: this.props.injury.player.team.color }} />
             </div>
             <div className='post-content'>
@@ -45,16 +48,21 @@ export class InjuryCard extends Component {
               <h2 className='sub_title line-clamp'>{this.props.injury.title}</h2>
               <p className='description'>{this.props.injury.description}</p>
               <div className='post-meta'>
-                <span className='timestamp'>
-                  <i className='fa fa-clock-o'></i>
-                  {this.props.injury.date}
-                </span>
                 {link}
+                <span style={{ float: 'right' }} className='timestamp'>
+                  <i className='fa fa-clock-o'></i> {moment(this.props.injury.date).add(6, "hours").fromNow()}
+                </span>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div >
     );
+  }
+
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
   }
 }

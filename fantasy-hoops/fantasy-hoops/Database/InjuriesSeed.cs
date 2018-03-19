@@ -49,15 +49,15 @@ namespace fantasy_hoops.Database
 
         private static async Task Extract(GameContext context)
         {
+            context.Database.ExecuteSqlCommand("DELETE FROM [fantasyhoops].[dbo].[Injuries]");
             JArray injuries = GetInjuries();
-            context.Database.ExecuteSqlCommand("truncate table [fantasyhoops].[dbo].[Injuries]");
             foreach (JObject injury in injuries)
             {
                 if (dayFrom.CompareTo(DateTime.Parse(injury["CreatedDate"].ToString())) > 0)
                     break;
                 AddToDatabase(context, injury);
-                await context.SaveChangesAsync();
             }
+            await context.SaveChangesAsync();
         }
 
         private static void AddToDatabase(GameContext context, JToken injury)
