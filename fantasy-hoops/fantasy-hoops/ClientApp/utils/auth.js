@@ -3,18 +3,23 @@ import { handleErrors } from './errors'
 
 export const isAuth = () => {
   const token = localStorage.getItem('accessToken');
-  if(!token)
+  if (!token)
     return false;
 
+  return parse();
+}
+
+export const parse = () => {
+  const token = localStorage.getItem('accessToken');
   try {
     const decoded = decode(token);
     if (decoded.exp > Date.now() / 1000) {
-      return true;
+      return decoded;
     }
     else
-      return false;
+      return null;
   }
   catch (err) {
-    return false;
+    return null;
   }
 }

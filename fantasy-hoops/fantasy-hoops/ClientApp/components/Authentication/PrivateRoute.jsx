@@ -11,7 +11,10 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
       :
       <Redirect to={{
         pathname: '/login',
-        state: { error: 'You must login to proceed!' }
+        state: {
+          error: 'You must login to proceed!',
+          fallback: this ? this.props.location.pathname : '/'
+        }
       }}
       />
   )} />

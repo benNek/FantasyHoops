@@ -6,7 +6,7 @@ import { Alert } from '../Alert';
 export class Login extends Component {
   constructor(props) {
     super(props);
-    
+
     const error = this.props.location.state && this.props.location.state.error;
 
     this.state = {
@@ -66,11 +66,14 @@ export class Login extends Component {
       .then(res => res.json())
       .then(res => {
         localStorage.setItem('accessToken', res.token);
-        this.setState({
-          showAlert: true,
-          alertType: 'alert-success',
-          alertText: 'You have signed in successfully!'
-        })
+
+        // If user was redirected to login because of authentication errors,
+        // he is now being redirected back
+        if (this.props.location.state && this.props.location.state.fallback) {
+          window.location.replace("/lineup");
+          return;
+        }
+        window.location.replace("/");
       })
       .catch(err => {
         this.setState({

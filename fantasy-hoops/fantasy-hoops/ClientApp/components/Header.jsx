@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { isAuth, parse } from '../utils/auth';
 
 export class Header extends Component {
   constructor(props) {
@@ -6,6 +7,69 @@ export class Header extends Component {
   }
 
   render() {
+    // Login button in case user is not signed in
+    const login = (
+      <ul className="nav navbar-nav ml-auto">
+        <li className="nav-item">
+          <a className="nav-link btn-no-outline" href="/login">Login</a>
+        </li>
+      </ul>
+    );
+
+    // Showing friend requests and profile when player has signed in
+    let profile = '';
+    if (isAuth()) {
+      const user = parse();
+      profile = (
+        <ul className="nav navbar-nav ml-auto">
+          <li className="dropdown">
+            <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Friend  requests </a>
+            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a className="dropdown-item">No friend requests now</a>
+            </div>
+          </li>
+          <li className="dropdown">
+            <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Account
+        </a>
+            <ul className="dropdown-menu dropdown-menu-right">
+              <li>
+                <div className="navbar-login">
+                  <div className="row">
+                    <div className="col-lg-4">
+                      <p className="text-center">
+                        <a href='/profile'><img src="https://i.imgur.com/0i1KEYY.png" width="100" height="100" alt="" /></a>
+                      </p>
+                    </div>
+                    <div className="col-lg-8">
+                      <p className="text-left"><strong>{user.username}</strong></p>
+                      <p className="text-left small">{user.email}</p>
+                      <p className="text-left">
+                        <a href="/profile/edit" className="btn btn-primary btn-block btn-sm">Edit profile</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li className="divider"></li>
+              <li>
+                <div className="navbar-login navbar-login-session">
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <p>
+                        <a href="#" className="btn btn-danger btn-block">Logout</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      );
+    }
+
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
         <a className="navbar-brand btn-no-outline" href="#">
@@ -45,52 +109,7 @@ export class Header extends Component {
               </div>
             </li>
           </ul>
-          <ul className="nav navbar-nav ml-auto">
-            <li className="dropdown">
-              <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Friend  requests </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a className="dropdown-item">No friend requests now</a>
-              </div>
-            </li>
-            <li className="dropdown">
-              <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Account
-                  </a>
-              <ul className="dropdown-menu dropdown-menu-right">
-                <li>
-                  <div className="navbar-login">
-                    <div className="row">
-                      <div className="col-lg-4">
-                        <p className="text-center">
-                          <a href='/profile'><img src="https://i.imgur.com/0i1KEYY.png" width="100" height="100" alt="" /></a>
-                        </p>
-                      </div>
-                      <div className="col-lg-8">
-                        <p className="text-left"><strong>hooper420</strong></p>
-                        <p className="text-left small">fantasy@hoops.com</p>
-                        <p className="text-left">
-                          <a href="/profile/edit" className="btn btn-primary btn-block btn-sm">Edit profile</a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li className="divider"></li>
-                <li>
-                  <div className="navbar-login navbar-login-session">
-                    <div className="row">
-                      <div className="col-lg-12">
-                        <p>
-                          <a href="#" className="btn btn-danger btn-block">Logout</a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
+          {isAuth() ? profile : login}
         </div>
       </nav>
     );
