@@ -64,8 +64,15 @@ export class NewsCard extends Component {
 
   handleCheck(e) {
     if (this.state.checked) {
-      var div = e.target.parentElement.parentElement;
-      Scroll.animateScroll.scrollMore(div.getBoundingClientRect().top - 80);
+      const div = e.target.parentElement.parentElement;
+      const position = div.getBoundingClientRect().top - 80;
+      const duration = (position * -1) / 15;
+      if (position < 0) {
+        Scroll.animateScroll.scrollMore(position, {
+          duration: duration,
+          smooth: true
+        });
+      }
     }
     this.setState({
       checked: !this.state.checked
