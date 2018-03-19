@@ -16,8 +16,10 @@ export const parse = () => {
     if (decoded.exp > Date.now() / 1000) {
       return decoded;
     }
-    else
+    else {
+      localStorage.removeItem('accessToken');
       return null;
+    }
   }
   catch (err) {
     return null;
