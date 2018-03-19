@@ -96,22 +96,22 @@ namespace fantasy_hoops
                 .Minutes());
 
             JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(5))
+                .ToRunOnceAt(DateTime.Now.AddMinutes(10))
                 .AndEvery(1)
                 .Days()
                 .At(00, 00));
 
             JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(10))
+                .ToRunOnceAt(DateTime.Now.AddSeconds(15))
                 .AndEvery(1)
                 .Days()
                 .At(12, 00));
 
             JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddSeconds(30))
+                .ToRunOnceAt(DateTime.Now.AddMinutes(3))
                 .AndEvery(1)
                 .Days()
-                .At(11, 55));
+                .At(12, 10));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
