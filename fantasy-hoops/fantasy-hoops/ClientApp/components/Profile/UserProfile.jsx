@@ -2,26 +2,79 @@ import React, { Component } from 'react';
 import { UserCard } from './UserCard'
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
+import TextareaAutosize from 'react-autosize-textarea';
 
 export class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      edit: this.props.match.params.edit || '',
       firstName: '',
       email: '',
       password: '',
-      confirmPassword: '',
-      team: '',
-      about: ''
+      newPassword: '',
+      confirmNewPassword: '',
+      team: ''
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.editProfile();
   }
 
   handleChange(e) {
     this.setState({
       [e.target.id]: e.target.value
     });
+
+    const btn = document.getElementById('submit');
+    if (document.querySelectorAll('.is-invalid').length != 0) {
+      btn.className = 'btn btn-primary';
+      btn.disabled = true;
+      return;
+    }
+    else {
+      const forms = document.querySelectorAll('.form-control');
+      for (let i = 0; i < forms.length; i++) {
+        if (!forms[i].required)
+          continue;
+        if (forms[i].value.length === 0) {
+          btn.className = 'btn btn-primary';
+          btn.disabled = true;
+          return;
+        }
+      }
+    }
+    btn.className = 'btn btn-primary';
+    btn.disabled = false;
   }
- 
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const data = {
+      UserName: this.state.firstName,
+      Email: this.state.email,
+      Password: this.state.password,
+      NewPassword: this.state.newPassword,
+      ConfirmNewPassword: this.state.confirmNewPassword,
+      //PhoneNumber: this.state.phone != '' ? this.state.phone : null,
+      //FavoriteTeam: this.state.team != '' ? this.state.team : null
+    };
+
+    fetch('/api/user/register', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .catch(error => console.error(error))
+      .then(res => res.text())
+      .then(res => console.log(res));
+
+  }
   render() {
     let teams = [
       {
@@ -153,6 +206,11 @@ export class UserProfile extends Component {
               </div>
               <div className="tab-pane" id="edit">
                 <form role="form">
+                  <label className="col-lg-3 col-form-label form-control-label"></label>
+                  <div className="col-lg-9">
+                    <label className="form-group row">PERSONAL INFO</label>
+                  </div>
+                  <hr className="col-xs-12" />
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">First name</label>
                     <div className="col-lg-9">
@@ -164,6 +222,7 @@ export class UserProfile extends Component {
                         onChange={this.handleChange}
                         regex={/^.{4,11}$/}
                         error="Username must be between 4 and 11 symbols long"
+                        notRequired={true}
                       />
                     </div>
                   </div>
@@ -178,6 +237,7 @@ export class UserProfile extends Component {
                         onChange={this.handleChange}
                         regex={/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i}
                         error="Invalid email"
+                        notRequired={true}
                       />
                     </div>
                   </div>
@@ -185,7 +245,7 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label">About me</label>
                     <div className="col-lg-9">
                       <div className="form-group">
-                        <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <TextareaAutosize className="form-control" />
                       </div>
                     </div>
                   </div>
@@ -201,32 +261,53 @@ export class UserProfile extends Component {
                       />
                     </div>
                   </div>
+                  <label className="col-lg-3 col-form-label form-control-label"></label>
+                  <div className="col-lg-9">
+                    <label className="form-group row">CHANGE PASSWORD</label>
+                  </div>
+                  <hr className="col-xs-12" />
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Password</label>
                     <div className="col-lg-9">
                       <Input
                         type="password"
                         id="password"
-                        placeholder="Password"
+                        placeholder="Current password"
                         value={this.state.password}
                         onChange={this.handleChange}
-                        regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/}
-                        error="Password must contain: 8-20 characters. At least one uppercase letter. At least one number."
-                        children="confirmPassword"
+                        children="newPassword"
+                        notRequired={true}
                       />
                     </div>
                   </div>
                   <div className="form-group row">
-                    <label className="col-lg-3 col-form-label form-control-label">Confirm password</label>
+                    <label className="col-lg-3 col-form-label form-control-label">New password</label>
                     <div className="col-lg-9">
                       <Input
                         type="password"
-                        id="confirmPassword"
-                        placeholder="Password"
-                        value={this.state.confirmPassword}
+                        id="newPassword"
+                        placeholder="New password"
+                        value={this.state.newPassword}
                         onChange={this.handleChange}
-                        match="password"
+                        regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/}
+                        error="Password must contain: 8-20 characters. At least one uppercase letter. At least one number."
+                        notRequired={true}
+                        children="confirmNewPassword"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-lg-3 col-form-label form-control-label">Confirm new password</label>
+                    <div className="col-lg-9">
+                      <Input
+                        type="password"
+                        id="confirmNewPassword"
+                        placeholder="Confirm new password"
+                        value={this.state.confirmNewPassword}
+                        onChange={this.handleChange}
+                        match="newPassword"
                         error="Passwords must match"
+                        notRequired={true}
                       />
                     </div>
                   </div>
@@ -234,7 +315,7 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label"></label>
                     <div className="col-lg-9">
                       <input type="reset" className="btn btn-secondary" value="Cancel" />
-                      <input type="button" className="btn btn-primary" value="Save Changes" />
+                      <input id="submit" disabled className="btn btn-primary" value="Save Changes" />
                     </div>
                   </div>
                 </form>
@@ -251,7 +332,7 @@ export class UserProfile extends Component {
             />
             <div className="custom-file">
               <input type="file" className="custom-file-input" id="customFile" />
-              <label className="custom-file-label" for="customFile">Choose file</label>
+              <label className="custom-file-label" htmlFor="customFile">Choose file</label>
             </div>
           </div>
         </div>
