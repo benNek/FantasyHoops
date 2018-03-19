@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { Input } from '../Inputs/Input';
-
+import { handleErrors } from '../../utils/errors'
+import { Alert } from '../Alert';
+import { isAuth } from '../../utils/auth';
 
 export class Login extends Component {
   constructor(props) {
     super(props);
+
+    const error = this.props.location.state && this.props.location.state.error;
+
     this.state = {
       username: '',
       password: '',
+      showAlert: error ? true : false,
+      alertType: error ? 'alert-danger' : '',
+      alertText: error ? this.props.location.state.error : ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.testAuth = this.testAuth.bind(this);
   }
 
   handleChange(e) {
@@ -56,25 +63,33 @@ export class Login extends Component {
       },
       body: JSON.stringify(data)
     })
+      .then(res => handleErrors(res))
       .then(res => res.json())
       .then(res => {
-        localStorage.setItem('accessToken', JSON.stringify(res.token));
-        console.log('Login successful!');
+        localStorage.setItem('accessToken', res.token);
+
+        // If user was redirected to login because of authentication errors,
+        // he is now being redirected back
+        if (this.props.location.state && this.props.location.state.fallback) {
+          window.location.replace("/lineup");
+          return;
+        }
+        window.location.replace("/");
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        })
+      });
   }
 
-  testAuth(e) {
-    e.preventDefault();
-    fetch('/api/user', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`
-      }
-    })
-      .catch(err => console.error('UNAUTHORIZED'))
-      .then(res => res.text())
-      .then(res => console.log(res));
+  componentDidMount() {
+    // If user has signed in already, he is redirecting to main page
+    if (isAuth()) {
+      window.location.replace("/");
+    }
   }
 
   render() {
@@ -82,6 +97,8 @@ export class Login extends Component {
       <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
         <br />
         <h2>Login</h2>
+        <hr />
+        <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
         <form onSubmit={this.handleSubmit} id="form">
           <div className="form-group">
             <label>Username</label>
@@ -104,12 +121,9 @@ export class Login extends Component {
             />
           </div>
           <button id="login" disabled className="btn btn-outline-primary btn-block">Log in</button>
-          <a href="/register" className="btn btn-outline-info btn-block">Sign up</a>
-          <a href="#" onClick={this.testAuth} className="btn btn-danger btn-block">Test AUTH</a>
+          <a href="/register" className="btn btn-info btn-block">Sign up</a>
         </form>
       </div>
     );
   }
-
-
 }

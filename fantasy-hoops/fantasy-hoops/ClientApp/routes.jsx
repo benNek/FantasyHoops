@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
+import { PrivateRoute } from './components/Authentication/PrivateRoute';
 import { Lineup } from './components/Lineup/Lineup';
 import { Header } from './components/Header';
 import { InjuriesFeed } from './components/Injuries/InjuriesFeed';
@@ -13,8 +14,8 @@ export const routes = <div>
     <Route path='/' component={Header} />
     <Route exact path='/login' component={Login} />
     <Route exact path='/register' component={Registration} />
-    <Route path='/profile/:edit?' component={UserProfile} />
-    <Route path='/lineup' component={Lineup} />
+    <PrivateRoute path='/profile/:edit?' component={UserProfile} />
+    <PrivateRoute path='/lineup' component={Lineup} />
     <Route path='/injuries' component={InjuriesFeed} />
     <Route path='/rules' component={Rules} />
     <Route path='/news' component={NewsFeed} />
