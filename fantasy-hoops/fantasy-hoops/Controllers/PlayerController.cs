@@ -28,6 +28,7 @@ namespace fantasy_hoops.Controllers
                 x.Position,
                 TeamColor = x.Team.Color,
                 x.FPPG })
+                .OrderByDescending(p => p.Price)
                 .ToList();
         }
 

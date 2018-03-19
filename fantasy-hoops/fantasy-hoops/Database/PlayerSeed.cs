@@ -20,12 +20,19 @@ namespace fantasy_hoops.Database
 
         private static HttpWebResponse GetResponse(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.KeepAlive = true;
-            request.ContentType = "application/json";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            return response;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.KeepAlive = true;
+                request.ContentType = "application/json";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                return response;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static string ResponseToString(HttpWebResponse response)
@@ -42,6 +49,8 @@ namespace fantasy_hoops.Database
         {
             string url = "http://data.nba.net/10s/prod/v1/2017/players/" + id + "_profile.json";
             HttpWebResponse webResponse = GetResponse(url);
+            if (webResponse == null)
+                return null;
             string apiResponse = ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             return json;
@@ -51,23 +60,24 @@ namespace fantasy_hoops.Database
         {
             foreach (var player in context.Players)
             {
-                try
+                JObject p = GetPlayer(player.NbaID);
+                if (p == null)
                 {
-                    JToken stats = GetPlayer(player.NbaID)["league"]["standard"]["stats"]["latest"];
-                    player.PTS = (double)stats["ppg"];
-                    player.REB = (double)stats["rpg"];
-                    player.AST = (double)stats["apg"];
-                    player.STL = (double)stats["spg"];
-                    player.BLK = (double)stats["bpg"];
-                    player.TOV = (double)stats["topg"];
-                    player.GP = (int)stats["gamesPlayed"];
-                    player.FPPG = FPPG(player);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
+                    player.Price = 25;
                     continue;
                 }
+
+                JToken stats = p["league"]["standard"]["stats"]["latest"];
+                int gamesPlayed = (int)stats["gamesPlayed"];
+                player.PTS = gamesPlayed <= 0 ? 0 : (double)stats["ppg"];
+                player.REB = gamesPlayed <= 0 ? 0 : (double)stats["rpg"];
+                player.AST = gamesPlayed <= 0 ? 0 : (double)stats["apg"];
+                player.STL = gamesPlayed <= 0 ? 0 : (double)stats["spg"];
+                player.BLK = gamesPlayed <= 0 ? 0 : (double)stats["bpg"];
+                player.TOV = gamesPlayed <= 0 ? 0 : (double)stats["topg"];
+                player.GP = gamesPlayed <= 0 ? 0 : gamesPlayed;
+                player.FPPG = gamesPlayed <= 0 ? 0 : FPPG(player);
+                player.Price = gamesPlayed <= 0 ? 25 : Price(context, player);
             }
             await context.SaveChangesAsync();
         }
@@ -75,6 +85,26 @@ namespace fantasy_hoops.Database
         private static double FPPG(Player p)
         {
             return Math.Round((1 * p.PTS) + (1.2 * p.REB) + (1.5 * p.AST) + (3 * p.STL) + (3 * p.BLK) - (1 * p.TOV), 2);
+        }
+
+        private static int Price(GameContext context, Player p)
+        {
+            double GSavg = 0;
+            if (context.Stats.Where(x => x.Player.NbaID == p.NbaID).Count() < 1)
+                return 25;
+
+            try
+            {
+                GSavg = context.Stats
+                            .Where(x => x.Player.NbaID == p.NbaID)
+                            .Select(s => s.GS)
+                            .Average();
+            }
+            catch { }
+            int price = (int)(GSavg + p.FPPG) * 7 / 5;
+            if (price < 25)
+                return 25;
+            return price;
         }
     }
 }
