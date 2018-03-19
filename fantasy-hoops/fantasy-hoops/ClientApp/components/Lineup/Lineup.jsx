@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PlayerPool } from './PlayerPool';
 import { PlayerCard } from './PlayerCard';
 import { ProgressBar } from './ProgressBar';
+const budget = 300; // thousands
 
 export class Lineup extends Component {
   constructor() {
@@ -33,6 +34,7 @@ export class Lineup extends Component {
   }
 
   render() {
+    const remaining = this.calculateRemaining();
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem' }}>
@@ -44,8 +46,18 @@ export class Lineup extends Component {
               {this.state.pf}
               {this.state.c}
             </div>
-            <ProgressBar players={this.state} />
           </div>
+          <div className="row mt-4 justify-content-center"
+            style={{
+              fontSize: '25px',
+              color: remaining < 0 ? 'red' : 'black'
+            }}>
+            <div className="col"> Remaining {remaining}K</div>
+            <div className="col">
+            <a className="btn btn-primary" href="#" role="button">Submit</a>
+            </div>
+          </div>
+          <ProgressBar players={this.state} />
         </div>
         <PlayerPool
           position={this.state.position}
@@ -71,4 +83,22 @@ export class Lineup extends Component {
       [pos]: playerCard
     });
   }
+
+  calculateRemaining() {
+    const remaining = budget
+      - this.price(this.state.pg)
+      - this.price(this.state.sg)
+      - this.price(this.state.sf)
+      - this.price(this.state.pf)
+      - this.price(this.state.c);
+    return remaining;
+  }
+
+  price(player) {
+    const playerPrice = (player.props.status == 2
+      ? parseInt(player.props.player.price)
+      : 0)
+    return playerPrice;
+  }
+
 }
