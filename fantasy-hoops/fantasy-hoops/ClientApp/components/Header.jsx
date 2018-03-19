@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { isAuth, parse } from '../utils/auth';
+import { isAuth, parse, logout } from '../utils/auth';
 
 export class Header extends Component {
   constructor(props) {
@@ -58,7 +58,7 @@ export class Header extends Component {
                   <div className="row">
                     <div className="col-lg-12">
                       <p>
-                        <a href="#" className="btn btn-danger btn-block">Logout</a>
+                        <a onClick={logout} className="btn btn-light btn-block">Logout</a>
                       </p>
                     </div>
                   </div>

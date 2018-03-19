@@ -3,6 +3,7 @@ import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
 import { handleErrors } from '../../utils/errors'
 import { Alert } from '../Alert';
+import { isAuth } from '../../utils/auth';
 
 export class Registration extends Component {
   constructor(props) {
@@ -76,15 +77,21 @@ export class Registration extends Component {
           showAlert: true,
           alertType: 'alert-danger',
           alertText: err.message
-        }); 
+        });
       });
+  }
 
+  componentDidMount() {
+    // If user has signed in already, he is redirecting to main page
+    if (isAuth()) {
+      window.location.replace("/");
+    }
   }
 
   render() {
     return (
       <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
-        <br/>
+        <br />
         <h2>Registration</h2>
         <hr />
         <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />

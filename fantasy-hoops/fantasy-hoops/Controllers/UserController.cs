@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -64,6 +65,14 @@ namespace fantasy_hoops.Controllers
             return BadRequest("Unknown error");
         }
 
+        [Authorize]
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok("You have signed out successfully!");
+        }
+
         public IActionResult RequestToken(LoginViewModel model)
         {
             var user = context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower())).FirstOrDefault();
@@ -72,8 +81,8 @@ namespace fantasy_hoops.Controllers
                 new Claim("id", user.Id),
                 new Claim("username", user.UserName),
                 new Claim("email", user.Email),
-                new Claim("description", user.Description),
-                new Claim("team", user.Team.Name)
+                new Claim("description", user.Description != null ? user.Description : ""),
+                new Claim("team", user.Team != null ? user.Team.Name : "")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tai yra raktas musu saugumo sistemai, kuo ilgesnis tuo geriau?"));

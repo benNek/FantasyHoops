@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Input } from '../Inputs/Input';
 import { handleErrors } from '../../utils/errors'
 import { Alert } from '../Alert';
+import { isAuth } from '../../utils/auth';
 
 export class Login extends Component {
   constructor(props) {
@@ -84,6 +85,13 @@ export class Login extends Component {
       });
   }
 
+  componentDidMount() {
+    // If user has signed in already, he is redirecting to main page
+    if (isAuth()) {
+      window.location.replace("/");
+    }
+  }
+
   render() {
     return (
       <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
@@ -113,11 +121,9 @@ export class Login extends Component {
             />
           </div>
           <button id="login" disabled className="btn btn-outline-primary btn-block">Log in</button>
-          <a href="/register" className="btn btn-outline-info btn-block">Sign up</a>
+          <a href="/register" className="btn btn-info btn-block">Sign up</a>
         </form>
       </div>
     );
   }
-
-
 }

@@ -23,3 +23,14 @@ export const parse = () => {
     return null;
   }
 }
+
+export const logout = () => {
+  fetch('/api/user/logout', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+    }
+  })
+  localStorage.removeItem('accessToken');
+  window.location.replace("/");
+}
