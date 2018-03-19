@@ -32,6 +32,9 @@ namespace fantasy_hoops.Controllers
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             model.UserName = context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower())).Select(x => x.UserName).FirstOrDefault();
+            if(model.UserName == null)
+                return StatusCode(401, "You have entered an invalid username or password!");
+
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, lockoutOnFailure: false);
             if(result.Succeeded)
             {
