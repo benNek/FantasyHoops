@@ -26,6 +26,7 @@ namespace fantasy_hoops.Controllers
                 id = x.NbaID,
                 x.Price,
                 x.Position,
+                x.IsPlaying,
                 TeamColor = x.Team.Color,
                 x.FPPG })
                 .OrderByDescending(p => p.Price)

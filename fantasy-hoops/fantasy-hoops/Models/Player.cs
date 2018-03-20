@@ -22,6 +22,7 @@ namespace fantasy_hoops.Models
         public double FPPG { get; set; }
         public int Price { get; set; }
         public int TeamID { get; set; }
+        public bool IsPlaying { get; set; }
 
         public virtual Team Team{ get; set; }
         public virtual ICollection<Stats> Stats { get; set; }
