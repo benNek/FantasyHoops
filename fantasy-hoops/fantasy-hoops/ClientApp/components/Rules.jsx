@@ -9,7 +9,7 @@ export class Rules extends Component {
 
   render() {
     return (
-      <div className="container mt-4 bg-light" style={{ paddingTop: '5em' }}>
+      <div className="container bg-light" style={{ padding: '3rem' }}>
         <h3>POSITIONS</h3>
         <br />
         <ol>
@@ -43,7 +43,7 @@ export class Rules extends Component {
         <p>When purchasing players for your team, you want to make sure that you remain within your budget (the  budget is $300K). Budget constant for every day, changing only the price of players. Ultimately, you want to choose players whose values will not be too high budget that day.
           Player salaries are determined by the relation between fantasy scoring and the sychanging stem projected fpts per game. For example when player x, which the system projected his average fpts for the season will be 34, scores 26 fpts in his last game, his price will decrease in a few thousands of fantasy dollars. Note that the minimal price of a player is $25000. The player‘s price are calculated in the last 5 matches. Player price are calculated daily, usually a couple of hours after the last game of the day. You will be able to view all price changes in the Price Movers page.
           </p>
-          <br/>
+        <br />
         <h3>DON'T ALLOW TO CHOOSE LINEUP IF THERE ARE NO GAMES ON THAT DAY</h3>
         <p>For each game day, NBA players will get their recent stats and scores a few hours after the last game is finished. In addition, players price are also calculated even if the player did not play the previous day. These daily updates reflects your fantasy team score and value.</p>
       </div>

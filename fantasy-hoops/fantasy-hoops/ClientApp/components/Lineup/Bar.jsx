@@ -13,7 +13,7 @@ export class Bar extends Component {
   render() {
     this.updateProgressBar();
     return (
-      <div className="progress-bar" role="progressbar"
+      <div className="progress-bar bar" role="progressbar"
         style={{
           backgroundColor: this.state.color,
           width: `${this.state.width}%`

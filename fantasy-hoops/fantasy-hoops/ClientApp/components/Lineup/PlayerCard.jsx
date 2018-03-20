@@ -34,9 +34,9 @@ export class PlayerCard extends Component {
         : '';
       return (
         <div onClick={this.props.status == 2 ? this.filter : ''} className="player-card card">
-          <div className="ppg">{this.props.player.fppg.toFixed(1)}</div>
-          <div className="ppg ppg-label">FPPG</div>
-          <div className="player-position">{this.props.player.position}</div>
+          {this.props.status == 1 ? <div className="ppg">{this.props.player.fppg.toFixed(1)}</div> : ''}
+          {this.props.status == 1 ? <div className="ppg ppg-label">FPPG</div> : ''}
+          {this.props.status == 1 ? <div className="player-position">{this.props.player.position}</div> : ''}
           {buttonState}
           <div className="price-badge">
             <span className="badge badge-dark">{this.props.player.price + 'K'}</span>

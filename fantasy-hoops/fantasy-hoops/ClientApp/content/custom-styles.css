@@ -104,8 +104,8 @@
   z-index: 1000;
 }
 
-.progress-bar {
-  border-radius: 0.5rem;
+.bar {
+  border-radius: 0.35rem;
 }
 
 .container {
@@ -116,8 +116,8 @@
 
 .navbar-login
 {
-    width: 19rem;
-    padding: 0.625rem;
+  width: 19rem;
+  padding: 0.625rem;
 }
 
 .btn-no-outline {
