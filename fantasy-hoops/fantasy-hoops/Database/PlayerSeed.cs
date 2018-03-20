@@ -59,6 +59,8 @@ namespace fantasy_hoops.Database
 
         private static async Task Calculate(GameContext context)
         {
+            string date = GetDate();
+            JArray games = GetGames(date);
             foreach (var player in context.Players)
             {
                 JObject p = GetPlayer(player.NbaID);
@@ -79,8 +81,47 @@ namespace fantasy_hoops.Database
                 player.GP = gamesPlayed <= 0 ? 0 : gamesPlayed;
                 player.FPPG = gamesPlayed <= 0 ? 0 : FPPG(player);
                 player.Price = gamesPlayed <= 0 ? PRICE_FLOOR : Price(context, player);
+                player.IsPlaying = IsPlaying(player, games);
             }
             await context.SaveChangesAsync();
+        }
+
+        private static JArray GetGames(string date)
+        {
+            string url = "http://data.nba.net/10s/prod/v1/" + date + "/scoreboard.json";
+            HttpWebResponse webResponse = GetResponse(url);
+            if (webResponse == null)
+                return null;
+            string apiResponse = ResponseToString(webResponse);
+            JObject json = JObject.Parse(apiResponse);
+            return (JArray)json["games"];
+
+        }
+
+        private static bool IsPlaying(Player player, JArray games)
+        {
+            foreach (JObject game in games)
+            {
+                int hTeam = (int)game["hTeam"]["teamId"];
+                int vTeam = (int)game["vTeam"]["teamId"];
+                if (player.Team.NbaID == hTeam || player.Team.NbaID == vTeam)
+                    return true;
+            }
+            return false;
+        }
+
+        private static string GetDate()
+        {
+            string url = "http://data.nba.net/10s/prod/v1/today.json";
+            HttpWebResponse webResponse = GetResponse(url);
+            if (webResponse == null)
+                return null;
+            string apiResponse = ResponseToString(webResponse);
+            JObject json = JObject.Parse(apiResponse);
+            string date = (string)json["links"]["currentDate"];
+            date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
+                .AddDays(1).ToString("yyyyMMdd");
+            return date;
         }
 
         private static double FPPG(Player p)

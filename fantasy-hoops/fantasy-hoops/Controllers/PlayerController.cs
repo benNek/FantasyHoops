@@ -20,14 +20,18 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Players.Select(x => new {
-                x.FirstName,
-                x.LastName,
-                id = x.NbaID,
-                x.Price,
-                x.Position,
-                TeamColor = x.Team.Color,
-                x.FPPG })
+            return context.Players
+                .Where(x => x.IsPlaying)
+                .Select(x => new
+                {
+                    x.FirstName,
+                    x.LastName,
+                    id = x.NbaID,
+                    x.Price,
+                    x.Position,
+                    TeamColor = x.Team.Color,
+                    x.FPPG
+                })
                 .OrderByDescending(p => p.Price)
                 .ToList();
         }
