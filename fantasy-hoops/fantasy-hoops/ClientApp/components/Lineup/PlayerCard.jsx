@@ -39,7 +39,7 @@ export class PlayerCard extends Component {
           {this.props.status == 1 ? <div className="player-position">{this.props.player.position}</div> : ''}
           {buttonState}
           <div className="price-badge">
-            {this.props.status == 1 ? <span className="badge badge-dark">{this.props.player.price + 'K'}</span> : ''}
+            <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
           </div>
           <img
             className="player-card-img-top card-img-top"
