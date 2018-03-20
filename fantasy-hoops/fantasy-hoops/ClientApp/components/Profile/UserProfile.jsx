@@ -9,8 +9,9 @@ export class UserProfile extends Component {
     super(props);
     this.state = {
       edit: this.props.match.params.edit || '',
-      firstName: '',
+      username: '',
       email: '',
+      about: '',
       password: '',
       newPassword: '',
       confirmNewPassword: '',
@@ -24,11 +25,7 @@ export class UserProfile extends Component {
     this.editProfile();
   }
 
-  handleChange(e) {
-    this.setState({
-      [e.target.id]: e.target.value
-    });
-
+  componentDidUpdate(nextProps, nextState) {
     const btn = document.getElementById('submit');
     if (document.querySelectorAll('.is-invalid').length != 0) {
       btn.className = 'btn btn-primary';
@@ -51,15 +48,22 @@ export class UserProfile extends Component {
     btn.disabled = false;
   }
 
+  handleChange(e) {
+    this.setState({
+      [e.target.id]: e.target.value
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const data = {
-      UserName: this.state.firstName,
+      UserName: this.state.username,
       Email: this.state.email,
+      About: this.state.about,
       Password: this.state.password,
       NewPassword: this.state.newPassword,
       ConfirmNewPassword: this.state.confirmNewPassword,
-      //PhoneNumber: this.state.phone != '' ? this.state.phone : null,
+      //\PhoneNumber: this.state.phone != '' ? this.state.phone : null,
       //FavoriteTeam: this.state.team != '' ? this.state.team : null
     };
 
@@ -94,6 +98,7 @@ export class UserProfile extends Component {
         name: "San Antonio Spurs"
       }
     ];
+    const changingPassword = !(this.state.password.length > 0 || this.state.newPassword.length > 0 || this.state.confirmNewPassword.length > 0);
     return (
       <div className="container mt-4 bg-light" style={{ paddingTop: '5em' }}>
         <div className="row my-2">
@@ -212,17 +217,15 @@ export class UserProfile extends Component {
                   </div>
                   <hr className="col-xs-12" />
                   <div className="form-group row">
-                    <label className="col-lg-3 col-form-label form-control-label">First name</label>
+                    <label className="col-lg-3 col-form-label form-control-label">Username</label>
                     <div className="col-lg-9">
                       <Input
                         type="text"
-                        id="firstName"
-                        placeholder="First name"
+                        id="username"
                         value={this.state.username}
                         onChange={this.handleChange}
-                        regex={/^.{4,11}$/}
+                        regex={/^.{4,11}$|^$/}
                         error="Username must be between 4 and 11 symbols long"
-                        notRequired={true}
                       />
                     </div>
                   </div>
@@ -232,12 +235,10 @@ export class UserProfile extends Component {
                       <Input
                         type="email"
                         id="email"
-                        placeholder="Enter email"
                         value={this.state.email}
                         onChange={this.handleChange}
-                        regex={/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i}
+                        regex={/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$|^$/i}
                         error="Invalid email"
-                        notRequired={true}
                       />
                     </div>
                   </div>
@@ -245,7 +246,7 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label">About me</label>
                     <div className="col-lg-9">
                       <div className="form-group">
-                        <TextareaAutosize className="form-control" />
+                        <TextareaAutosize className="form-control" onChange={this.handleChange} />
                       </div>
                     </div>
                   </div>
@@ -257,7 +258,6 @@ export class UserProfile extends Component {
                         id="team"
                         value={this.state.team}
                         onChange={this.handleChange}
-                        notRequired={true}
                       />
                     </div>
                   </div>
@@ -272,11 +272,10 @@ export class UserProfile extends Component {
                       <Input
                         type="password"
                         id="password"
-                        placeholder="Current password"
                         value={this.state.password}
                         onChange={this.handleChange}
                         children="newPassword"
-                        notRequired={true}
+                        notRequired={changingPassword}
                       />
                     </div>
                   </div>
@@ -286,12 +285,11 @@ export class UserProfile extends Component {
                       <Input
                         type="password"
                         id="newPassword"
-                        placeholder="New password"
                         value={this.state.newPassword}
                         onChange={this.handleChange}
-                        regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/}
+                        regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$|^$/}
                         error="Password must contain: 8-20 characters. At least one uppercase letter. At least one number."
-                        notRequired={true}
+                        notRequired={changingPassword}
                         children="confirmNewPassword"
                       />
                     </div>
@@ -302,19 +300,18 @@ export class UserProfile extends Component {
                       <Input
                         type="password"
                         id="confirmNewPassword"
-                        placeholder="Confirm new password"
                         value={this.state.confirmNewPassword}
                         onChange={this.handleChange}
                         match="newPassword"
                         error="Passwords must match"
-                        notRequired={true}
+                        notRequired={changingPassword}
                       />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label"></label>
                     <div className="col-lg-9">
-                      <input type="reset" className="btn btn-secondary" value="Cancel" />
+                      <input type="reset" className="btn btn-secondary mr-2" value="Cancel" />
                       <input id="submit" disabled className="btn btn-primary" value="Save Changes" />
                     </div>
                   </div>
