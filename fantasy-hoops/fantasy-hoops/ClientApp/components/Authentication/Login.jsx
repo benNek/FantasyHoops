@@ -94,7 +94,7 @@ export class Login extends Component {
 
   render() {
     return (
-      <div className="container mt-5 pb-3 bg-light vertical-center" style={{ 'maxWidth': '420px' }}>
+      <div className="container pb-3 bg-light vertical-center" style={{ maxWidth: '420px' }}>
         <br />
         <h2>Login</h2>
         <hr />

@@ -16,7 +16,7 @@ export class UserProfile extends Component {
 
   render() {
     return (
-      <div className="container mt-4 bg-light" style={{ paddingTop: '5em' }}>
+      <div className="container bg-light pt-1">
         <div className="row my-2">
           <div className="col-lg-8 order-lg-2">
             <ul className="nav nav-tabs">

@@ -40,7 +40,7 @@ export class InjuriesFeed extends Component {
       }
     );
     return (
-      <div className="container mt-4 bg-light" style={{ paddingTop: '5em' }}>
+      <div className="container bg-light">
         <div className="row">
           {injuries}
           {this.state.noInjuries ? <div>No injuries report today</div> : ''}

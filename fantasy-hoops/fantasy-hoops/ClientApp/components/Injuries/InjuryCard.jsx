@@ -32,7 +32,7 @@ export class InjuryCard extends Component {
       : '';
     const pos = this.props.injury.player.position.toLowerCase();
     return (
-      <div className='ml-3 mt-3 mx-auto' style={{transform: 'scale(0.9, 0.9)'}}>
+      <div className='mx-auto' style={{ transform: 'scale(0.9, 0.9)' }}>
         <div className='column'>
           <div className='post-module'>
             <div className='thumbnail'>

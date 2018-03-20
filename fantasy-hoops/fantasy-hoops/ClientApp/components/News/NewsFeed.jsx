@@ -15,7 +15,7 @@ export class NewsFeed extends Component {
       }
     );
     return (
-      <div className="container mt-4 bg-light" style={{ paddingTop: '3em' }}>
+      <div className="container bg-light pt-5 pb-1">
         <div className="center col">
           {news}
         </div>

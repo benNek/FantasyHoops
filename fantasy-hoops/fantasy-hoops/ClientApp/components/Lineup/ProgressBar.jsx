@@ -6,14 +6,14 @@ export class ProgressBar extends Component {
   render() {
     const remaining = this.calculateRemaining();
     return (
-      <div style={{height: '100px'}}>
+      <div style={{ height: '1.5rem', paddingBottom: '3rem' }}>
         <div className="row mt-4 justify-content-center"
           style={{
-            fontSize: '25px',
+            fontSize: '1.5rem',
             color: remaining < 0 ? 'red' : 'black'
           }}>Remaining {remaining}K</div>
         <div className="row mt-4 justify-content-center">
-          <div className="progress" style={{ width: '91%' }}>
+          <div className="progress bar" style={{ width: '90%' }}>
             <Bar player={this.props.players.pg} />
             <Bar player={this.props.players.sg} />
             <Bar player={this.props.players.sf} />

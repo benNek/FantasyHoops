@@ -14,7 +14,7 @@ export class NewsCard extends Component {
     const text = this.props.news.news;
     const cutPosition = 300;
     return (
-      <div className="mt-5 mx-auto news-card card">
+      <div className="mb-5 mx-auto news-card card">
         <div className="card-header bg-info text-white">
           <h5 className="card-title" style={{ marginBottom: '0' }}>
             {this.props.news.title}

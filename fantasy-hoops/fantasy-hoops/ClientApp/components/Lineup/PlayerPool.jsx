@@ -39,8 +39,8 @@ export class PlayerPool extends Component {
       }
     );
     return (
-      <div className="container mt-4">
-        <div className="row justify-content-center">
+      <div className="container">
+        <div className="row justify-content-center" style={{ margin: 'auto' }}>
           {players}
         </div>
       </div>
