@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { UserCard } from './UserCard'
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
-import TextareaAutosize from 'react-autosize-textarea';
+import Textarea from 'react-autosize-textarea';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -18,7 +18,6 @@ export class UserProfile extends Component {
       team: ''
     }
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -53,32 +52,7 @@ export class UserProfile extends Component {
       [e.target.id]: e.target.value
     });
   }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    const data = {
-      UserName: this.state.username,
-      Email: this.state.email,
-      About: this.state.about,
-      Password: this.state.password,
-      NewPassword: this.state.newPassword,
-      ConfirmNewPassword: this.state.confirmNewPassword,
-      //\PhoneNumber: this.state.phone != '' ? this.state.phone : null,
-      //FavoriteTeam: this.state.team != '' ? this.state.team : null
-    };
-
-    fetch('/api/user/register', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .catch(error => console.error(error))
-      .then(res => res.text())
-      .then(res => console.log(res));
-
-  }
+  
   render() {
     let teams = [
       {
@@ -246,7 +220,7 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label">About me</label>
                     <div className="col-lg-9">
                       <div className="form-group">
-                        <TextareaAutosize className="form-control" onChange={this.handleChange} />
+                        <Textarea className="form-control" onChange={this.handleChange} notRequired={true} />
                       </div>
                     </div>
                   </div>
@@ -274,7 +248,6 @@ export class UserProfile extends Component {
                         id="password"
                         value={this.state.password}
                         onChange={this.handleChange}
-                        children="newPassword"
                         notRequired={changingPassword}
                       />
                     </div>

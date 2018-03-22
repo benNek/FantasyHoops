@@ -21,7 +21,7 @@ export class Select extends Component {
       <div>
         <select
           id={this.props.id}
-          className="form-control custom-select"
+          className="form-control custom-select select"
           value={this.props.value}
           onChange={this.props.onChange}
           required={this.props.notRequired ? false : true}

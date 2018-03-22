@@ -375,3 +375,8 @@
 .news-card {
   max-width: 30em;
 }
+
+.select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+  }
