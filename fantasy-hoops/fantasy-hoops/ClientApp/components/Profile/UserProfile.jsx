@@ -1,20 +1,78 @@
 import React, { Component } from 'react';
 import { UserCard } from './UserCard'
+import { Input } from '../Inputs/Input';
+import { Select } from '../Inputs/Select';
+import Textarea from 'react-autosize-textarea';
 
 export class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: this.props.match.params.edit || ''
+      edit: this.props.match.params.edit || '',
+      username: '',
+      email: '',
+      about: '',
+      password: '',
+      newPassword: '',
+      confirmNewPassword: '',
+      team: ''
     }
-    this.editProfile = this.editProfile.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     this.editProfile();
   }
 
+  componentDidUpdate(nextProps, nextState) {
+    const btn = document.getElementById('submit');
+    if (document.querySelectorAll('.is-invalid').length != 0) {
+      btn.className = 'btn btn-primary';
+      btn.disabled = true;
+      return;
+    }
+    else {
+      const forms = document.querySelectorAll('.form-control');
+      for (let i = 0; i < forms.length; i++) {
+        if (!forms[i].required)
+          continue;
+        if (forms[i].value.length === 0) {
+          btn.className = 'btn btn-primary';
+          btn.disabled = true;
+          return;
+        }
+      }
+    }
+    btn.className = 'btn btn-primary';
+    btn.disabled = false;
+  }
+
+  handleChange(e) {
+    this.setState({
+      [e.target.id]: e.target.value
+    });
+  }
+
   render() {
+    let teams = [
+      {
+        value: 1,
+        name: "Atlanta Hawks"
+      },
+      {
+        value: 2,
+        name: "Boston Celtics"
+      },
+      {
+        value: 3,
+        name: "Los Angeles Lakers"
+      },
+      {
+        value: 4,
+        name: "San Antonio Spurs"
+      }
+    ];
+    const changingPassword = !(this.state.password.length > 0 || this.state.newPassword.length > 0 || this.state.confirmNewPassword.length > 0);
     return (
       <div className="container bg-light pt-1">
         <div className="row my-2">
@@ -127,47 +185,110 @@ export class UserProfile extends Component {
               </div>
               <div className="tab-pane" id="edit">
                 <form role="form">
+                  <label className="col-lg-3 col-form-label form-control-label"></label>
+                  <div className="col-lg-9">
+                    <label className="form-group row">PERSONAL INFO</label>
+                  </div>
+                  <hr className="col-xs-12" />
                   <div className="form-group row">
-                    <label className="col-lg-3 col-form-label form-control-label">First name</label>
+                    <label className="col-lg-3 col-form-label form-control-label">Username</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="text" value="Jane" />
+                      <Input
+                        type="text hidden"
+                        id="username"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                        regex={/^.{4,11}$|^$/}
+                        error="Username must be between 4 and 11 symbols long"
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Email</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="email" value="email@gmail.com" />
+                      <Input
+                        type="email hidden"
+                        id="email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                        regex={/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$|^$/i}
+                        error="Invalid email"
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">About me</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="url" value="" />
+                      <div className="form-group">
+                        <Textarea
+                          className="form-control"
+                          onChange={this.handleChange}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Favorite team</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="url" value="" />
+                      <Select
+                        options={teams}
+                        id="team"
+                        value={this.state.team}
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
+                  <label className="col-lg-3 col-form-label form-control-label"></label>
+                  <div className="col-lg-9">
+                    <label className="form-group row">CHANGE PASSWORD</label>
+                  </div>
+                  <hr className="col-xs-12" />
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label">Password</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="password" value="11111122333" />
+                      <Input
+                        type="password"
+                        id="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                        notRequired={changingPassword}
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
-                    <label className="col-lg-3 col-form-label form-control-label">Confirm password</label>
+                    <label className="col-lg-3 col-form-label form-control-label">New password</label>
                     <div className="col-lg-9">
-                      <input className="form-control" type="password" value="11111122333" />
+                      <Input
+                        type="password"
+                        id="newPassword"
+                        value={this.state.newPassword}
+                        onChange={this.handleChange}
+                        regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$|^$/}
+                        error="Password must contain: 8-20 characters. At least one uppercase letter. At least one number."
+                        notRequired={changingPassword}
+                        children="confirmNewPassword"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-lg-3 col-form-label form-control-label">Confirm new password</label>
+                    <div className="col-lg-9">
+                      <Input
+                        type="password"
+                        id="confirmNewPassword"
+                        value={this.state.confirmNewPassword}
+                        onChange={this.handleChange}
+                        match="newPassword"
+                        error="Passwords must match"
+                        notRequired={changingPassword}
+                      />
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label"></label>
                     <div className="col-lg-9">
-                      <input type="reset" className="btn btn-secondary" value="Cancel" />
-                      <input type="button" className="btn btn-primary" value="Save Changes" />
+                      <button type="reset" className="btn btn-secondary mr-2">Cancel</button>
+                      <button id="submit" disabled className="btn btn-primary">Save changes</button>
                     </div>
                   </div>
                 </form>
@@ -184,7 +305,7 @@ export class UserProfile extends Component {
             />
             <div className="custom-file">
               <input type="file" className="custom-file-input" id="customFile" />
-              <label className="custom-file-label" for="customFile">Choose file</label>
+              <label className="custom-file-label" htmlFor="customFile">Choose file</label>
             </div>
           </div>
         </div>
@@ -209,3 +330,5 @@ export class UserProfile extends Component {
     }
   }
 }
+
+

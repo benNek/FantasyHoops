@@ -383,3 +383,8 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical; 
 }
+
+.select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+  }
