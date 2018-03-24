@@ -194,7 +194,7 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label">Username</label>
                     <div className="col-lg-9">
                       <Input
-                        type="text"
+                        type="text hidden"
                         id="username"
                         value={this.state.username}
                         onChange={this.handleChange}
@@ -207,7 +207,7 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label">Email</label>
                     <div className="col-lg-9">
                       <Input
-                        type="email"
+                        type="email hidden"
                         id="email"
                         value={this.state.email}
                         onChange={this.handleChange}
