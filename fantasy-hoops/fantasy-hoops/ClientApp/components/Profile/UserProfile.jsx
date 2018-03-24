@@ -52,7 +52,7 @@ export class UserProfile extends Component {
       [e.target.id]: e.target.value
     });
   }
-  
+
   render() {
     let teams = [
       {
@@ -220,7 +220,10 @@ export class UserProfile extends Component {
                     <label className="col-lg-3 col-form-label form-control-label">About me</label>
                     <div className="col-lg-9">
                       <div className="form-group">
-                        <Textarea className="form-control" onChange={this.handleChange} notRequired={true} />
+                        <Textarea
+                          className="form-control"
+                          onChange={this.handleChange}
+                        />
                       </div>
                     </div>
                   </div>
@@ -284,8 +287,8 @@ export class UserProfile extends Component {
                   <div className="form-group row">
                     <label className="col-lg-3 col-form-label form-control-label"></label>
                     <div className="col-lg-9">
-                      <input type="reset" className="btn btn-secondary mr-2" value="Cancel" />
-                      <input id="submit" disabled className="btn btn-primary" value="Save Changes" />
+                      <button type="reset" className="btn btn-secondary mr-2">Cancel</button>
+                      <button id="submit" disabled className="btn btn-primary">Save changes</button>
                     </div>
                   </div>
                 </form>
