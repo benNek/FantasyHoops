@@ -22,6 +22,15 @@ export class UserProfile extends Component {
 
   componentDidMount() {
     this.editProfile();
+    fetch(`http://localhost:51407/api/team`)
+    .then(res => {
+      return res.json()
+    })
+    .then(res => {
+      this.setState({
+        teams: res
+      });
+    });
   }
 
   componentDidUpdate(nextProps, nextState) {
@@ -54,24 +63,7 @@ export class UserProfile extends Component {
   }
 
   render() {
-    let teams = [
-      {
-        value: 1,
-        name: "Atlanta Hawks"
-      },
-      {
-        value: 2,
-        name: "Boston Celtics"
-      },
-      {
-        value: 3,
-        name: "Los Angeles Lakers"
-      },
-      {
-        value: 4,
-        name: "San Antonio Spurs"
-      }
-    ];
+    const teams = this.state.teams;
     const changingPassword = !(this.state.password.length > 0 || this.state.newPassword.length > 0 || this.state.confirmNewPassword.length > 0);
     return (
       <div className="container bg-light pt-1">
