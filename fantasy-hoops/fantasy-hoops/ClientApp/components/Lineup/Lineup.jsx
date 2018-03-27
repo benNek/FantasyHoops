@@ -4,6 +4,7 @@ import { PlayerCard } from './PlayerCard';
 import { ProgressBar } from './ProgressBar';
 import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
+import { Alert } from '../Alert';
 
 const budget = 300; // thousands
 
@@ -20,7 +21,10 @@ export class Lineup extends Component {
       sg: <PlayerCard filter={this.filter} status={0} position="SG" />,
       sf: <PlayerCard filter={this.filter} status={0} position="SF" />,
       pf: <PlayerCard filter={this.filter} status={0} position="PF" />,
-      c: <PlayerCard filter={this.filter} status={0} position="C" />
+      c: <PlayerCard filter={this.filter} status={0} position="C" />,
+      showAlert: false,
+      alertType: '',
+      alertText: ''
     };
   }
 
@@ -41,6 +45,7 @@ export class Lineup extends Component {
     const remaining = this.calculateRemaining();
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
+        <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
         <div className="bg-light sticky-top" style={{ top: '4rem' }}>
           <div className="" style={{ transform: 'scale(0.7, 0.7)' }}>
             <div className="row justify-content-center">
@@ -62,7 +67,9 @@ export class Lineup extends Component {
           </div>
           <ProgressBar players={this.state} />
           <div className="col text-center">
-            <a className="btn btn-primary" onClick={this.handleSubmit} role="button">Submit</a>
+            <form onSubmit={this.handleSubmit}>
+              <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
+            </form>
           </div>
         </div>
         <PlayerPool
@@ -130,20 +137,34 @@ export class Lineup extends Component {
       .then(res => res.text())
       .then(res => {
         console.log(res);
-        // this.setState({
-        //   showAlert: true,
-        //   alertType: 'alert-success',
-        //   alertText: res
-        // });
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: res
+        });
       })
       .catch(err => {
         console.log(err);
-        // this.setState({
-        //   showAlert: true,
-        //   alertType: 'alert-danger',
-        //   alertText: err.message
-        // });
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        });
       });
   }
 
+  componentDidUpdate() {
+    if (this.state.pg.props.player && this.state.sg.props.player
+      && this.state.sf.props.player && this.state.pf.props.player
+      && this.state.c.props.player && this.calculateRemaining() >= 0) {
+      const btn = document.getElementById('submit');
+      btn.disabled = false;
+      btn.className = 'btn btn-primary btn-lg btn-block';
+    }
+    else {
+      const btn = document.getElementById('submit');
+      btn.disabled = true;
+      btn.className = 'btn btn-outline-primary btn-lg btn-block';
+    }
+  }
 }
