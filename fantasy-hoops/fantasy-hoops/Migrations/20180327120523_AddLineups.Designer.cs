@@ -11,8 +11,8 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20180319190444_AddLineupIDsToUser")]
-    partial class AddLineupIDsToUser
+    [Migration("20180327120523_AddLineups")]
+    partial class AddLineups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -242,17 +242,18 @@ namespace fantasy_hoops.Migrations
 
             modelBuilder.Entity("fantasy_hoops.Models.UserPlayers", b =>
                 {
-                    b.Property<int>("ID");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("PlayerID");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserID");
 
-                    b.HasKey("ID", "PlayerID");
+                    b.HasKey("ID");
 
                     b.HasIndex("PlayerID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("UserPlayers");
                 });
@@ -413,7 +414,7 @@ namespace fantasy_hoops.Migrations
 
                     b.HasOne("fantasy_hoops.Models.User", "User")
                         .WithMany("UserPlayers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

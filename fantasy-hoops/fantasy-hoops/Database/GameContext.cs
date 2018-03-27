@@ -32,13 +32,5 @@ namespace fantasy_hoops.Database
         {
             optionsBuilder.UseSqlServer(connectionString);
         }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.Entity<UserPlayers>()
-                .HasKey(c => new { c.ID, c.PlayerID });
-        }
     }
 }

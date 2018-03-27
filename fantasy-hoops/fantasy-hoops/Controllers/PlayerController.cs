@@ -27,6 +27,7 @@ namespace fantasy_hoops.Controllers
                     x.FirstName,
                     x.LastName,
                     id = x.NbaID,
+                    playerId = x.PlayerID,
                     x.Price,
                     x.Position,
                     TeamColor = x.Team.Color,

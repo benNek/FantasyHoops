@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
 namespace fantasy_hoops.Migrations
 {
-    public partial class AddLineupIDsToUser : Migration
+    public partial class AddLineups : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,13 +13,14 @@ namespace fantasy_hoops.Migrations
                 name: "UserPlayers",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false),
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PlayerID = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
+                    UserID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserPlayers", x => new { x.ID, x.PlayerID });
+                    table.PrimaryKey("PK_UserPlayers", x => x.ID);
                     table.ForeignKey(
                         name: "FK_UserPlayers_Players_PlayerID",
                         column: x => x.PlayerID,
@@ -26,8 +28,8 @@ namespace fantasy_hoops.Migrations
                         principalColumn: "PlayerID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserPlayers_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserPlayers_AspNetUsers_UserID",
+                        column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -39,9 +41,9 @@ namespace fantasy_hoops.Migrations
                 column: "PlayerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserPlayers_UserId",
+                name: "IX_UserPlayers_UserID",
                 table: "UserPlayers",
-                column: "UserId");
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

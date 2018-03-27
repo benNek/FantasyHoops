@@ -40,6 +40,16 @@
     <Compile Remove="Migrations\20180319185652_AddLineupIDsToUser.Designer.cs" />
     <Compile Remove="Migrations\20180319190028_AddLineupIDsToUser.cs" />
     <Compile Remove="Migrations\20180319190028_AddLineupIDsToUser.Designer.cs" />
+    <Compile Remove="Migrations\20180319190444_AddLineupIDsToUser.cs" />
+    <Compile Remove="Migrations\20180319190444_AddLineupIDsToUser.Designer.cs" />
+    <Compile Remove="Migrations\20180327100107_AddLineupToUser.cs" />
+    <Compile Remove="Migrations\20180327100107_AddLineupToUser.Designer.cs" />
+    <Compile Remove="Migrations\20180327113222_UpdateLineup.cs" />
+    <Compile Remove="Migrations\20180327113222_UpdateLineup.Designer.cs" />
+    <Compile Remove="Migrations\20180327114752_UpdateLineup.cs" />
+    <Compile Remove="Migrations\20180327114752_UpdateLineup.Designer.cs" />
+    <Compile Remove="Migrations\20180327115945_UpdateLineup.cs" />
+    <Compile Remove="Migrations\20180327115945_UpdateLineup.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

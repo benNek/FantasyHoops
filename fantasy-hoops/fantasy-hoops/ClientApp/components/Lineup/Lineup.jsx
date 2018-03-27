@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { PlayerPool } from './PlayerPool';
 import { PlayerCard } from './PlayerCard';
 import { ProgressBar } from './ProgressBar';
+import { parse } from '../../utils/auth';
+import { handleErrors } from '../../utils/errors';
+
 const budget = 300; // thousands
 
 export class Lineup extends Component {
@@ -9,6 +12,7 @@ export class Lineup extends Component {
     super();
     this.selectPlayer = this.selectPlayer.bind(this);
     this.filter = this.filter.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       position: '',
@@ -47,17 +51,19 @@ export class Lineup extends Component {
               {this.state.c}
             </div>
           </div>
-          <div className="row mt-4 justify-content-center"
+          <div className="row mt-4"
             style={{
               fontSize: '25px',
               color: remaining < 0 ? 'red' : 'black'
             }}>
-            <div className="col"> Remaining {remaining}K</div>
-            <div className="col">
-            <a className="btn btn-primary" href="#" role="button">Submit</a>
+            <div className="col text-center">
+              <div> Remaining {remaining}K</div>
             </div>
           </div>
           <ProgressBar players={this.state} />
+          <div className="col text-center">
+            <a className="btn btn-primary" onClick={this.handleSubmit} role="button">Submit</a>
+          </div>
         </div>
         <PlayerPool
           position={this.state.position}
@@ -99,6 +105,45 @@ export class Lineup extends Component {
       ? parseInt(player.props.player.price)
       : 0)
     return playerPrice;
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const user = parse();
+    const data = {
+      UserID: user.id,
+      PgID: this.state.pg.props.player.playerId,
+      SgID: this.state.sg.props.player.playerId,
+      SfID: this.state.sf.props.player.playerId,
+      PfID: this.state.pf.props.player.playerId,
+      CID: this.state.c.props.player.playerId
+    };
+
+    fetch('/api/lineup/submit', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.text())
+      .then(res => {
+        console.log(res);
+        // this.setState({
+        //   showAlert: true,
+        //   alertType: 'alert-success',
+        //   alertText: res
+        // });
+      })
+      .catch(err => {
+        console.log(err);
+        // this.setState({
+        //   showAlert: true,
+        //   alertType: 'alert-danger',
+        //   alertText: err.message
+        // });
+      });
   }
 
 }
