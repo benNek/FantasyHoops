@@ -83,9 +83,11 @@ export class Lineup extends Component {
     const remaining = this.calculateRemaining();
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
-        <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
         <div className="bg-light sticky-top" style={{ top: '4rem' }}>
-          <div className="" style={{ transform: 'scale(0.7, 0.7)' }}>
+          <div className="pt-3 text-center mx-auto" style={{width: "50%"}}>
+            <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
+          </div>
+          <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
               {this.state.pg}
               {this.state.sg}
@@ -94,17 +96,18 @@ export class Lineup extends Component {
               {this.state.c}
             </div>
           </div>
-          <div className="row mt-4"
+          <div className="row"
             style={{
               fontSize: '25px',
-              color: remaining < 0 ? 'red' : 'black'
+              color: remaining < 0 ? 'red' : 'black',
+              marginTop: '-1rem'
             }}>
             <div className="col text-center">
               <div> Remaining {remaining}K</div>
             </div>
           </div>
           <ProgressBar players={this.state} />
-          <div className="col text-center">
+          <div className="text-center mt-3 mx-auto" style={{width: "50%"}}>
             <form onSubmit={this.handleSubmit}>
               <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
             </form>

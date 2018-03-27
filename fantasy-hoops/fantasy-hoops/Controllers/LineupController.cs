@@ -105,7 +105,7 @@ namespace fantasy_hoops.Controllers
 
             await context.SaveChangesAsync();
 
-            return Ok("Lineup was submited successfully");
+            return Ok("Lineup was updated successfully");
         }
     }
 }
