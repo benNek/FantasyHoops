@@ -150,8 +150,10 @@ namespace fantasy_hoops.Database
             string apiResponse = ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             string date = (string)json["links"]["currentDate"];
+
+            int toAdd = DateTime.Now.Hour >= 19 ? 0 : 1;
             date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
-                .AddDays(1).ToString("yyyyMMdd");
+                .AddDays(toAdd).ToString("yyyyMMdd");
             return date;
         }
 
