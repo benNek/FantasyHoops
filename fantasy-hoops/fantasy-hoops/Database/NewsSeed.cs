@@ -121,7 +121,6 @@ namespace fantasy_hoops.Database
                 hTeamID = (int)newsObj["hTeamID"],
                 vTeamID = (int)newsObj["vTeamID"]
             };
-            JArray paragraphs = (JArray)newsObj["paragraphs"];
 
             bool shouldAdd = !context.News.Any(x => x.Title.Equals((string)newsObj["title"])
             && x.Date.Equals(DateTime.Parse(newsObj["pubDateUTC"].ToString())));
@@ -130,6 +129,7 @@ namespace fantasy_hoops.Database
                 return;
             context.News.Add(nObj);
 
+            JArray paragraphs = (JArray)newsObj["paragraphs"];
             foreach (var parObj in paragraphs)
             {
                 var paragraph = new Paragraph
@@ -137,7 +137,6 @@ namespace fantasy_hoops.Database
                     NewsID = nObj.NewsID,
                     Content = (string)parObj["paragraph"]
                 };
-                nObj.Paragraphs.Add(paragraph);
                 context.Paragraphs.Add(paragraph);
             }
             context.SaveChanges();
