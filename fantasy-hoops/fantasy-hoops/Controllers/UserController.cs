@@ -105,6 +105,23 @@ namespace fantasy_hoops.Controllers
                 token = new JwtSecurityTokenHandler().WriteToken(token)
             });
         }
+        [HttpPut("editprofile")]
+        public async Task<IActionResult> EditProfile([FromBody]EditProfileView model)
+        {
+            if(context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower())).Any())
+                return StatusCode(409, "Username is already taken!");
+            if(context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower())).Any())
+                return StatusCode(409, "Email already has an user associated to it!");
+            var user = context.Users.Where(x => x.Id.Equals(model.Id)).FirstOrDefault();
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.Description = model.Description;
+            user.FavoriteTeamId = model.FavoriteTeamId;
+            await context.SaveChangesAsync();
+            if(model.CurrentPassword.Length > 0 && model.NewPassword.Length > 0)
+                await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword );
+            return Ok("User information updated successfully!");
+        }
 
         [HttpPost("avatar")]
         public async Task<IActionResult> Post([FromBody]AvatarViewModel model)
@@ -124,40 +141,5 @@ namespace fantasy_hoops.Controllers
             }
             return Ok("Avatar updated successfully!");
         }
-
-        [HttpGet]
-        public IEnumerable<Object> Get()
-        {
-            return context.Users
-                .Select(x => new
-                {
-                    x.Id,
-                    x.UserName,
-                    x.Email,
-                    x.Description,
-                    x.Team,
-                })
-                .ToList();
-        }
-        [HttpGet("{username}")]
-        public IActionResult Get(string username)
-        {
-            var user = context.Users
-                .Where(x => x.UserName == username)
-                .Select(x => new
-                {
-                    x.Id,
-                    x.UserName,
-                    x.Email,
-                    x.Description,
-                    x.Team,
-                })
-                .ToList()
-                .FirstOrDefault();
-            if (user == null)
-                return NotFound(new { error = String.Format("User with username {0} has not been found!", username) });
-            return Ok(user);
-        }
-
     }
 }

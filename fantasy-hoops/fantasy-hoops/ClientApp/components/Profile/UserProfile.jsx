@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { UserCard } from './UserCard'
+import { UserCard } from './UserCard';
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
 import Textarea from 'react-autosize-textarea';
 import defaultPhoto from '../../content/images/default.png';
 import { ChangeAvatar } from '../Inputs/ChangeAvatar';
 import { parse } from '../../utils/auth';
+import { handleErrors } from '../../utils/errors';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export class UserProfile extends Component {
       team: ''
     }
     this.handleChange = this.handleChange.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   componentDidMount() {
@@ -187,7 +189,7 @@ export class UserProfile extends Component {
                 </div>
               </div>
               <div className="tab-pane" id="edit">
-                <form role="form">
+                <form role="form" onSubmit={this.submit}>
                   <label className="col-lg-3 col-form-label form-control-label"></label>
                   <div className="col-lg-9">
                     <label className="form-group row">PERSONAL INFO</label>
@@ -314,6 +316,35 @@ export class UserProfile extends Component {
         </div>
       </div>
     );
+  }
+  submit(e) {
+    e.preventDefault();
+    const user = parse();
+    const data = {
+      Id: user.id,
+      UserName: this.state.username,
+      Email: this.state.email,
+      Description: this.state.about,
+      FavoriteTeamId: this.state.team,
+      CurrentPassword: this.state.password,
+      NewPassword: this.state.newPassword,
+    };
+
+    fetch('/api/user/editprofile', {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.text())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   editProfile() {
