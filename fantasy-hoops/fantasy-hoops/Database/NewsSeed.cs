@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Diagnostics;
 
 namespace fantasy_hoops.Database
 {
@@ -76,6 +74,8 @@ namespace fantasy_hoops.Database
 
                 if (recapJson != null)
                 {
+                    recapJson.Add("hTeamID", game["hTeam"]["teamId"]);
+                    recapJson.Add("vTeamID", game["vTeam"]["teamId"]);
                     news.Add(recapJson);
                 }
             }
@@ -104,6 +104,8 @@ namespace fantasy_hoops.Database
 
                 if (previewJson != null)
                 {
+                    previewJson.Add("hTeamID", game["hTeam"]["teamId"]);
+                    previewJson.Add("vTeamID", game["vTeam"]["teamId"]);
                     news.Add(previewJson);
                 }
             }
@@ -115,10 +117,18 @@ namespace fantasy_hoops.Database
             var nObj = new News
             {
                 Date = DateTime.Parse(newsObj["pubDateUTC"].ToString()),
-                Title = (string)newsObj["title"]
+                Title = (string)newsObj["title"],
+                hTeamID = (int)newsObj["hTeamID"],
+                vTeamID = (int)newsObj["vTeamID"]
             };
-
             JArray paragraphs = (JArray)newsObj["paragraphs"];
+
+            bool shouldAdd = !context.News.Any(x => x.Title.Equals((string)newsObj["title"])
+            && x.Date.Equals(DateTime.Parse(newsObj["pubDateUTC"].ToString())));
+
+            if (nObj == null || !shouldAdd)
+                return;
+            context.News.Add(nObj);
 
             foreach (var parObj in paragraphs)
             {
@@ -127,18 +137,10 @@ namespace fantasy_hoops.Database
                     NewsID = nObj.NewsID,
                     Content = (string)parObj["paragraph"]
                 };
-
-                context.Paragraphs.Add(paragraph);
                 nObj.Paragraphs.Add(paragraph);
+                context.Paragraphs.Add(paragraph);
             }
-
-
-            bool shouldAdd = !context.News.Any(x => x.Title.Equals((string)newsObj["title"]) 
-            || x.Date.Equals(DateTime.Parse(newsObj["pubDateUTC"].ToString())));
-
-            if (nObj == null)
-                return;
-            context.News.Add(nObj);
+            context.SaveChanges();
         }
         private static string GetDate()
         {
@@ -153,6 +155,7 @@ namespace fantasy_hoops.Database
                 .AddDays(1).ToString("yyyyMMdd");
             return date;
         }
+
         private static JArray GetGames(string date)
         {
             string url = "http://data.nba.net/10s/prod/v1/" + date + "/scoreboard.json";
@@ -162,7 +165,6 @@ namespace fantasy_hoops.Database
             string apiResponse = ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             return (JArray)json["games"];
-
         }
     }
 }
