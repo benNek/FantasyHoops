@@ -27,7 +27,8 @@ namespace fantasy_hoops.Controllers
                 x.City,
                 x.Name,
                 x.Color
-            }).ToList();
+            }).OrderBy(x => x.Name)
+            .ToList();
         }
 
         [HttpGet("{id}")]

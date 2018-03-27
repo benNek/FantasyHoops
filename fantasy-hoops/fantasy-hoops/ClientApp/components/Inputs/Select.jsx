@@ -4,7 +4,19 @@ import shortid from 'shortid';
 export class Select extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      teams: this.props.options
+    }
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.teams == this.props.options) {
+      return;
+    }
+    this.setState({
+      teams: this.props.options
+    });
   }
 
   handleChange(e) {
@@ -12,11 +24,13 @@ export class Select extends Component {
   }
 
   render() {
-    let values = this.props.options.map(option => {
-      return (
-        <option key={shortid()} value={option.value}>{option.name}</option>
-      );
-    });
+    let values = '';
+    if(this.state.teams)
+      values = this.state.teams.map(option => {
+        return (
+          <option key={shortid()} value={option.value}>{option.name}</option>
+        );
+      });
     return (
       <div>
         <select
