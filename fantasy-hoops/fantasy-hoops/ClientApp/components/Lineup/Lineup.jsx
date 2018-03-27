@@ -107,7 +107,7 @@ export class Lineup extends Component {
             </div>
           </div>
           <ProgressBar players={this.state} />
-          <div className="text-center mt-3 mx-auto" style={{width: "50%"}}>
+          <div className="text-center mt-3 pb-3 mx-auto" style={{width: "50%"}}>
             <form onSubmit={this.handleSubmit}>
               <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
             </form>
