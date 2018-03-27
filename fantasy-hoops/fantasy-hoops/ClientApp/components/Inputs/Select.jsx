@@ -24,13 +24,14 @@ export class Select extends Component {
   }
 
   render() {
-    let values = '';
-    if(this.state.teams)
-      values = this.state.teams.map(option => {
+    let values;
+    if (this.props.options) {
+      values = this.props.options.map(option => {
         return (
           <option key={shortid()} value={option.value}>{option.name}</option>
         );
       });
+    }
     return (
       <div>
         <select

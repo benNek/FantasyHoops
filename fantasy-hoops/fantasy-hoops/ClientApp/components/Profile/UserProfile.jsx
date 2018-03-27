@@ -7,6 +7,7 @@ import defaultPhoto from '../../content/images/default.png';
 import { ChangeAvatar } from '../Inputs/ChangeAvatar';
 import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
+import { Alert } from '../Alert';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -20,7 +21,11 @@ export class UserProfile extends Component {
       password: '',
       newPassword: '',
       confirmNewPassword: '',
-      team: ''
+      team: '',
+      teamInfo: '',
+      showAlert: false,
+      alertType: '',
+      alertText: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,12 +46,12 @@ export class UserProfile extends Component {
     fetch(`http://localhost:51407/api/user/${user.id}`)
       .then(res => res.json())
       .then(res => {
-        console.log(res.description);
         this.setState({
           username: res.userName,
           email: res.email,
           about: res.description,
-          team: res.favoriteTeamId
+          team: res.favoriteTeamId,
+          teamInfo: res.team
         });
       });
   }
@@ -95,18 +100,23 @@ export class UserProfile extends Component {
 
     fetch('/api/user/editprofile', {
       method: 'PUT',
-      headers: {
+      headers: {  
         'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
     })
       .then(res => handleErrors(res))
-      .then(res => res.text())
+      .then(res => res.json())
       .then(res => {
-        console.log(res);
+        localStorage.setItem('accessToken', res.value.token);
+        location.reload();
       })
       .catch(err => {
-        console.log(err);
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        })
       });
   }
 
@@ -136,19 +146,20 @@ export class UserProfile extends Component {
               </li>
             </ul>
             <div className="tab-content py-4">
+              <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
               <div className="tab-pane active" id="profile">
-                <h5 className="mb-3">Username</h5>
+                <h5 className="mb-3">{user.username}</h5>
                 <div className="row">
                   <div className="col-md-6">
                     <h6>About</h6>
                     <p className='about-me'>
-                      This is something that describes me as a basketball fan.
-                            </p>
+                      {user.description}
+                    </p>
                   </div>
                   <div className="col-md-6">
                     <h6 style={{ paddingLeft: '1.1rem' }}>Favorite team</h6>
                     <div className="team-badge">
-                      <a href="#" className="badge badge-dark badge-pill" style={{ backgroundColor: '#008248' }} >Boston Celtics</a>
+                      <span href="/#" className="badge badge-dark badge-pill" style={{ backgroundColor: this.state.teamInfo.color }}>{this.state.teamInfo.name}</span>
                     </div>
                     <hr />
                     <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak</span>
