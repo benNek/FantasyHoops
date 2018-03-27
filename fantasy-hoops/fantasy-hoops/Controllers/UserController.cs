@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
@@ -32,11 +33,11 @@ namespace fantasy_hoops.Controllers
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             model.UserName = context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower())).Select(x => x.UserName).FirstOrDefault();
-            if(model.UserName == null)
+            if (model.UserName == null)
                 return StatusCode(401, "You have entered an invalid username or password!");
 
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, lockoutOnFailure: false);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return RequestToken(model);
             }
@@ -61,7 +62,7 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(422, "Email already has an user associated to it!");
 
             var result = await _userManager.CreateAsync(user, model.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return Ok("You have registered successfully!");
             }
@@ -102,5 +103,39 @@ namespace fantasy_hoops.Controllers
                 token = new JwtSecurityTokenHandler().WriteToken(token)
             });
         }
+        [HttpGet]
+        public IEnumerable<Object> Get()
+        {
+            return context.Users
+                .Select(x => new
+                {
+                    x.Id,
+                    x.UserName,
+                    x.Email,
+                    x.Description,
+                    x.Team,
+                })
+                .ToList();
+        }
+        [HttpGet("{username}")]
+        public IActionResult Get(string username)
+        {
+            var user = context.Users
+                .Where(x => x.UserName == username)
+                .Select(x => new
+                 {
+                     x.Id,
+                     x.UserName,
+                     x.Email,
+                     x.Description,
+                     x.Team,
+                 })
+                .ToList()
+                .FirstOrDefault();
+            if (user == null)
+                return NotFound(new { error = String.Format("User with username {0} has not been found!", username) });
+            return Ok(user);
+        }
+
     }
 }
