@@ -22,6 +22,7 @@ export class Lineup extends Component {
       sf: <PlayerCard filter={this.filter} status={0} position="SF" />,
       pf: <PlayerCard filter={this.filter} status={0} position="PF" />,
       c: <PlayerCard filter={this.filter} status={0} position="C" />,
+      loadedPlayers: false,
       showAlert: false,
       alertType: '',
       alertText: ''
@@ -39,6 +40,43 @@ export class Lineup extends Component {
         });
       });
     this.filter('PG');
+  }
+
+  componentDidUpdate() {
+    if (!this.state.loadedPlayers && this.state.players) {
+      const user = parse();
+      fetch(`http://localhost:51407/api/lineup/${user.id}`)
+        .then(res => {
+          return res.json()
+        })
+        .then(res => {
+          res.forEach(selectedPlayer => {
+            this.state.players.forEach(player => {
+              if (player.id == selectedPlayer.id) {
+                player.selected = true;
+                player.status = 2;
+                this.selectPlayer(player);
+              }
+            });
+          })
+        });
+      this.setState({
+        loadedPlayers: true
+      })
+    }
+
+    if (this.state.pg.props.player && this.state.sg.props.player
+      && this.state.sf.props.player && this.state.pf.props.player
+      && this.state.c.props.player && this.calculateRemaining() >= 0) {
+      const btn = document.getElementById('submit');
+      btn.disabled = false;
+      btn.className = 'btn btn-primary btn-lg btn-block';
+    }
+    else {
+      const btn = document.getElementById('submit');
+      btn.disabled = true;
+      btn.className = 'btn btn-outline-primary btn-lg btn-block';
+    }
   }
 
   render() {
@@ -136,7 +174,6 @@ export class Lineup extends Component {
       .then(res => handleErrors(res))
       .then(res => res.text())
       .then(res => {
-        console.log(res);
         this.setState({
           showAlert: true,
           alertType: 'alert-success',
@@ -144,27 +181,11 @@ export class Lineup extends Component {
         });
       })
       .catch(err => {
-        console.log(err);
         this.setState({
           showAlert: true,
           alertType: 'alert-danger',
           alertText: err.message
         });
       });
-  }
-
-  componentDidUpdate() {
-    if (this.state.pg.props.player && this.state.sg.props.player
-      && this.state.sf.props.player && this.state.pf.props.player
-      && this.state.c.props.player && this.calculateRemaining() >= 0) {
-      const btn = document.getElementById('submit');
-      btn.disabled = false;
-      btn.className = 'btn btn-primary btn-lg btn-block';
-    }
-    else {
-      const btn = document.getElementById('submit');
-      btn.disabled = true;
-      btn.className = 'btn btn-outline-primary btn-lg btn-block';
-    }
   }
 }

@@ -19,6 +19,23 @@ namespace fantasy_hoops.Controllers
             context = new GameContext();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(string id)
+        {
+            var players = context.UserPlayers.Where(x => x.UserID.Equals(id)).Select(x => new
+            {
+                id = x.Player.NbaID,
+                firstName = x.Player.FirstName,
+                lastName = x.Player.LastName,
+                position = x.Player.Position,
+                price = x.Player.Price,
+                fppg = x.Player.FPPG,
+                playerId = x.PlayerID,
+                teamColor = x.Player.Team.Color
+            }).ToList();
+            return Ok(players);
+        }
+
         [HttpPost("submit")]
         public async Task<IActionResult> SubmitLineup([FromBody]SumbitLineupViewModel model)
         {
@@ -80,7 +97,7 @@ namespace fantasy_hoops.Controllers
                 sf.PlayerID = model.SfID;
 
                 var pf = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("PF")).FirstOrDefault();
-                pg.PlayerID = model.PfID;
+                pf.PlayerID = model.PfID;
 
                 var c = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("C")).FirstOrDefault();
                 c.PlayerID = model.CID;
