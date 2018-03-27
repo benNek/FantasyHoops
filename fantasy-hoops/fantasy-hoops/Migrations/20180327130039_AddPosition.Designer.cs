@@ -11,9 +11,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180327130039_AddPosition")]
+    partial class AddPosition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,8 +91,6 @@ namespace fantasy_hoops.Migrations
                     b.Property<string>("FirstName");
 
                     b.Property<int>("GP");
-
-                    b.Property<bool>("IsPlaying");
 
                     b.Property<string>("LastName");
 
