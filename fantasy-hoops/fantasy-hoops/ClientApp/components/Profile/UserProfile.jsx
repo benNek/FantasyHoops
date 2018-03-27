@@ -23,7 +23,7 @@ export class UserProfile extends Component {
       team: ''
     }
     this.handleChange = this.handleChange.bind(this);
-    this.submit = this.submit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +35,18 @@ export class UserProfile extends Component {
       .then(res => {
         this.setState({
           teams: res
+        });
+      });
+    const user = parse();
+    fetch(`http://localhost:51407/api/user/${user.id}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.description);
+        this.setState({
+          username: res.userName,
+          email: res.email,
+          about: res.description,
+          team: res.favoriteTeamId
         });
       });
   }
@@ -66,6 +78,36 @@ export class UserProfile extends Component {
     this.setState({
       [e.target.id]: e.target.value
     });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const user = parse();
+    const data = {
+      Id: user.id,
+      UserName: this.state.username,
+      Email: this.state.email,
+      Description: this.state.about,
+      FavoriteTeamId: this.state.team,
+      CurrentPassword: this.state.password,
+      NewPassword: this.state.newPassword,
+    };
+
+    fetch('/api/user/editprofile', {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.text())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -189,7 +231,7 @@ export class UserProfile extends Component {
                 </div>
               </div>
               <div className="tab-pane" id="edit">
-                <form role="form" onSubmit={this.submit}>
+                <form role="form" onSubmit={this.handleSubmit}>
                   <label className="col-lg-3 col-form-label form-control-label"></label>
                   <div className="col-lg-9">
                     <label className="form-group row">PERSONAL INFO</label>
@@ -226,7 +268,9 @@ export class UserProfile extends Component {
                     <div className="col-lg-9">
                       <div className="form-group">
                         <Textarea
+                          id="about"
                           className="form-control"
+                          value={this.state.about}
                           onChange={this.handleChange}
                         />
                       </div>
@@ -316,35 +360,6 @@ export class UserProfile extends Component {
         </div>
       </div>
     );
-  }
-  submit(e) {
-    e.preventDefault();
-    const user = parse();
-    const data = {
-      Id: user.id,
-      UserName: this.state.username,
-      Email: this.state.email,
-      Description: this.state.about,
-      FavoriteTeamId: this.state.team,
-      CurrentPassword: this.state.password,
-      NewPassword: this.state.newPassword,
-    };
-
-    fetch('/api/user/editprofile', {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => handleErrors(res))
-      .then(res => res.text())
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }
 
   editProfile() {
