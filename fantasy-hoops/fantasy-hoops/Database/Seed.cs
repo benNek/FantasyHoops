@@ -46,6 +46,7 @@ namespace fantasy_hoops.Database
 
                         JObject jobject = JObject.Parse(playerResponse);
                         JArray players = (JArray)jobject["players"];
+                        team.Abbreviation = (String)jobject["alias"];
                         for (int l = 0; l < players.Count(); l++)
                         {
                             try

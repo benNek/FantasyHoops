@@ -22,7 +22,7 @@ export class NewsCard extends Component {
         </div>
         <span>
           <img
-            src="http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/PHI.svg"
+            src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${this.props.news.hTeam}.svg`}
             alt=""
             width="50px"
             style={{ position: 'absolute' }}
@@ -30,7 +30,7 @@ export class NewsCard extends Component {
         </span>
         <span style={{ paddingLeft: '4rem' }}>
           <img
-            src="http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/CHA.svg"
+            src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${this.props.news.vTeam}.svg`}
             alt=""
             width="50px"
             style={{ position: 'absolute' }}

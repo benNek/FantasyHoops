@@ -21,13 +21,15 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            
+
             return context.News.Select(x => new
             {
                 id = x.NewsID,
                 x.Title,
                 news = String.Join(String.Empty, x.Paragraphs.Select(y => y.Content).ToArray()),
-                x.Date
+                date = x.Date.ToString("yyyy-MM-dd"),
+                hTeam = context.Teams.Where(y => y.NbaID == x.hTeamID).FirstOrDefault().Abbreviation,
+                vTeam = context.Teams.Where(y => y.NbaID == x.vTeamID).FirstOrDefault().Abbreviation
             }).ToList();
         }
     }
