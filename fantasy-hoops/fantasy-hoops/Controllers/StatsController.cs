@@ -34,18 +34,33 @@ namespace fantasy_hoops.Controllers
                         {
                             s.StatsID,
                             s.Date,
-                            s.PTS,
+                            Opponent = context.Teams.Where(t => t.NbaID == s.OppID)
+                                .Select(t => new
+                                {
+                                    t.NbaID,
+                                    t.Abbreviation
+                                })
+                                .FirstOrDefault(),
+                            s.Score,
+                            s.MIN,
                             s.FGM,
                             s.FGA,
+                            s.FGP,
+                            s.TPM,
+                            s.TPA,
+                            s.TPP,
                             s.FTM,
                             s.FTA,
+                            s.FTP,
                             s.DREB,
                             s.OREB,
+                            s.TREB,
                             s.AST,
-                            s.STL,
                             s.BLK,
-                            s.TOV,
+                            s.STL,
                             s.FLS,
+                            s.TOV,
+                            s.PTS,
                             s.GS,
                             s.FP
                         })
@@ -71,18 +86,33 @@ namespace fantasy_hoops.Controllers
                         {
                             s.StatsID,
                             s.Date,
-                            s.PTS,
+                            Opponent = context.Teams.Where(t => t.NbaID == s.OppID)
+                                .Select(t => new
+                                {
+                                    t.NbaID,
+                                    t.Abbreviation
+                                })
+                                .FirstOrDefault(),
+                            s.Score,
+                            s.MIN,
                             s.FGM,
                             s.FGA,
+                            s.FGP,
+                            s.TPM,
+                            s.TPA,
+                            s.TPP,
                             s.FTM,
                             s.FTA,
+                            s.FTP,
                             s.DREB,
                             s.OREB,
+                            s.TREB,
                             s.AST,
-                            s.STL,
                             s.BLK,
-                            s.TOV,
+                            s.STL,
                             s.FLS,
+                            s.TOV,
+                            s.PTS,
                             s.GS,
                             s.FP
                         })

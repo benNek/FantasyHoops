@@ -71,13 +71,27 @@ namespace fantasy_hoops.Database
                     JObject boxscore = GetBoxscore(bsUrl);
                     if (boxscore["stats"] == null)
                         continue;
+                    int hTeam = (int)boxscore["basicGameData"]["hTeam"]["teamId"];
+                    int vTeam = (int)boxscore["basicGameData"]["vTeam"]["teamId"];
                     var stats = boxscore["stats"]["activePlayers"];
                     JArray players = (JArray)stats;
                     foreach (var player in players)
                     {
+                        int oppId;
+                        string score = "";
                         if (!context.Players.Any(x => x.NbaID.Equals((int)player["personId"])))
                             continue;
-                        AddToDatabase(context, player, date);
+                        if ((int)player["teamId"] == hTeam)
+                        {
+                            oppId = vTeam;
+                            score = (int)boxscore["basicGameData"]["hTeam"]["score"] + "-" + (int)boxscore["basicGameData"]["vTeam"]["score"];
+                        }
+                        else
+                        {
+                            oppId = hTeam;
+                            score = (int)boxscore["basicGameData"]["vTeam"]["score"] + "-" + (int)boxscore["basicGameData"]["hTeam"]["score"];
+                        }
+                        AddToDatabase(context, player, date, oppId, score);
                     }
                     await context.SaveChangesAsync();
                 }
@@ -85,23 +99,32 @@ namespace fantasy_hoops.Database
             }
         }
 
-        private static void AddToDatabase(GameContext context, JToken player, DateTime date)
+        private static void AddToDatabase(GameContext context, JToken player, DateTime date, int oppId, string score)
         {
             var statsObj = new Stats
             {
                 Date = date,
-                PTS = (int)player["points"],
+                OppID = oppId,
+                Score = score,
+                MIN = (string)player["min"],
                 FGM = (int)player["fgm"],
-                OREB = (int)player["offReb"],
-                DREB = (int)player["defReb"],
-                STL = (int)player["steals"],
-                AST = (int)player["assists"],
-                BLK = (int)player["blocks"],
                 FGA = (int)player["fga"],
+                FGP = (double)player["fgp"],
+                TPM = (int)player["tpm"],
+                TPA = (int)player["tpa"],
+                TPP = (double)player["tpp"],
                 FTM = (int)player["ftm"],
                 FTA = (int)player["fta"],
+                FTP = (double)player["ftp"],
+                DREB = (int)player["defReb"],
+                OREB = (int)player["offReb"],
+                TREB = (int)player["totReb"],
+                AST = (int)player["assists"],
+                BLK = (int)player["blocks"],
+                STL = (int)player["steals"],
                 FLS = (int)player["pFouls"],
                 TOV = (int)player["turnovers"],
+                PTS = (int)player["points"],
                 PlayerID = (int)player["personId"]
             };
             statsObj.Player = context.Players.Where(x => x.NbaID == statsObj.PlayerID).FirstOrDefault();
