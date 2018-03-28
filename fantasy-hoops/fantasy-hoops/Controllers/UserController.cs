@@ -116,7 +116,7 @@ namespace fantasy_hoops.Controllers
                 {
                     City = "Seattle",
                     Name = "Supersonics",
-                    Color = "#00653A"
+                    Color = "#FFC200"
                 };
             }
 
