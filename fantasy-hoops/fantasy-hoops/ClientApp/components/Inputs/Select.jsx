@@ -28,7 +28,7 @@ export class Select extends Component {
     if (this.props.options) {
       values = this.props.options.map(option => {
         return (
-          <option key={shortid()} value={option.value}>{option.name}</option>
+          <option key={shortid()} value={option.teamID}>{option.name}</option>
         );
       });
     }

@@ -33,15 +33,6 @@ export class UserProfile extends Component {
 
   componentDidMount() {
     this.editProfile();
-    fetch(`http://localhost:51407/api/team`)
-      .then(res => {
-        return res.json()
-      })
-      .then(res => {
-        this.setState({
-          teams: res
-        });
-      });
     const user = parse();
     fetch(`http://localhost:51407/api/user/${user.id}`)
       .then(res => res.json())
@@ -52,6 +43,15 @@ export class UserProfile extends Component {
           about: res.description ? res.description : '',
           team: res.favoriteTeamId,
           teamInfo: res.team
+        });
+      });
+    fetch(`http://localhost:51407/api/team`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          teams: res
         });
       });
   }
@@ -100,7 +100,7 @@ export class UserProfile extends Component {
 
     fetch('/api/user/editprofile', {
       method: 'PUT',
-      headers: {  
+      headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -148,7 +148,6 @@ export class UserProfile extends Component {
             <div className="tab-content py-4">
               <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
               <div className="tab-pane active" id="profile">
-                <h5 className="mb-3">{user.username}</h5>
                 <div className="row">
                   <div className="col-md-6">
                     <h6>About</h6>
@@ -356,10 +355,13 @@ export class UserProfile extends Component {
             </div>
           </div>
           <div className="col-lg-4 order-lg-1">
+            <div className="row">
+              <h3 className="mt-3 mx-auto">{user.username}</h3>
+            </div>
             <img
               src={avatar} alt="Preview"
               className="mx-auto img-fluid img-circle d-block round-img"
-              style={{width: '50%'}}
+              style={{ width: '50%' }}
             />
             <div className="row">
               <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">
