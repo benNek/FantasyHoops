@@ -179,6 +179,12 @@ namespace fantasy_hoops.Controllers
             if (!Directory.Exists(avatarDir))
                 Directory.CreateDirectory(avatarDir);
             var filePath = avatarDir + "/" + model.Id + ".png";
+            if (model.Avatar == null || model.Avatar.Length < 15)
+                return StatusCode(400, "Please select a file!");
+
+            var fileType = model.Avatar.Substring(11, 3);
+            if(!(fileType.Equals("png") || fileType.Equals("jpg")))
+                return StatusCode(415, "Only .png and .jpg extensions are allowed!");
             model.Avatar = model.Avatar.Substring(22);
             try
             {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Avatar from 'react-avatar-edit';
 import { parse } from '../../utils/auth';
+import { handleErrors } from '../../utils/errors'
 import { Alert } from '../Alert';
 
 export class ChangeAvatar extends Component {
@@ -24,6 +25,8 @@ export class ChangeAvatar extends Component {
       alertType: '',
       alertText: ''
     });
+    if (this.state.showAlert)
+      location.reload();
   }
 
   onCrop(preview) {
@@ -43,6 +46,7 @@ export class ChangeAvatar extends Component {
       },
       body: JSON.stringify(data)
     })
+      .then(res => handleErrors(res))
       .then(res => res.text())
       .then(res => {
         this.setState({
@@ -67,9 +71,9 @@ export class ChangeAvatar extends Component {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="changeImage">Crop your image</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <a onClick={this.onClose} type="button btn-no-outline" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </a>
             </div>
             <div className="modal-body mx-auto">
               <Avatar
