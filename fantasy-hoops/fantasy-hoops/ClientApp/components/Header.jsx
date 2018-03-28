@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { isAuth, parse, logout } from '../utils/auth';
-import defaultPhoto from '../content/images/avatars/default.png';
+import defaultPhoto from '../content/images/default.png';
 
 export class Header extends Component {
   constructor(props) {

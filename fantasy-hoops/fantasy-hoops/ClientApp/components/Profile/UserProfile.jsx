@@ -3,7 +3,7 @@ import { UserCard } from './UserCard'
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
 import Textarea from 'react-autosize-textarea';
-import defaultPhoto from '../../content/images/avatars/default.png';
+import defaultPhoto from '../../content/images/default.png';
 import { ChangeAvatar } from '../Inputs/ChangeAvatar';
 import { parse } from '../../utils/auth';
 
