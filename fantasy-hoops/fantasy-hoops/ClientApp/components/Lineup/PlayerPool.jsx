@@ -34,6 +34,7 @@ export class PlayerPool extends Component {
               player={player}
               selectPlayer={this.props.selectPlayer}
               handleSelect={this.handleSelect}
+              showModal={this.props.showModal}
             />
           </div>
       }

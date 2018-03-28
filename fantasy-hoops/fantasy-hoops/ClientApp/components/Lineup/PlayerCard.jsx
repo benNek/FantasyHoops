@@ -6,6 +6,7 @@ export class PlayerCard extends Component {
     super();
     this.filter = this.filter.bind(this);
     this.select = this.select.bind(this);
+    this.showModal = this.showModal.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.importAll = this.importAll.bind(this);
   }
@@ -33,22 +34,33 @@ export class PlayerCard extends Component {
         </div>
         : '';
       return (
-        <div onClick={this.props.status == 2 ? this.filter : ''} className="player-card card">
-          {this.props.status == 1 ? <div className="ppg">{this.props.player.fppg.toFixed(1)}</div> : ''}
-          {this.props.status == 1 ? <div className="ppg ppg-label">FPPG</div> : ''}
-          {this.props.status == 1 ? <div className="player-position">{this.props.player.position}</div> : ''}
-          {buttonState}
-          <div className="price-badge">
-            <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
-          </div>
-          <img
-            className="player-card-img-top card-img-top"
-            style={{ backgroundColor: `${this.props.player.teamColor}` }}
-            src={playerIMG[`${this.props.player.id}.png`] || posIMG[`${pos}.png`]}
-            alt={this.getDisplayName(this.props.player)}>
-          </img>
-          <div className="card-block" >
-            <h2 className="player-card-title card-title">{this.getDisplayName(this.props.player)}</h2>
+        <div>
+          <div className="player-card card">
+            {this.props.status == 1 ? <div className="ppg">{this.props.player.fppg.toFixed(1)}</div> : ''}
+            {this.props.status == 1 ? <div className="ppg ppg-label">FPPG</div> : ''}
+            {this.props.status == 1 ? <div className="player-position">{this.props.player.position}</div> : ''}
+            {buttonState}
+            <div className="price-badge">
+              <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
+            </div>
+            <img
+              onClick={this.props.status == 2 ? this.filter : ''}
+              className="player-card-img-top card-img-top"
+              style={{ backgroundColor: `${this.props.player.teamColor}` }}
+              src={playerIMG[`${this.props.player.id}.png`] || posIMG[`${pos}.png`]}
+              alt={this.getDisplayName(this.props.player)}>
+            </img>
+            <div className="card-block" >
+              <h2
+                data-toggle="modal"
+                data-target="#playerModal"
+                className="player-card-title card-title"
+                onClick={this.showModal}
+                style={{ cursor: 'pointer' }}
+              >
+                {this.getDisplayName(this.props.player)}
+              </h2>
+            </div>
           </div>
         </div>
       );
@@ -90,6 +102,10 @@ export class PlayerCard extends Component {
     this.props.player.status = this.props.player.selected ? 2 : 1;
     this.props.selectPlayer(this.props.player);
     this.handleSelect();
+  }
+
+  showModal() {
+    this.props.showModal(this.props.player);
   }
 
   filter() {
