@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
+using System.IO;
 
 namespace fantasy_hoops.Controllers
 {
@@ -103,6 +105,26 @@ namespace fantasy_hoops.Controllers
                 token = new JwtSecurityTokenHandler().WriteToken(token)
             });
         }
+
+        [HttpPost("avatar")]
+        public async Task<IActionResult> Post([FromBody]AvatarViewModel model)
+        {
+            string avatarDir = @"./ClientApp/content/images/avatars";
+            if (!Directory.Exists(avatarDir))
+                Directory.CreateDirectory(avatarDir);
+            var filePath = avatarDir + "/" + model.Id + ".png";
+            model.Avatar = model.Avatar.Substring(22);
+            try
+            {
+                System.IO.File.WriteAllBytes(filePath, Convert.FromBase64String(model.Avatar));
+            }
+            catch
+            {
+                return StatusCode(500, "Avatar cannot be uploaded!");
+            }
+            return Ok("Avatar updated successfully!");
+        }
+
         [HttpGet]
         public IEnumerable<Object> Get()
         {
@@ -123,13 +145,13 @@ namespace fantasy_hoops.Controllers
             var user = context.Users
                 .Where(x => x.UserName == username)
                 .Select(x => new
-                 {
-                     x.Id,
-                     x.UserName,
-                     x.Email,
-                     x.Description,
-                     x.Team,
-                 })
+                {
+                    x.Id,
+                    x.UserName,
+                    x.Email,
+                    x.Description,
+                    x.Team,
+                })
                 .ToList()
                 .FirstOrDefault();
             if (user == null)
