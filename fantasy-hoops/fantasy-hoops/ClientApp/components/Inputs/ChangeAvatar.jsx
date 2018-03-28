@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Avatar from 'react-avatar-edit';
 import { parse } from '../../utils/auth';
+import { Alert } from '../Alert';
 
 export class ChangeAvatar extends Component {
   constructor(props) {
@@ -8,15 +9,21 @@ export class ChangeAvatar extends Component {
     this.onCrop = this.onCrop.bind(this);
     this.onClose = this.onClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
     this.state = {
       preview: null,
-      src: null
+      showAlert: false,
+      alertType: '',
+      alertText: ''
     }
   }
 
   onClose() {
-    this.setState({ preview: null })
+    this.setState({
+      preview: null,
+      showAlert: false,
+      alertType: '',
+      alertText: ''
+    });
   }
 
   onCrop(preview) {
@@ -35,7 +42,22 @@ export class ChangeAvatar extends Component {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
-    });
+    })
+      .then(res => res.text())
+      .then(res => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: res
+        });
+      })
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        });
+      });
   }
 
   render() {
@@ -55,12 +77,14 @@ export class ChangeAvatar extends Component {
                 height={250}
                 onCrop={this.onCrop}
                 onClose={this.onClose}
-                src={this.state.src}
               />
+              <div className="mt-3">
+                <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
+              </div>
             </div>
-            <div className="modal-footer">
-              <button onClick={this.onClose} type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+            <div className="modal-footer mx-auto">
               <button onClick={this.handleSubmit} type="button" className="btn btn-primary">Save changes</button>
+              <button onClick={this.onClose} type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
