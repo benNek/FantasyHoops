@@ -25,6 +25,8 @@ export class ChangeAvatar extends Component {
       alertType: '',
       alertText: ''
     });
+    if (this.state.showAlert)
+      location.reload();
   }
 
   onCrop(preview) {
