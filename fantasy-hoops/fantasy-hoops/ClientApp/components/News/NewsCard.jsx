@@ -32,7 +32,7 @@ export class NewsCard extends Component {
             style={{ position: 'absolute' }}
           />
         </span>
-        <span style={{ paddingLeft: '4rem' }}>
+        <span style={{ paddingLeft: '5rem' }}>
           <img
             src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${this.props.news.vTeam}.svg`}
             alt=""
@@ -40,7 +40,7 @@ export class NewsCard extends Component {
             style={{ position: 'absolute' }}
           />
         </span>
-        <div className="card-header text-muted" style={{ height: '3rem', paddingLeft: '3rem' }}>
+        <div className="card-header text-muted" style={{ height: '3rem', paddingLeft: '3.5rem' }}>
           vs.
           <span style={{ float: 'right' }}>
             {this.props.news.date}
@@ -57,9 +57,9 @@ export class NewsCard extends Component {
           <p className="read-more-wrap" style={{ textAlign: 'justify' }}>
             {paragraphs.slice(0, size)}
 
-            {!this.state.checked ? '...' : ''}
+            {!this.state.checked ? '' : ''}
             <span className="read-more-target">
-              {!this.state.checked ? '...' : paragraphs.slice(size)}
+              {!this.state.checked ? '' : paragraphs.slice(size)}
             </span>
 
           </p>
