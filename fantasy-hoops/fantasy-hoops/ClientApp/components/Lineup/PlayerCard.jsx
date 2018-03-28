@@ -8,18 +8,9 @@ export class PlayerCard extends Component {
     this.select = this.select.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.importAll = this.importAll.bind(this);
   }
 
   render() {
-    let posIMG = '';
-    let playerIMG = '';
-    try {
-      posIMG = this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/));
-      playerIMG = this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/));
-    }
-    catch (err) {
-    }
     if (this.props.status > 0) {
       const pos = this.props.player.position.toLowerCase();
       const innerHTML = this.props.player.selected
@@ -47,7 +38,7 @@ export class PlayerCard extends Component {
               onClick={this.props.status == 2 ? this.filter : ''}
               className="player-card-img-top card-img-top"
               style={{ backgroundColor: `${this.props.player.teamColor}` }}
-              src={playerIMG[`${this.props.player.id}.png`] || posIMG[`${pos}.png`]}
+              src={this.props.image}
               alt={this.getDisplayName(this.props.player)}>
             </img>
             <div className="card-block" >
@@ -71,7 +62,7 @@ export class PlayerCard extends Component {
         <div onClick={this.filter} className="player-card card" tabIndex="1">
           <img className="player-card-img-top card-img-top"
             style={{ backgroundColor: `` }}
-            src={posIMG[`${pos}.png`]}
+            src={this.props.image}
             alt={this.props.position}>
           </img>
           <div className="card-block" >
@@ -80,12 +71,6 @@ export class PlayerCard extends Component {
         </div>
       );
     }
-  }
-
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
   }
 
   getDisplayName(player) {

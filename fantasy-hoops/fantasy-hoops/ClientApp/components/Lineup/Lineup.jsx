@@ -19,15 +19,17 @@ export class Lineup extends Component {
 
     this.state = {
       position: '',
-      pg: <PlayerCard filter={this.filter} status={0} position="PG" />,
-      sg: <PlayerCard filter={this.filter} status={0} position="SG" />,
-      sf: <PlayerCard filter={this.filter} status={0} position="SF" />,
-      pf: <PlayerCard filter={this.filter} status={0} position="PF" />,
-      c: <PlayerCard filter={this.filter} status={0} position="C" />,
+      pg: <PlayerCard image={require('../../content/images/positions/pg.png')} filter={this.filter} status={0} position="PG" />,
+      sg: <PlayerCard image={require('../../content/images/positions/sg.png')} filter={this.filter} status={0} position="SG" />,
+      sf: <PlayerCard image={require('../../content/images/positions/sg.png')} filter={this.filter} status={0} position="SF" />,
+      pf: <PlayerCard image={require('../../content/images/positions/pg.png')} filter={this.filter} status={0} position="PF" />,
+      c: <PlayerCard image={require('../../content/images/positions/c.png')} filter={this.filter} status={0} position="C" />,
       loadedPlayers: false,
       showAlert: false,
       alertType: '',
-      alertText: ''
+      alertText: '',
+      posIMG: this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/)),
+      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     };
   }
 
@@ -81,6 +83,12 @@ export class Lineup extends Component {
     }
   }
 
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
   render() {
     const remaining = this.calculateRemaining();
     return (
@@ -116,8 +124,8 @@ export class Lineup extends Component {
           </div>
         </div>
         <PlayerModal player={this.state.selected} />
-
         <PlayerPool
+          images={this.state.playerIMG}
           position={this.state.position}
           players={this.state.players}
           selectPlayer={this.selectPlayer}
@@ -134,10 +142,23 @@ export class Lineup extends Component {
   }
 
   selectPlayer(player) {
-    const playerCard = player.selected
-      ? <PlayerCard status={2} filter={this.filter} player={player} selectPlayer={this.selectPlayer} position={player.position} showModal={this.showModal} />
-      : <PlayerCard status={0} filter={this.filter} position={player.position} />;
     const pos = player.position.toLowerCase();
+    const playerCard = player.selected
+      ? <PlayerCard
+        status={2}
+        filter={this.filter}
+        player={player}
+        image={this.state.playerIMG[`${player.id}.png`] || this.state.posIMG[`${pos}.png`]}
+        selectPlayer={this.selectPlayer}
+        position={player.position}
+        showModal={this.showModal}
+      />
+      : <PlayerCard
+        status={0}
+        filter={this.filter}
+        position={player.position}
+        image={this.state.posIMG[`${pos}.png`]}
+      />;
     this.setState({
       selected: player,
       [pos]: playerCard
@@ -148,7 +169,6 @@ export class Lineup extends Component {
     fetch(`http://localhost:51407/api/player/${player.id}`)
       .then(res => res.json())
       .then(res => {
-        console.log(res);
         this.setState({
           selected: res
         });
