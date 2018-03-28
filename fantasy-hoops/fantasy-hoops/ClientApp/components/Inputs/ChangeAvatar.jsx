@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Avatar from 'react-avatar-edit';
 import { parse } from '../../utils/auth';
+import { handleErrors } from '../../utils/errors'
 import { Alert } from '../Alert';
 
 export class ChangeAvatar extends Component {
@@ -43,6 +44,7 @@ export class ChangeAvatar extends Component {
       },
       body: JSON.stringify(data)
     })
+      .then(res => handleErrors(res))
       .then(res => res.text())
       .then(res => {
         this.setState({
