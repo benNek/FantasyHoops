@@ -11,8 +11,12 @@ export class NewsCard extends Component {
   }
 
   render() {
-    const text = this.props.news.news;
-    const cutPosition = 300;
+    const size = 3;
+    let paragraphs = _.map(this.props.news.paragraphs,
+      (paragraph) => {
+        return <p>{paragraph}</p>
+      }
+    );
     return (
       <div className="mb-5 mx-auto news-card card">
         <div className="card-header bg-info text-white">
@@ -22,21 +26,21 @@ export class NewsCard extends Component {
         </div>
         <span>
           <img
-            src="http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/PHI.svg"
+            src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${this.props.news.hTeam}.svg`}
             alt=""
             width="50px"
             style={{ position: 'absolute' }}
           />
         </span>
-        <span style={{ paddingLeft: '4rem' }}>
+        <span style={{ paddingLeft: '5rem' }}>
           <img
-            src="http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/CHA.svg"
+            src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${this.props.news.vTeam}.svg`}
             alt=""
             width="50px"
             style={{ position: 'absolute' }}
           />
         </span>
-        <div className="card-header text-muted" style={{ height: '3rem', paddingLeft: '3rem' }}>
+        <div className="card-header text-muted" style={{ height: '3rem', paddingLeft: '3.5rem' }}>
           vs.
           <span style={{ float: 'right' }}>
             {this.props.news.date}
@@ -50,11 +54,14 @@ export class NewsCard extends Component {
             className="read-more-state"
             id={this.props.news.id}
           />
-          <p className="read-more-wrap" style={{ textAlign: 'justify' }}>{text.substring(0, cutPosition)}
-            {!this.state.checked ? '...' : ''}
+          <p className="read-more-wrap" style={{ textAlign: 'justify' }}>
+            {paragraphs.slice(0, size)}
+
+            {!this.state.checked ? '' : ''}
             <span className="read-more-target">
-              {text.substring(cutPosition, text.length)}
+              {!this.state.checked ? '' : paragraphs.slice(size)}
             </span>
+
           </p>
           <label htmlFor={this.props.news.id} className="read-more-trigger"></label>
         </div>

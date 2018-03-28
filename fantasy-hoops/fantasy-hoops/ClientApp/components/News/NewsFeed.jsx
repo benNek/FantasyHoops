@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
 import { NewsCard } from './NewsCard';
-import NewsAPI from '../../mocked/News';
 import _ from 'lodash'
 import shortid from 'shortid';
 
 export class NewsFeed extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      news: ''
+    }
   }
+
+  componentDidMount() {
+    fetch(`http://localhost:51407/api/news`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          news: res
+        });
+      });
+  }
+
   render() {
-    const news = _.map(NewsAPI.all(),
+    let news = _.map(this.state.news,
       (news) => {
         return <NewsCard key={shortid()} news={news} />
       }

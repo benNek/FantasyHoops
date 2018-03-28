@@ -152,6 +152,7 @@ namespace fantasy_hoops.Database
             string date = (string)json["links"]["currentDate"];
 
             int toAdd = DateTime.Now.Hour >= 19 ? 0 : 1;
+            toAdd = DateTime.Now.Hour < 7 ? -1 : toAdd;
             date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
                 .AddDays(toAdd).ToString("yyyyMMdd");
             return date;
