@@ -123,7 +123,12 @@ export class Lineup extends Component {
             </form>
           </div>
         </div>
-        <PlayerModal player={this.state.selected} />
+        <PlayerModal
+          player={this.state.modalPlayer}
+          image={this.state.modalPlayer
+            ? this.state.playerIMG[`${this.state.modalPlayer.nbaID}.png`] || this.state.posIMG[`${this.state.modalPlayer.position.toLowerCase()}.png`]
+            : ''}
+        />
         <PlayerPool
           images={this.state.playerIMG}
           position={this.state.position}
@@ -160,7 +165,6 @@ export class Lineup extends Component {
         image={this.state.posIMG[`${pos}.png`]}
       />;
     this.setState({
-      selected: player,
       [pos]: playerCard
     });
   }
@@ -170,7 +174,7 @@ export class Lineup extends Component {
       .then(res => res.json())
       .then(res => {
         this.setState({
-          selected: res
+          modalPlayer: res
         });
       });
   }
