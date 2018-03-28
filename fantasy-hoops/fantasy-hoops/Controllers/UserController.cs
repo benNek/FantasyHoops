@@ -110,6 +110,16 @@ namespace fantasy_hoops.Controllers
         public IActionResult Get(String id)
         {
             var team = context.Teams.Where(x => x.TeamID == context.Users.Where(y => y.Id.Equals(id)).Select(y => y.FavoriteTeamId).FirstOrDefault()).FirstOrDefault();
+            if(team == null)
+            {
+                team = new Team()
+                {
+                    City = "Seattle",
+                    Name = "Supersonics",
+                    Color = "#00653A"
+                };
+            }
+
             var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
             {
                 x.Id,
@@ -117,7 +127,8 @@ namespace fantasy_hoops.Controllers
                 x.Email,
                 x.Description,
                 x.FavoriteTeamId,
-                team = new
+
+                Team = new
                 {
                     Name = team.City + " " + team.Name,
                     team.Color
@@ -133,14 +144,14 @@ namespace fantasy_hoops.Controllers
         public async Task<IActionResult> EditProfile([FromBody]EditProfileView model)
         {
             // No duplicate usernames
-            if(context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower()) && !x.Id.Equals(model.Id)).Any())
+            if (context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower()) && !x.Id.Equals(model.Id)).Any())
                 return StatusCode(409, "Username is already taken!");
             // No duplicate emails
-            if(context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.Equals(model.Id)).Any())
+            if (context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.Equals(model.Id)).Any())
                 return StatusCode(409, "Email already has an user associated to it!");
 
             var user = await _userManager.FindByIdAsync(model.Id);
-            if(user == null)
+            if (user == null)
             {
                 return NotFound("User has not been found!");
             }
@@ -154,7 +165,7 @@ namespace fantasy_hoops.Controllers
             if (model.CurrentPassword.Length > 0 && model.NewPassword.Length > 0)
             {
                 var result = _userManager.CheckPasswordAsync(user, model.CurrentPassword);
-                if(!result.Result)
+                if (!result.Result)
                     return StatusCode(401, "Wrong current password!");
                 await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             }

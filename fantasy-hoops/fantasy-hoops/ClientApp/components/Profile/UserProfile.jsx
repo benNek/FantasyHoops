@@ -49,7 +49,7 @@ export class UserProfile extends Component {
         this.setState({
           username: res.userName,
           email: res.email,
-          about: res.description,
+          about: res.description ? res.description : '',
           team: res.favoriteTeamId,
           teamInfo: res.team
         });
