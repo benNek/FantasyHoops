@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { isAuth, parse, logout } from '../utils/auth';
+import defaultPhoto from '../content/images/default.png';
 
 export class Header extends Component {
   constructor(props) {
@@ -19,8 +20,14 @@ export class Header extends Component {
 
     // Showing friend requests and profile when player has signed in
     let profile = '';
+    let avatar = defaultPhoto;
     if (isAuth()) {
       const user = parse();
+      try {
+        avatar = require(`../content/images/avatars/${user.id}.png`);
+      }
+      catch (err) {
+      }
       profile = (
         <ul className="nav navbar-nav ml-auto">
           <li className="dropdown">
@@ -40,7 +47,7 @@ export class Header extends Component {
                   <div className="row">
                     <div className="col-lg-4">
                       <p className="text-center">
-                        <a href='/profile'><img src="https://i.imgur.com/0i1KEYY.png" width="100" height="100" alt="" /></a>
+                        <a href='/profile'><img src={avatar} width="100" height="100" alt="" /></a>
                       </p>
                     </div>
                     <div className="col-lg-8">

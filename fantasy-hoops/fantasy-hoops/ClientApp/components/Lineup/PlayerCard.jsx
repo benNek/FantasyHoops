@@ -14,7 +14,7 @@ export class PlayerCard extends Component {
     let posIMG = '';
     let playerIMG = '';
     try {
-      posIMG = this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/));
+      posIMG = this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/));
       playerIMG = this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/));
     }
     catch (err) {

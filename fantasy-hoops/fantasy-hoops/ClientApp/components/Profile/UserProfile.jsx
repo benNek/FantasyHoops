@@ -3,11 +3,15 @@ import { UserCard } from './UserCard'
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
 import Textarea from 'react-autosize-textarea';
+import defaultPhoto from '../../content/images/default.png';
+import { ChangeAvatar } from '../Inputs/ChangeAvatar';
+import { parse } from '../../utils/auth';
 
 export class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      avatar: defaultPhoto,
       edit: this.props.match.params.edit || '',
       username: '',
       email: '',
@@ -23,14 +27,14 @@ export class UserProfile extends Component {
   componentDidMount() {
     this.editProfile();
     fetch(`http://localhost:51407/api/team`)
-    .then(res => {
-      return res.json()
-    })
-    .then(res => {
-      this.setState({
-        teams: res
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          teams: res
+        });
       });
-    });
   }
 
   componentDidUpdate(nextProps, nextState) {
@@ -63,6 +67,13 @@ export class UserProfile extends Component {
   }
 
   render() {
+    const user = parse();
+    let avatar = defaultPhoto;
+    try {
+      avatar = require(`../../content/images/avatars/${user.id}.png`);
+    }
+    catch (err) {
+    }
     const teams = this.state.teams;
     const changingPassword = !(this.state.password.length > 0 || this.state.newPassword.length > 0 || this.state.confirmNewPassword.length > 0);
     return (
@@ -289,17 +300,17 @@ export class UserProfile extends Component {
           </div>
           <div className="col-lg-4 order-lg-1">
             <img
-              src="https://i.imgur.com/0i1KEYY.png"
-              width="300"
-              height="300"
+              src={avatar} alt="Preview"
               className="mx-auto img-fluid img-circle d-block round-img"
-              alt="avatar"
+              style={{width: '50%'}}
             />
-            <div className="custom-file">
-              <input type="file" className="custom-file-input" id="customFile" />
-              <label className="custom-file-label" htmlFor="customFile">Choose file</label>
+            <div className="row">
+              <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">
+                Change image
+              </button>
             </div>
           </div>
+          <ChangeAvatar />
         </div>
       </div>
     );
