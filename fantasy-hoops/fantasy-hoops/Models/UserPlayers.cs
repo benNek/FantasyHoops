@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fantasy_hoops.Models
 {
@@ -11,7 +12,9 @@ namespace fantasy_hoops.Models
         public string Position { get; set; }
         public double FP { get; set; }
 
+        [ForeignKey("UserID")]
         public virtual User User { get; set; }
+        [ForeignKey("PlayerID")]
         public virtual Player Player { get; set; }
     }
 }

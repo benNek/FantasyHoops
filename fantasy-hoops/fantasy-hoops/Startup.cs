@@ -105,19 +105,25 @@ namespace fantasy_hoops
                 .ToRunOnceAt(DateTime.Now.AddMinutes(1))
                 .AndEvery(1)
                 .Days()
-                .At(12, 00));
+                .At(9, 50));
+
+            JobManager.AddJob(() => Task.Run(() => UserScoreSeed.Initialize(_context)), s => s
+                .ToRunEvery(1)
+                .Days()
+                .At(10, 00));
 
             JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s
                 .ToRunOnceAt(DateTime.Now.AddMinutes(6))
                 .AndEvery(1)
                 .Days()
-                .At(12, 10));
+                .At(10, 10));
 
             JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s
                 .ToRunOnceAt(DateTime.Now.AddSeconds(15))
                 .AndEvery(1)
                 .Days()
                 .At(11, 30));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
