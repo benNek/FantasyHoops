@@ -26,7 +26,7 @@ namespace fantasy_hoops.Controllers
             {
                 id = x.NewsID,
                 x.Title,
-                news = String.Join(String.Empty, x.Paragraphs.Select(y => y.Content).ToArray()),
+                Paragraphs = x.Paragraphs.Select(y => y.Content).ToList(),
                 date = x.Date.ToString("yyyy-MM-dd"),
                 hTeam = context.Teams.Where(y => y.NbaID == x.hTeamID).FirstOrDefault().Abbreviation,
                 vTeam = context.Teams.Where(y => y.NbaID == x.vTeamID).FirstOrDefault().Abbreviation

@@ -11,8 +11,12 @@ export class NewsCard extends Component {
   }
 
   render() {
-    const text = this.props.news.news;
-    const cutPosition = 300;
+    const size = 3;
+    let paragraphs = _.map(this.props.news.paragraphs,
+      (paragraph) => {
+        return <p>{paragraph}</p>
+      }
+    );
     return (
       <div className="mb-5 mx-auto news-card card">
         <div className="card-header bg-info text-white">
@@ -50,11 +54,14 @@ export class NewsCard extends Component {
             className="read-more-state"
             id={this.props.news.id}
           />
-          <p className="read-more-wrap" style={{ textAlign: 'justify' }}>{text.substring(0, cutPosition)}
+          <p className="read-more-wrap" style={{ textAlign: 'justify' }}>
+            {paragraphs.slice(0, size)}
+
             {!this.state.checked ? '...' : ''}
             <span className="read-more-target">
-              {text.substring(cutPosition, text.length)}
+              {!this.state.checked ? '...' : paragraphs.slice(size)}
             </span>
+
           </p>
           <label htmlFor={this.props.news.id} className="read-more-trigger"></label>
         </div>
