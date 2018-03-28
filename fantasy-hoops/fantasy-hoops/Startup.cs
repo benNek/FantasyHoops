@@ -99,7 +99,7 @@ namespace fantasy_hoops
                 .ToRunOnceAt(DateTime.Now.AddMinutes(10))
                 .AndEvery(1)
                 .Days()
-                .At(00, 00));
+                .At(16, 00));
 
             JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s
                 .ToRunOnceAt(DateTime.Now.AddMinutes(1))
