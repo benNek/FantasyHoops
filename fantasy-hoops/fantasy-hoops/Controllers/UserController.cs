@@ -41,7 +41,7 @@ namespace fantasy_hoops.Controllers
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return RequestToken(model);
+                return RequestToken(model.UserName);
             }
             return StatusCode(401, "You have entered an invalid username or password!");
         }
@@ -68,7 +68,7 @@ namespace fantasy_hoops.Controllers
             {
                 return Ok("You have registered successfully!");
             }
-            return BadRequest("Unknown error");
+            return BadRequest(result.ToString());
         }
 
         [Authorize]
@@ -79,15 +79,15 @@ namespace fantasy_hoops.Controllers
             return Ok("You have signed out successfully!");
         }
 
-        public IActionResult RequestToken(LoginViewModel model)
+        public IActionResult RequestToken(String username)
         {
-            var user = context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower())).FirstOrDefault();
+            var user = context.Users.Where(x => x.UserName.ToLower().Equals(username.ToLower())).FirstOrDefault();
             var claims = new[]
             {
                 new Claim("id", user.Id),
                 new Claim("username", user.UserName),
                 new Claim("email", user.Email),
-                new Claim("description", user.Description != null ? user.Description : ""),
+                new Claim("description", user.Description ??""),
                 new Claim("team", user.Team != null ? user.Team.Name : "")
             };
 
@@ -104,6 +104,72 @@ namespace fantasy_hoops.Controllers
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token)
             });
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(String id)
+        {
+            var team = context.Teams.Where(x => x.TeamID == context.Users.Where(y => y.Id.Equals(id)).Select(y => y.FavoriteTeamId).FirstOrDefault()).FirstOrDefault();
+            if(team == null)
+            {
+                team = new Team()
+                {
+                    City = "Seattle",
+                    Name = "Supersonics",
+                    Color = "#FFC200"
+                };
+            }
+
+            var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
+            {
+                x.Id,
+                x.UserName,
+                x.Email,
+                x.Description,
+                x.FavoriteTeamId,
+
+                Team = new
+                {
+                    Name = team.City + " " + team.Name,
+                    team.Color
+                }
+            })
+            .FirstOrDefault();
+            if (user == null)
+                return NotFound(String.Format("User with id {0} has not been found!", id));
+            return Ok(user);
+        }
+
+        [HttpPut("editprofile")]
+        public async Task<IActionResult> EditProfile([FromBody]EditProfileView model)
+        {
+            // No duplicate usernames
+            if (context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower()) && !x.Id.Equals(model.Id)).Any())
+                return StatusCode(409, "Username is already taken!");
+            // No duplicate emails
+            if (context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.Equals(model.Id)).Any())
+                return StatusCode(409, "Email already has an user associated to it!");
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                return NotFound("User has not been found!");
+            }
+
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.Description = model.Description;
+            user.FavoriteTeamId = model.FavoriteTeamId;
+
+            await _userManager.UpdateAsync(user);
+            if (model.CurrentPassword.Length > 0 && model.NewPassword.Length > 0)
+            {
+                var result = _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+                if (!result.Result)
+                    return StatusCode(401, "Wrong current password!");
+                await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            }
+            return Ok(RequestToken(user.UserName));
         }
 
         [HttpPost("avatar")]
@@ -124,40 +190,5 @@ namespace fantasy_hoops.Controllers
             }
             return Ok("Avatar updated successfully!");
         }
-
-        [HttpGet]
-        public IEnumerable<Object> Get()
-        {
-            return context.Users
-                .Select(x => new
-                {
-                    x.Id,
-                    x.UserName,
-                    x.Email,
-                    x.Description,
-                    x.Team,
-                })
-                .ToList();
-        }
-        [HttpGet("{username}")]
-        public IActionResult Get(string username)
-        {
-            var user = context.Users
-                .Where(x => x.UserName == username)
-                .Select(x => new
-                {
-                    x.Id,
-                    x.UserName,
-                    x.Email,
-                    x.Description,
-                    x.Team,
-                })
-                .ToList()
-                .FirstOrDefault();
-            if (user == null)
-                return NotFound(new { error = String.Format("User with username {0} has not been found!", username) });
-            return Ok(user);
-        }
-
     }
 }

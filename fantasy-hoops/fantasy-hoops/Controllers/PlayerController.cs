@@ -42,7 +42,7 @@ namespace fantasy_hoops.Controllers
         {
             var player = context.Players.Where(x => x.NbaID == id).ToList().FirstOrDefault();
             if (player == null)
-                return NotFound(new { error = String.Format("Player with id {0} has not been found!", id) });
+                return NotFound(String.Format("Player with id {0} has not been found!", id));
             return Ok(player);
         }
     }

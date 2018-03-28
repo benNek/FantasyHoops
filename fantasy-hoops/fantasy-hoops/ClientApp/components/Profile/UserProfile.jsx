@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { UserCard } from './UserCard'
+import { UserCard } from './UserCard';
 import { Input } from '../Inputs/Input';
 import { Select } from '../Inputs/Select';
 import Textarea from 'react-autosize-textarea';
 import defaultPhoto from '../../content/images/default.png';
 import { ChangeAvatar } from '../Inputs/ChangeAvatar';
 import { parse } from '../../utils/auth';
+import { handleErrors } from '../../utils/errors';
+import { Alert } from '../Alert';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -19,13 +21,30 @@ export class UserProfile extends Component {
       password: '',
       newPassword: '',
       confirmNewPassword: '',
-      team: ''
+      team: '',
+      teamInfo: '',
+      showAlert: false,
+      alertType: '',
+      alertText: ''
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     this.editProfile();
+    const user = parse();
+    fetch(`http://localhost:51407/api/user/${user.id}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          username: res.userName,
+          email: res.email,
+          about: res.description ? res.description : '',
+          team: res.favoriteTeamId,
+          teamInfo: res.team
+        });
+      });
     fetch(`http://localhost:51407/api/team`)
       .then(res => {
         return res.json()
@@ -66,6 +85,41 @@ export class UserProfile extends Component {
     });
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    const user = parse();
+    const data = {
+      Id: user.id,
+      UserName: this.state.username,
+      Email: this.state.email,
+      Description: this.state.about,
+      FavoriteTeamId: this.state.team,
+      CurrentPassword: this.state.password,
+      NewPassword: this.state.newPassword,
+    };
+
+    fetch('/api/user/editprofile', {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.json())
+      .then(res => {
+        localStorage.setItem('accessToken', res.value.token);
+        location.reload();
+      })
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        })
+      });
+  }
+
   render() {
     const user = parse();
     let avatar = defaultPhoto;
@@ -92,19 +146,19 @@ export class UserProfile extends Component {
               </li>
             </ul>
             <div className="tab-content py-4">
+              <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
               <div className="tab-pane active" id="profile">
-                <h5 className="mb-3">Username</h5>
                 <div className="row">
                   <div className="col-md-6">
                     <h6>About</h6>
                     <p className='about-me'>
-                      This is something that describes me as a basketball fan.
-                            </p>
+                      {user.description}
+                    </p>
                   </div>
                   <div className="col-md-6">
                     <h6 style={{ paddingLeft: '1.1rem' }}>Favorite team</h6>
                     <div className="team-badge">
-                      <a href="#" className="badge badge-dark badge-pill" style={{ backgroundColor: '#008248' }} >Boston Celtics</a>
+                      <span href="/#" className="badge badge-dark badge-pill" style={{ backgroundColor: this.state.teamInfo.color }}>{this.state.teamInfo.name}</span>
                     </div>
                     <hr />
                     <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak</span>
@@ -187,7 +241,7 @@ export class UserProfile extends Component {
                 </div>
               </div>
               <div className="tab-pane" id="edit">
-                <form role="form">
+                <form role="form" onSubmit={this.handleSubmit}>
                   <label className="col-lg-3 col-form-label form-control-label"></label>
                   <div className="col-lg-9">
                     <label className="form-group row">PERSONAL INFO</label>
@@ -224,7 +278,9 @@ export class UserProfile extends Component {
                     <div className="col-lg-9">
                       <div className="form-group">
                         <Textarea
+                          id="about"
                           className="form-control"
+                          value={this.state.about}
                           onChange={this.handleChange}
                         />
                       </div>
@@ -299,10 +355,13 @@ export class UserProfile extends Component {
             </div>
           </div>
           <div className="col-lg-4 order-lg-1">
+            <div className="row">
+              <h3 className="mt-3 mx-auto">{user.username}</h3>
+            </div>
             <img
               src={avatar} alt="Preview"
               className="mx-auto img-fluid img-circle d-block round-img"
-              style={{width: '50%'}}
+              style={{ width: '50%' }}
             />
             <div className="row">
               <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">

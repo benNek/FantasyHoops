@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Scroll from 'react-scroll'
+import Scroll from 'react-scroll';
+import shortid from 'shortid';
 
 export class NewsCard extends Component {
   constructor(props) {
@@ -11,10 +12,10 @@ export class NewsCard extends Component {
   }
 
   render() {
-    const size = 3;
+    const size = 2;
     let paragraphs = _.map(this.props.news.paragraphs,
       (paragraph) => {
-        return <p>{paragraph}</p>
+        return <p key={shortid()}>{paragraph}</p>
       }
     );
     return (
@@ -54,7 +55,7 @@ export class NewsCard extends Component {
             className="read-more-state"
             id={this.props.news.id}
           />
-          <p className="read-more-wrap" style={{ textAlign: 'justify' }}>
+          <div className="read-more-wrap" style={{ textAlign: 'justify' }}>
             {paragraphs.slice(0, size)}
 
             {!this.state.checked ? '' : ''}
@@ -62,7 +63,7 @@ export class NewsCard extends Component {
               {!this.state.checked ? '' : paragraphs.slice(size)}
             </span>
 
-          </p>
+          </div>
           <label htmlFor={this.props.news.id} className="read-more-trigger"></label>
         </div>
       </div>
