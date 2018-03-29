@@ -40,7 +40,33 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var player = context.Players.Where(x => x.NbaID == id).ToList().FirstOrDefault();
+            var player = context.Players.Where(x => x.NbaID == id)
+                .Select(x => new
+                {
+                    x.PlayerID,
+                    x.NbaID,
+                    x.FirstName,
+                    x.LastName,
+                    x.Number,
+                    x.Position,
+                    x.PTS,
+                    x.REB,
+                    x.AST,
+                    x.STL,
+                    x.BLK,
+                    x.TOV,
+                    x.FPPG,
+                    x.Price,
+                    Team = new
+                    {
+                        x.TeamID,
+                        x.Team.NbaID,
+                        x.Team.Abbreviation,
+                        x.Team.City,
+                        x.Team.Name,
+                        x.Team.Color
+                    },
+                }).ToList().FirstOrDefault();
             if (player == null)
                 return NotFound(String.Format("Player with id {0} has not been found!", id));
             return Ok(player);

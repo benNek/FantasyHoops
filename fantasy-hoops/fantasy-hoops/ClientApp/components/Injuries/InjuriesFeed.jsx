@@ -8,7 +8,9 @@ export class InjuriesFeed extends Component {
     super(props);
     this.state = {
       noInjuries: false,
-      injuries: ''
+      injuries: '',
+      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
+      posIMG: this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/))
     }
   }
 
@@ -33,10 +35,21 @@ export class InjuriesFeed extends Component {
       });
   }
 
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
   render() {
     let injuries = _.map(this.state.injuries,
       (injury) => {
-        return <InjuryCard key={shortid()} injury={injury} />
+        const pos = injury.player.position.toLowerCase();
+        return <InjuryCard
+          key={shortid()}
+          image={this.state.playerIMG[`${injury.player.nbaID}.png`] || this.state.posIMG[`${pos}.png`]}
+          injury={injury}
+        />
       }
     );
     return (

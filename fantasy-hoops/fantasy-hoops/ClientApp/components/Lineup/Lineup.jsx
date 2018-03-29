@@ -5,6 +5,7 @@ import { ProgressBar } from './ProgressBar';
 import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
 import { Alert } from '../Alert';
+import { PlayerModal } from '../PlayerModal';
 
 const budget = 300; // thousands
 
@@ -14,18 +15,21 @@ export class Lineup extends Component {
     this.selectPlayer = this.selectPlayer.bind(this);
     this.filter = this.filter.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showModal = this.showModal.bind(this);
 
     this.state = {
       position: '',
-      pg: <PlayerCard filter={this.filter} status={0} position="PG" />,
-      sg: <PlayerCard filter={this.filter} status={0} position="SG" />,
-      sf: <PlayerCard filter={this.filter} status={0} position="SF" />,
-      pf: <PlayerCard filter={this.filter} status={0} position="PF" />,
-      c: <PlayerCard filter={this.filter} status={0} position="C" />,
+      pg: <PlayerCard image={require('../../content/images/positions/pg.png')} filter={this.filter} status={0} position="PG" />,
+      sg: <PlayerCard image={require('../../content/images/positions/sg.png')} filter={this.filter} status={0} position="SG" />,
+      sf: <PlayerCard image={require('../../content/images/positions/sg.png')} filter={this.filter} status={0} position="SF" />,
+      pf: <PlayerCard image={require('../../content/images/positions/pg.png')} filter={this.filter} status={0} position="PF" />,
+      c: <PlayerCard image={require('../../content/images/positions/c.png')} filter={this.filter} status={0} position="C" />,
       loadedPlayers: false,
       showAlert: false,
       alertType: '',
-      alertText: ''
+      alertText: '',
+      posIMG: this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/)),
+      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     };
   }
 
@@ -79,12 +83,18 @@ export class Lineup extends Component {
     }
   }
 
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
   render() {
     const remaining = this.calculateRemaining();
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem' }}>
-          <div className="pt-3 text-center mx-auto" style={{width: "50%"}}>
+          <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
           </div>
           <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
@@ -107,16 +117,24 @@ export class Lineup extends Component {
             </div>
           </div>
           <ProgressBar players={this.state} />
-          <div className="text-center mt-3 pb-3 mx-auto" style={{width: "50%"}}>
+          <div className="text-center mt-3 pb-3 mx-auto" style={{ width: "50%" }}>
             <form onSubmit={this.handleSubmit}>
               <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
             </form>
           </div>
         </div>
+        <PlayerModal
+          stats={this.state.stats}
+          image={this.state.stats
+            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+            : ''}
+        />
         <PlayerPool
+          images={this.state.playerIMG}
           position={this.state.position}
           players={this.state.players}
           selectPlayer={this.selectPlayer}
+          showModal={this.showModal}
         />
       </div>
     );
@@ -129,13 +147,36 @@ export class Lineup extends Component {
   }
 
   selectPlayer(player) {
-    const playerCard = player.selected
-      ? <PlayerCard status={2} filter={this.filter} player={player} selectPlayer={this.selectPlayer} position={player.position} />
-      : <PlayerCard status={0} filter={this.filter} position={player.position} />;
     const pos = player.position.toLowerCase();
+    const playerCard = player.selected
+      ? <PlayerCard
+        status={2}
+        filter={this.filter}
+        player={player}
+        image={this.state.playerIMG[`${player.id}.png`] || this.state.posIMG[`${pos}.png`]}
+        selectPlayer={this.selectPlayer}
+        position={player.position}
+        showModal={this.showModal}
+      />
+      : <PlayerCard
+        status={0}
+        filter={this.filter}
+        position={player.position}
+        image={this.state.posIMG[`${pos}.png`]}
+      />;
     this.setState({
       [pos]: playerCard
     });
+  }
+
+  showModal(player) {
+    fetch(`http://localhost:51407/api/stats/${player.id}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          stats: res
+        });
+      });
   }
 
   calculateRemaining() {

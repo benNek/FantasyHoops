@@ -6,19 +6,15 @@ export class PlayerCard extends Component {
     super();
     this.filter = this.filter.bind(this);
     this.select = this.select.bind(this);
+    this.showModal = this.showModal.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.importAll = this.importAll.bind(this);
+  }
+
+  componentDidMount() {
+    $('[data-toggle="tooltip"]').tooltip({ delay: { show: 800, hide: 100 } })
   }
 
   render() {
-    let posIMG = '';
-    let playerIMG = '';
-    try {
-      posIMG = this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/));
-      playerIMG = this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/));
-    }
-    catch (err) {
-    }
     if (this.props.status > 0) {
       const pos = this.props.player.position.toLowerCase();
       const innerHTML = this.props.player.selected
@@ -33,22 +29,39 @@ export class PlayerCard extends Component {
         </div>
         : '';
       return (
-        <div onClick={this.props.status == 2 ? this.filter : ''} className="player-card card">
-          {this.props.status == 1 ? <div className="ppg">{this.props.player.fppg.toFixed(1)}</div> : ''}
-          {this.props.status == 1 ? <div className="ppg ppg-label">FPPG</div> : ''}
-          {this.props.status == 1 ? <div className="player-position">{this.props.player.position}</div> : ''}
-          {buttonState}
-          <div className="price-badge">
-            <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
-          </div>
-          <img
-            className="player-card-img-top card-img-top"
-            style={{ backgroundColor: `${this.props.player.teamColor}` }}
-            src={playerIMG[`${this.props.player.id}.png`] || posIMG[`${pos}.png`]}
-            alt={this.getDisplayName(this.props.player)}>
-          </img>
-          <div className="card-block" >
-            <h2 className="player-card-title card-title">{this.getDisplayName(this.props.player)}</h2>
+        <div>
+          <div className="player-card card">
+            {this.props.status == 1 ? <div className="ppg">{this.props.player.fppg.toFixed(1)}</div> : ''}
+            {this.props.status == 1 ? <div className="ppg ppg-label">FPPG</div> : ''}
+            {this.props.status == 1 ? <div className="player-position">{this.props.player.position}</div> : ''}
+            {buttonState}
+            <div className="price-badge">
+              <span className="badge badge-dark">{this.props.player.price + 'K'}</span>
+            </div>
+            <img
+              onClick={this.props.status == 2 ? this.filter : ''}
+              className="player-card-img-top card-img-top"
+              style={{ backgroundColor: `${this.props.player.teamColor}` }}
+              src={this.props.image}
+              alt={this.getDisplayName(this.props.player)}>
+            </img>
+            <div className="card-block" >
+              <a
+                data-toggle="tooltip"
+                data-placement="auto"
+                title="Click for stats"
+              >
+                <h2
+                  data-toggle="modal"
+                  data-target="#playerModal"
+                  className="player-card-title card-title"
+                  onClick={this.showModal}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {this.getDisplayName(this.props.player)}
+                </h2>
+              </a>
+            </div>
           </div>
         </div>
       );
@@ -59,7 +72,7 @@ export class PlayerCard extends Component {
         <div onClick={this.filter} className="player-card card" tabIndex="1">
           <img className="player-card-img-top card-img-top"
             style={{ backgroundColor: `` }}
-            src={posIMG[`${pos}.png`]}
+            src={this.props.image}
             alt={this.props.position}>
           </img>
           <div className="card-block" >
@@ -68,12 +81,6 @@ export class PlayerCard extends Component {
         </div>
       );
     }
-  }
-
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
   }
 
   getDisplayName(player) {
@@ -90,6 +97,10 @@ export class PlayerCard extends Component {
     this.props.player.status = this.props.player.selected ? 2 : 1;
     this.props.selectPlayer(this.props.player);
     this.handleSelect();
+  }
+
+  showModal() {
+    this.props.showModal(this.props.player);
   }
 
   filter() {

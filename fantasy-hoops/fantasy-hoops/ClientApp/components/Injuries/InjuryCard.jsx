@@ -4,18 +4,9 @@ import moment from 'moment';
 export class InjuryCard extends Component {
   constructor() {
     super();
-    this.importAll = this.importAll.bind(this);
   }
 
   render() {
-    let posIMG = '';
-    let playerIMG = '';
-    try {
-      posIMG = this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/));
-      playerIMG = this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/));
-    }
-    catch (err) {
-    }
     let status = '';
     if (this.props.injury.status.toLowerCase().includes("active"))
       status = 'injury-active';
@@ -39,7 +30,7 @@ export class InjuryCard extends Component {
               <div className='date'>
                 <div className='day badge badge-dark'>{this.props.injury.player.position}</div>
               </div>
-              <img src={playerIMG[`${this.props.injury.player.nbaID}.png`] || posIMG[`${pos}.png`]}
+              <img src={this.props.image}
                 style={{ backgroundColor: this.props.injury.player.team.color }} />
             </div>
             <div className='post-content'>
@@ -58,11 +49,5 @@ export class InjuryCard extends Component {
         </div>
       </div >
     );
-  }
-
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
   }
 }

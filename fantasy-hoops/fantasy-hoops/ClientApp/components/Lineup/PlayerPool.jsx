@@ -21,6 +21,7 @@ export class PlayerPool extends Component {
   }
 
   render() {
+    const images = this.props.images;
     const players = _.map(
       this.state.players,
       (player) => {
@@ -32,8 +33,10 @@ export class PlayerPool extends Component {
               id={player.id}
               status={1}
               player={player}
+              image={images[`${player.id}.png`] || this.state.posIMG[`${pos}.png`]}
               selectPlayer={this.props.selectPlayer}
               handleSelect={this.handleSelect}
+              showModal={this.props.showModal}
             />
           </div>
       }
