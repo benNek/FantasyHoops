@@ -13,7 +13,6 @@ export class PlayerModal extends Component {
     let teamLogo = '';
     let rows = '';
     if (this.props.player) {
-      console.log(this.props.stats);
       player = this.props.player;
       teamLogo = `http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${player.team.abbreviation}.svg`;
     }
