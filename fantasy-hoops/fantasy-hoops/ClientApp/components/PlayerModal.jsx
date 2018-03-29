@@ -19,16 +19,24 @@ export class PlayerModal extends Component {
     }
     if (this.props.stats) {
       rows = _.map(this.props.stats.games, (s) => {
+        let score = '';
+        var str = s.score.split('-');
+        if(parseInt(str[0]) > parseInt(str[1]))
+          score = <span className="text-success">W</span>;
+          else score = <span className="text-danger">L</span>;
         return <tr key={shortid()} >
           <td>{moment(s.date).format("ddd MM/D")}</td>
-          <td><img src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${s.opponent.abbreviation}.svg`} width='40rem' style={{right: '0'}}/> {s.opponent.abbreviation}</td>
-          <td>{s.score}</td>
+          <td><img src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${s.opponent.abbreviation}.svg`} alt={s.opponent.abbreviation} width='40rem' style={{right: '0'}}/></td>
+          <td>{score} {s.score}</td>
           <td>{s.min}</td>
-          <td>{s.fgm}-{s.fga}</td>
+          <td>{s.fgm}</td>
+          <td>{s.fga}</td>
           <td>{s.fgp}</td>
-          <td>{s.tpm}-{s.tpa}</td>
+          <td>{s.tpm}</td>
+          <td>{s.tpa}</td>
           <td>{s.tpp}</td>
-          <td>{s.ftm}-{s.fta}</td>
+          <td>{s.ftm}</td>
+          <td>{s.fta}</td>
           <td>{s.ftp}</td>
           <td>{s.dreb}</td>
           <td>{s.oreb}</td>
@@ -66,13 +74,13 @@ export class PlayerModal extends Component {
               </div>
               <nav>
                 <div className="nav nav-tabs justify-content-end" id="nav-tab" role="tablist" style={{ position: 'static' }}>
-                  <a className="nav-item nav-link active" id="nav-stats-tab" data-toggle="tab" href="#nav-stats" role="tab" aria-controls="nav-stats" aria-selected="true">Season stats</a>
-                  <a className="nav-item nav-link" id="nav-gamelog-tab" data-toggle="tab" href="#nav-gamelog" role="tab" aria-controls="nav-gamelog" aria-selected="false">Gamelog</a>
+                  <a className="nav-item nav-link active btn-no-otline" id="nav-stats-tab" data-toggle="tab" href="#nav-stats" role="tab" aria-controls="nav-stats" aria-selected="true">Season stats</a>
+                  <a className="nav-item nav-link btn-no-otline" id="nav-gamelog-tab" data-toggle="tab" href="#nav-gamelog" role="tab" aria-controls="nav-gamelog" aria-selected="false">Gamelog</a>
                 </div>
               </nav>
               <div className="tab-content" id="nav-tabContent">
                 <div className="tab-pane fade show active" id="nav-stats" role="tabpanel" aria-labelledby="nav-stats-tab">
-                  <table className="table table-sm table-bordered">
+                  <table className="table table-sm table-hover table-bordered text-right">
                     <thead>
                       <tr>
                         <th scope="col">PTS</th>
@@ -98,18 +106,21 @@ export class PlayerModal extends Component {
                   </table>
                 </div>
                 <div className="tab-pane fade" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
-                  <table className="table table-sm table-bordered">
+                  <table className="table table-sm table-hover table-bordered text-right">
                     <thead>
                       <tr>
                         <th scope="col">DATE</th>
                         <th scope="col">OPP</th>
                         <th scope="col">SCORE</th>
                         <th scope="col">MIN</th>
-                        <th scope="col">FGM-FGA</th>
+                        <th scope="col">FGM</th>
+                        <th scope="col">FGA</th>
                         <th scope="col">FG%</th>
-                        <th scope="col">3PM-3PA</th>
+                        <th scope="col">3PM</th>
+                        <th scope="col">3PA</th>
                         <th scope="col">3P%</th>
-                        <th scope="col">FTM-FTA</th>
+                        <th scope="col">FTM</th>
+                        <th scope="col">FTA</th>
                         <th scope="col">FT%</th>
                         <th scope="col">DREB</th>
                         <th scope="col">OREB</th>

@@ -10,6 +10,10 @@ export class PlayerCard extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+  componentDidMount() {
+    $('[data-toggle="tooltip"]').tooltip({ delay: { show: 800, hide: 100 } })
+  }
+
   render() {
     if (this.props.status > 0) {
       const pos = this.props.player.position.toLowerCase();
@@ -42,15 +46,22 @@ export class PlayerCard extends Component {
               alt={this.getDisplayName(this.props.player)}>
             </img>
             <div className="card-block" >
-              <h2
-                data-toggle="modal"
-                data-target="#playerModal"
-                className="player-card-title card-title"
-                onClick={this.showModal}
-                style={{ cursor: 'pointer' }}
+              <a
+                type="button"
+                data-toggle="tooltip"
+                data-placement="auto"
+                title="Click for stats"
               >
-                {this.getDisplayName(this.props.player)}
-              </h2>
+                <h2
+                  data-toggle="modal"
+                  data-target="#playerModal"
+                  className="player-card-title card-title"
+                  onClick={this.showModal}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {this.getDisplayName(this.props.player)}
+                </h2>
+              </a>
             </div>
           </div>
         </div>
