@@ -31,6 +31,7 @@ namespace fantasy_hoops.Controllers
                 hTeam = context.Teams.Where(y => y.NbaID == x.hTeamID).FirstOrDefault().Abbreviation,
                 vTeam = context.Teams.Where(y => y.NbaID == x.vTeamID).FirstOrDefault().Abbreviation
             })
+            .OrderByDescending(x => x.date)
             .Skip(start).Take(count).ToList();
             return news;
         }
