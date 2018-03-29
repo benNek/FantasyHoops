@@ -94,18 +94,23 @@ namespace fantasy_hoops.Controllers
             {
                 var pg = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("PG")).FirstOrDefault();
                 pg.PlayerID = model.PgID;
+                pg.FP = 0.0;
 
                 var sg = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("SG")).FirstOrDefault();
                 sg.PlayerID = model.SgID;
+                sg.FP = 0.0;
 
                 var sf = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("SF")).FirstOrDefault();
                 sf.PlayerID = model.SfID;
+                sf.FP = 0.0;
 
                 var pf = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("PF")).FirstOrDefault();
                 pf.PlayerID = model.PfID;
+                pf.FP = 0.0;
 
                 var c = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Position.Equals("C")).FirstOrDefault();
                 c.PlayerID = model.CID;
+                c.FP = 0.0;
             }
 
             await context.SaveChangesAsync();
