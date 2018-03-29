@@ -125,6 +125,7 @@ export class Lineup extends Component {
         </div>
         <PlayerModal
           player={this.state.modalPlayer}
+          stats={this.state.stats}
           image={this.state.modalPlayer
             ? this.state.playerIMG[`${this.state.modalPlayer.nbaID}.png`] || this.state.posIMG[`${this.state.modalPlayer.position.toLowerCase()}.png`]
             : ''}
@@ -170,13 +171,20 @@ export class Lineup extends Component {
   }
 
   showModal(player) {
+    let modalPlayer;
     fetch(`http://localhost:51407/api/player/${player.id}`)
       .then(res => res.json())
       .then(res => {
-        this.setState({
-          modalPlayer: res
-        });
-      });
+        modalPlayer = res;
+      }).then(
+        fetch(`http://localhost:51407/api/stats/${player.id}`)
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              modalPlayer: modalPlayer,
+              stats: res
+            });
+          }));
   }
 
   calculateRemaining() {
