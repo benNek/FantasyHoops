@@ -47,7 +47,6 @@ export class PlayerCard extends Component {
             </img>
             <div className="card-block" >
               <a
-                type="button"
                 data-toggle="tooltip"
                 data-placement="auto"
                 title="Click for stats"

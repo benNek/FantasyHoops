@@ -57,7 +57,7 @@ export class PlayerModal extends Component {
           <div className="modal-content">
             <div className="modal-body">
               <div className="text-right mr-2">
-                <a type="button" className="close" data-dismiss="modal" aria-label="Close" style={{ right: '0' }}>
+                <a className="close" data-dismiss="modal" aria-label="Close" style={{ right: '0' }}>
                   <span aria-hidden="true">&times;</span>
                 </a>
               </div>
