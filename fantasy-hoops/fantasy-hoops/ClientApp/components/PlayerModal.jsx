@@ -15,7 +15,7 @@ export class PlayerModal extends Component {
     if (this.props.stats) {
       stats = this.props.stats;
       teamLogo = `http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${stats.team.abbreviation}.svg`;
-      rows = _.map(stats, (s) => {
+      rows = _.map(stats.games, (s) => {
         let score = '';
         var str = s.score.split('-');
         if (parseInt(str[0]) > parseInt(str[1]))
