@@ -11,9 +11,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180328190751_AddDateAndFPToUserPlayers")]
+    partial class AddDateAndFPToUserPlayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,8 +142,6 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("FGM");
 
-                    b.Property<double>("FGP");
-
                     b.Property<int>("FLS");
 
                     b.Property<double>("FP");
@@ -151,15 +150,9 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("FTM");
 
-                    b.Property<double>("FTP");
-
                     b.Property<double>("GS");
 
-                    b.Property<string>("MIN");
-
                     b.Property<int>("OREB");
-
-                    b.Property<int>("OppID");
 
                     b.Property<int>("PTS");
 
@@ -167,17 +160,7 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<int>("STL");
 
-                    b.Property<string>("Score");
-
                     b.Property<int>("TOV");
-
-                    b.Property<int>("TPA");
-
-                    b.Property<int>("TPM");
-
-                    b.Property<double>("TPP");
-
-                    b.Property<int>("TREB");
 
                     b.HasKey("StatsID");
 
