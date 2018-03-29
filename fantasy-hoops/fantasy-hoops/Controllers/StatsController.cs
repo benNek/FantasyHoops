@@ -28,7 +28,25 @@ namespace fantasy_hoops.Controllers
                     x.NbaID,
                     x.FirstName,
                     x.LastName,
+                    x.Number,
                     x.Position,
+                    x.PTS,
+                    x.REB,
+                    x.AST,
+                    x.STL,
+                    x.BLK,
+                    x.TOV,
+                    x.FPPG,
+                    x.Price,
+                    Team = new
+                    {
+                        x.TeamID,
+                        x.Team.NbaID,
+                        x.Team.Abbreviation,
+                        x.Team.City,
+                        x.Team.Name,
+                        x.Team.Color
+                    },
                     Games = context.Stats.Where(s => s.PlayerID == x.PlayerID)
                         .Select(s => new
                         {
@@ -80,7 +98,25 @@ namespace fantasy_hoops.Controllers
                     x.NbaID,
                     x.FirstName,
                     x.LastName,
+                    x.Number,
                     x.Position,
+                    x.PTS,
+                    x.REB,
+                    x.AST,
+                    x.STL,
+                    x.BLK,
+                    x.TOV,
+                    x.FPPG,
+                    x.Price,
+                    Team = new
+                    {
+                        x.TeamID,
+                        x.Team.NbaID,
+                        x.Team.Abbreviation,
+                        x.Team.City,
+                        x.Team.Name,
+                        x.Team.Color
+                    },
                     Games = context.Stats.Where(s => s.PlayerID == x.PlayerID)
                         .Select(s => new
                         {

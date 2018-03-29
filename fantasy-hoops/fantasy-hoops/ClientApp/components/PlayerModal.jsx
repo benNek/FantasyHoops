@@ -9,23 +9,21 @@ export class PlayerModal extends Component {
   }
 
   render() {
-    let player = '';
+    let stats = '';
     let teamLogo = '';
     let rows = '';
-    if (this.props.player) {
-      player = this.props.player;
-      teamLogo = `http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${player.team.abbreviation}.svg`;
-    }
     if (this.props.stats) {
-      rows = _.map(this.props.stats.games, (s) => {
+      stats = this.props.stats;
+      teamLogo = `http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${stats.team.abbreviation}.svg`;
+      rows = _.map(stats, (s) => {
         let score = '';
         var str = s.score.split('-');
-        if(parseInt(str[0]) > parseInt(str[1]))
+        if (parseInt(str[0]) > parseInt(str[1]))
           score = <span className="text-success">W</span>;
-          else score = <span className="text-danger">L</span>;
+        else score = <span className="text-danger">L</span>;
         return <tr key={shortid()} >
           <td>{moment(s.date).format("ddd MM/D")}</td>
-          <td><img src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${s.opponent.abbreviation}.svg`} alt={s.opponent.abbreviation} width='40rem' style={{right: '0'}}/></td>
+          <td><img src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${s.opponent.abbreviation}.svg`} alt={s.opponent.abbreviation} width='40rem' style={{ right: '0' }} /></td>
           <td>{score} {s.score}</td>
           <td>{s.min}</td>
           <td>{s.fgm}</td>
@@ -66,9 +64,9 @@ export class PlayerModal extends Component {
                 <img className="img-modal" src={teamLogo} />
                 <img className="ml-3 img-modal" src={this.props.image} style={{ zIndex: '1' }} />
                 <div className="col">
-                  <h1 className="">{player ? player.firstName : ''} {player ? player.lastName : ''}</h1>
-                  <h5>{player.position} | {player ? player.team.city + " " + player.team.name : ''}</h5>
-                  <h5>#{player.number}</h5>
+                  <h1 className="">{stats ? stats.firstName : ''} {stats ? stats.lastName : ''}</h1>
+                  <h5>{stats.position} | {stats ? stats.team.city + " " + stats.team.name : ''}</h5>
+                  <h5>#{stats.number}</h5>
                 </div>
               </div>
               <nav>
@@ -93,13 +91,13 @@ export class PlayerModal extends Component {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{player ? player.pts : ''}</td>
-                        <td>{player ? player.reb : ''}</td>
-                        <td>{player ? player.ast : ''}</td>
-                        <td>{player ? player.stl : ''}</td>
-                        <td>{player ? player.blk : ''}</td>
-                        <td>{player ? player.tov : ''}</td>
-                        <td>{player ? player.fppg.toFixed(1) : ''}</td>
+                        <td>{stats ? stats.pts : ''}</td>
+                        <td>{stats ? stats.reb : ''}</td>
+                        <td>{stats ? stats.ast : ''}</td>
+                        <td>{stats ? stats.stl : ''}</td>
+                        <td>{stats ? stats.blk : ''}</td>
+                        <td>{stats ? stats.tov : ''}</td>
+                        <td>{stats ? stats.fppg.toFixed(1) : ''}</td>
                       </tr>
                     </tbody>
                   </table>
