@@ -1,5 +1,6 @@
 ﻿using fantasy_hoops.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,9 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get()
+        public IEnumerable<Object> Get(int start = 0, int count = 6)
         {
-
-            return context.News.Select(x => new
+            var news = context.News.Select(x => new
             {
                 id = x.NewsID,
                 x.Title,
@@ -30,7 +30,9 @@ namespace fantasy_hoops.Controllers
                 date = x.Date.ToString("yyyy-MM-dd"),
                 hTeam = context.Teams.Where(y => y.NbaID == x.hTeamID).FirstOrDefault().Abbreviation,
                 vTeam = context.Teams.Where(y => y.NbaID == x.vTeamID).FirstOrDefault().Abbreviation
-            }).ToList();
+            })
+            .Skip(start).Take(count).ToList();
+            return news;
         }
     }
 }
