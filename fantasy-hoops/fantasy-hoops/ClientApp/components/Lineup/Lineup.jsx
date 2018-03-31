@@ -130,7 +130,8 @@ export class Lineup extends Component {
             : ''}
         />
         <PlayerPool
-          images={this.state.playerIMG}
+          playerIMG={this.state.playerIMG}
+          posIMG={this.state.posIMG}
           position={this.state.position}
           players={this.state.players}
           selectPlayer={this.selectPlayer}

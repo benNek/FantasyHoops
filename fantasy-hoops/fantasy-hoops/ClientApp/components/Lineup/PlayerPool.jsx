@@ -21,24 +21,25 @@ export class PlayerPool extends Component {
   }
 
   render() {
-    const images = this.props.images;
     const players = _.map(
       this.state.players,
       (player) => {
         if (player.position === this.props.position
-          || this.props.position === '')
+          || this.props.position === '') {
+          const pos = this.props.position.toLowerCase();
           return <div className="ml-3 mt-3">
             <PlayerCard
               key={player.id}
               id={player.id}
               status={1}
               player={player}
-              image={images[`${player.id}.png`] || this.state.posIMG[`${pos}.png`]}
+              image={this.props.playerIMG[`${player.id}.png`] || this.props.posIMG[`${pos}.png`]}
               selectPlayer={this.props.selectPlayer}
               handleSelect={this.handleSelect}
               showModal={this.props.showModal}
             />
           </div>
+        }
       }
     );
     return (
