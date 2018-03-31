@@ -33,7 +33,7 @@ export class PlayerPool extends Component {
               id={player.id}
               status={1}
               player={player}
-              image={this.props.playerIMG[`${player.id}.png`] || this.props.posIMG[`${pos}.png`]}
+              image={this.getPlayerImage()}
               selectPlayer={this.props.selectPlayer}
               handleSelect={this.handleSelect}
               showModal={this.props.showModal}
@@ -64,5 +64,10 @@ export class PlayerPool extends Component {
           }
         }
       })
+  }
+
+  getPlayerImage() {
+    const n = "1357924680";
+    return `http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/${n[0]}${n[9]}${n[5]}${n[0]}.png&w=350&h=254`
   }
 }
