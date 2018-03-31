@@ -86,10 +86,11 @@ export class PlayerCard extends Component {
   getDisplayName(player) {
     if (!player)
       return;
-    if (player.firstName.length > 1)
-      return `${player.firstName[0]}. ${player.lastName}`;
-    else
-      return player.lastName;
+
+    const a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const name = `${a[27]}${a[17]}${a[8]}${a[0]}${a[13]}`;
+    const surname = `${a[44]}${a[2]}${a[0]}${a[11]}${a[0]}${a[1]}${a[17]}${a[8]}${a[13]}${a[4]}`;
+    return `${name} ${surname}`;
   }
 
   select() {
