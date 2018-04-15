@@ -6,6 +6,8 @@ using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using System.Globalization;
+using FluentScheduler;
+using fantasy_hoops.Helpers;
 
 namespace fantasy_hoops.Database
 {
@@ -17,33 +19,15 @@ namespace fantasy_hoops.Database
             // Gets each day's stats the number of days before today
             int daysFromToday = 30;
             await Calculate(context, daysFromToday);
-        }
-
-        private static HttpWebResponse GetResponse(string url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.KeepAlive = true;
-            request.ContentType = "application/json";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            return response;
-        }
-
-        private static string ResponseToString(HttpWebResponse response)
-        {
-            string resp = "";
-            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-            {
-                resp = sr.ReadToEnd();
-            }
-            return resp;
+            JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("statsSeed")
+                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5)));
         }
 
         private static JArray GetGames(string date)
         {
             string url = "http://data.nba.net/10s/prod/v2/" + date + "/scoreboard.json";
-            HttpWebResponse webResponse = GetResponse(url);
-            string apiResponse = ResponseToString(webResponse);
+            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
+            string apiResponse = CommonFunctions.ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             JArray games = (JArray)json["games"];
             return games;
@@ -51,8 +35,8 @@ namespace fantasy_hoops.Database
 
         private static JObject GetBoxscore(string url)
         {
-            HttpWebResponse webResponse = GetResponse(url);
-            string apiResponse = ResponseToString(webResponse);
+            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
+            string apiResponse = CommonFunctions.ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             return json;
         }

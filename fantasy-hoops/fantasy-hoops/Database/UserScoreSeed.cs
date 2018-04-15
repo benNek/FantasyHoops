@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentScheduler;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,10 +8,11 @@ namespace fantasy_hoops.Database
 {
     public class UserScoreSeed
     {
-
         public static async Task Initialize(GameContext context)
         {
             await Update(context);
+            JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("userScore")
+                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5).AddMinutes(5)));
         }
 
         private static async Task Update(GameContext context)
@@ -24,6 +26,5 @@ namespace fantasy_hoops.Database
             }
             await context.SaveChangesAsync();
         }
-
     }
 }

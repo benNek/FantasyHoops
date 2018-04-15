@@ -6,7 +6,8 @@ using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using System.Globalization;
-using System.Diagnostics;
+using FluentScheduler;
+using fantasy_hoops.Helpers;
 
 namespace fantasy_hoops.Database
 {
@@ -17,42 +18,17 @@ namespace fantasy_hoops.Database
         public static async Task Initialize(GameContext context)
         {
             await Calculate(context);
-        }
-
-        private static HttpWebResponse GetResponse(string url)
-        {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Method = "GET";
-                request.KeepAlive = true;
-                request.ContentType = "application/json";
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                return response;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private static string ResponseToString(HttpWebResponse response)
-        {
-            string resp = "";
-            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-            {
-                resp = sr.ReadToEnd();
-            }
-            return resp;
+            JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("playerSeed")
+                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5).AddMinutes(6)));
         }
 
         private static JObject GetPlayer(int id)
         {
             string url = "http://data.nba.net/10s/prod/v1/2017/players/" + id + "_profile.json";
-            HttpWebResponse webResponse = GetResponse(url);
+            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
             if (webResponse == null)
                 return null;
-            string apiResponse = ResponseToString(webResponse);
+            string apiResponse = CommonFunctions.ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             return json;
         }
@@ -89,10 +65,10 @@ namespace fantasy_hoops.Database
         private static JArray GetGames(string date)
         {
             string url = "http://data.nba.net/10s/prod/v1/" + date + "/scoreboard.json";
-            HttpWebResponse webResponse = GetResponse(url);
+            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
             if (webResponse == null)
                 return null;
-            string apiResponse = ResponseToString(webResponse);
+            string apiResponse = CommonFunctions.ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             return (JArray)json["games"];
 
@@ -113,10 +89,10 @@ namespace fantasy_hoops.Database
         private static string GetDate()
         {
             string url = "http://data.nba.net/10s/prod/v1/today.json";
-            HttpWebResponse webResponse = GetResponse(url);
+            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
             if (webResponse == null)
                 return null;
-            string apiResponse = ResponseToString(webResponse);
+            string apiResponse = CommonFunctions.ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             string date = (string)json["links"]["currentDate"];
             date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)

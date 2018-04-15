@@ -105,12 +105,12 @@ export class Lineup extends Component {
   render() {
     const nextGame = Date.parse(moment(this.state.nextGame).add(7, 'hours'));
     const remaining = this.calculateRemaining();
-    const Completionist = () => <span>The game already started. Comeback tomorrow!</span>;
-    const renderer = ({ hours, minutes, seconds, completed }) => {
+    const Completionist = () => <span>The game already started. Come back soon!</span>;
+    const renderer = ({ days, hours, minutes, seconds, completed }) => {
       if (completed) {
         return <Completionist />;
       } else {
-        return <span>Game starts in: {hours}:{minutes}:{seconds}</span>;
+        return <span>Game starts in {days}:{hours}:{minutes}:{seconds}</span>;
       }
     };
     return (

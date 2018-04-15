@@ -6,6 +6,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using Microsoft.EntityFrameworkCore;
+using fantasy_hoops.Helpers;
 
 namespace fantasy_hoops.Database
 {
@@ -19,30 +20,10 @@ namespace fantasy_hoops.Database
             await Extract(context);
         }
 
-        private static HttpWebResponse GetResponse(string url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.KeepAlive = true;
-            request.ContentType = "application/json";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            return response;
-        }
-
-        private static string ResponseToString(HttpWebResponse response)
-        {
-            string resp = "";
-            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-            {
-                resp = sr.ReadToEnd();
-            }
-            return resp;
-        }
-
         private static JArray GetInjuries()
         {
-            HttpWebResponse webResponse = GetResponse("https://www.fantasylabs.com/api/players/news/2/");
-            string myResponse = ResponseToString(webResponse);
+            HttpWebResponse webResponse = CommonFunctions.GetResponse("https://www.fantasylabs.com/api/players/news/2/");
+            string myResponse = CommonFunctions.ResponseToString(webResponse);
             JArray injuries = JArray.Parse(myResponse);
             return injuries;
         }

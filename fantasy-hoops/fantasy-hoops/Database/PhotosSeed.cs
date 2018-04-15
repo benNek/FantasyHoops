@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using fantasy_hoops.Helpers;
 
 namespace fantasy_hoops.Database
 {
@@ -27,7 +28,7 @@ namespace fantasy_hoops.Database
         private static void SavePhoto(string localFile, string urlFile)
         {
             byte[] content;
-            WebResponse response = GetResponse(urlFile);
+            WebResponse response = CommonFunctions.GetResponse(urlFile);
             if (response == null)
                 return;
             Stream stream = response.GetResponseStream();
@@ -51,23 +52,6 @@ namespace fantasy_hoops.Database
             {
                 fs.Close();
                 bw.Close();
-            }
-        }
-
-        private static HttpWebResponse GetResponse(string url)
-        {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Method = "GET";
-                request.KeepAlive = true;
-                request.ContentType = "application/json";
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                return response;
-            }
-            catch (WebException)
-            {
-                return null;
             }
         }
 
