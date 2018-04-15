@@ -22,8 +22,8 @@ namespace fantasy_hoops.Database
             string today = GetDate();
             string yesterday = DateTime.ParseExact(today, "yyyyMMdd", CultureInfo.InvariantCulture)
                 .AddDays(-1).ToString("yyyyMMdd");
-            JArray tGames = GetGames(today);
-            JArray yGames = GetGames(yesterday);
+            JArray tGames = CommonFunctions.GetGames(today);
+            JArray yGames = CommonFunctions.GetGames(yesterday);
             JArray news = new JArray();
             GetPreviews(ref news, tGames, today);
             GetRecaps(ref news, yGames, yesterday);
@@ -124,30 +124,7 @@ namespace fantasy_hoops.Database
         }
         private static string GetDate()
         {
-            string url = "http://data.nba.net/10s/prod/v1/today.json";
-            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
-            if (webResponse == null)
-                return null;
-            string apiResponse = CommonFunctions.ResponseToString(webResponse);
-            JObject json = JObject.Parse(apiResponse);
-            string date = (string)json["links"]["currentDate"];
-
-            int toAdd = DateTime.Now.Hour >= 19 ? 0 : 1;
-            toAdd = DateTime.Now.Hour < 7 ? -1 : toAdd;
-            date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
-                .AddDays(toAdd).ToString("yyyyMMdd");
-            return date;
-        }
-
-        private static JArray GetGames(string date)
-        {
-            string url = "http://data.nba.net/10s/prod/v1/" + date + "/scoreboard.json";
-            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
-            if (webResponse == null)
-                return null;
-            string apiResponse = CommonFunctions.ResponseToString(webResponse);
-            JObject json = JObject.Parse(apiResponse);
-            return (JArray)json["games"];
+            return NextGame.NEXT_GAME.AddDays(-1).ToString("yyyyMMdd");
         }
     }
 }

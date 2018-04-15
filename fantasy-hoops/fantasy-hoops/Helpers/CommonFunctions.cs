@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -35,6 +37,17 @@ namespace fantasy_hoops.Helpers
                 resp = sr.ReadToEnd();
             }
             return resp;
+        }
+
+        public static JArray GetGames(string date)
+        {
+            string url = "http://data.nba.net/10s/prod/v1/" + date + "/scoreboard.json";
+            HttpWebResponse webResponse = GetResponse(url);
+            if (webResponse == null)
+                return null;
+            string apiResponse = ResponseToString(webResponse);
+            JObject json = JObject.Parse(apiResponse);
+            return (JArray)json["games"];
         }
     }
 }

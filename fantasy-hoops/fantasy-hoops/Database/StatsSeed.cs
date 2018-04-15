@@ -23,16 +23,6 @@ namespace fantasy_hoops.Database
                 .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5)));
         }
 
-        private static JArray GetGames(string date)
-        {
-            string url = "http://data.nba.net/10s/prod/v2/" + date + "/scoreboard.json";
-            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
-            string apiResponse = CommonFunctions.ResponseToString(webResponse);
-            JObject json = JObject.Parse(apiResponse);
-            JArray games = (JArray)json["games"];
-            return games;
-        }
-
         private static JObject GetBoxscore(string url)
         {
             HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
@@ -46,7 +36,7 @@ namespace fantasy_hoops.Database
             while (days > 0)
             {
                 string gameDate = DateTime.Today.AddDays(-days).ToString("yyyyMMdd");
-                JArray games = GetGames(gameDate);
+                JArray games = CommonFunctions.GetGames(gameDate);
                 DateTime date = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture);
 
                 foreach (JObject game in games)

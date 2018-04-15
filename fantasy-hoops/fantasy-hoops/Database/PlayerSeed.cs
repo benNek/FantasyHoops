@@ -36,7 +36,7 @@ namespace fantasy_hoops.Database
         private static async Task Calculate(GameContext context)
         {
             string date = GetDate();
-            JArray games = GetGames(date);
+            JArray games = CommonFunctions.GetGames(date);
             foreach (var player in context.Players)
             {
                 JObject p = GetPlayer(player.NbaID);
@@ -62,18 +62,6 @@ namespace fantasy_hoops.Database
             await context.SaveChangesAsync();
         }
 
-        private static JArray GetGames(string date)
-        {
-            string url = "http://data.nba.net/10s/prod/v1/" + date + "/scoreboard.json";
-            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
-            if (webResponse == null)
-                return null;
-            string apiResponse = CommonFunctions.ResponseToString(webResponse);
-            JObject json = JObject.Parse(apiResponse);
-            return (JArray)json["games"];
-
-        }
-
         private static bool IsPlaying(Player player, JArray games)
         {
             foreach (JObject game in games)
@@ -88,16 +76,7 @@ namespace fantasy_hoops.Database
 
         private static string GetDate()
         {
-            string url = "http://data.nba.net/10s/prod/v1/today.json";
-            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
-            if (webResponse == null)
-                return null;
-            string apiResponse = CommonFunctions.ResponseToString(webResponse);
-            JObject json = JObject.Parse(apiResponse);
-            string date = (string)json["links"]["currentDate"];
-            date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
-                .AddDays(1).ToString("yyyyMMdd");
-            return date;
+            return NextGame.NEXT_GAME.ToString("yyyyMMdd");
         }
 
         private static double FPPG(Player p)

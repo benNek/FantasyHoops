@@ -34,27 +34,17 @@ namespace fantasy_hoops.Database
             string date = (string)json["links"]["currentDate"];
 
             int toAdd = DateTime.Now.Hour >= 19 ? 1 : 0;
-            toAdd = DateTime.Now.Hour < 7 ? 0 : toAdd;
+            toAdd = DateTime.Now.Hour < 7 ? 1 : toAdd;
             date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
                 .AddDays(toAdd).ToString("yyyyMMdd");
             return date;
-        }
-
-        private static JArray GetGames(string date)
-        {
-            string url = "http://data.nba.net/10s/prod/v2/" + date + "/scoreboard.json";
-            HttpWebResponse webResponse = CommonFunctions.GetResponse(url);
-            string apiResponse = CommonFunctions.ResponseToString(webResponse);
-            JObject json = JObject.Parse(apiResponse);
-            JArray games = (JArray)json["games"];
-            return games;
         }
 
         private static void Calculate(string gameDate)
         {
             DateTime timeUTC;
             TimeZoneInfo eastern = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            JArray games = GetGames(gameDate);
+            JArray games = CommonFunctions.GetGames(gameDate);
             if (games.Count > 0)
             {
                 timeUTC = DateTime.Parse((string)games[0]["startTimeUTC"]);
