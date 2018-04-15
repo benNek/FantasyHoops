@@ -6,12 +6,15 @@ import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
 import { Alert } from '../Alert';
 import { PlayerModal } from '../PlayerModal';
+import moment from 'moment';
+import Countdown from 'react-countdown-now';
 
 const budget = 300; // thousands
 
 export class Lineup extends Component {
   constructor() {
     super();
+
     this.selectPlayer = this.selectPlayer.bind(this);
     this.filter = this.filter.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +32,8 @@ export class Lineup extends Component {
       alertType: '',
       alertText: '',
       posIMG: this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/)),
-      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
+      nextGame: ''
     };
   }
 
@@ -44,6 +48,15 @@ export class Lineup extends Component {
         });
       });
     this.filter('PG');
+    fetch(`http://localhost:51407/api/lineup/nextGame`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          nextGame: res
+        });
+      });
   }
 
   componentDidUpdate() {
@@ -90,12 +103,24 @@ export class Lineup extends Component {
   }
 
   render() {
+    const nextGame = Date.parse(moment(this.state.nextGame).add(7, 'hours'));
     const remaining = this.calculateRemaining();
+    const Completionist = () => <span>The game already started. Comeback tomorrow!</span>;
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+      if (completed) {
+        return <Completionist />;
+      } else {
+        return <span>Game starts in: {hours}:{minutes}:{seconds}</span>;
+      }
+    };
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem' }}>
           <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
+          </div>
+          <div className="text-center mb-3">
+            <Countdown date={nextGame} renderer={renderer} />
           </div>
           <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
@@ -108,7 +133,7 @@ export class Lineup extends Component {
           </div>
           <div className="row"
             style={{
-              fontSize: '25px',
+              fontSize: '1.2rem',
               color: remaining < 0 ? 'red' : 'black',
               marginTop: '-1rem'
             }}>

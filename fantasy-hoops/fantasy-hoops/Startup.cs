@@ -90,36 +90,42 @@ namespace fantasy_hoops
             var registry = new Registry();
             JobManager.Initialize(registry);
 
-            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)), s => s
-                .ToRunNow()
-                .AndEvery(30)
-                .Minutes());
+            //JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)), s => s
+            //    .ToRunNow()
+            //    .AndEvery(30)
+            //    .Minutes());
 
-            JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(10))
-                .AndEvery(1)
-                .Days()
-                .At(16, 00));
+            //JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s
+            //    .ToRunOnceAt(DateTime.Now.AddMinutes(10))
+            //    .AndEvery(1)
+            //    .Days()
+            //    .At(16, 00));
 
-            JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(1))
-                .AndEvery(1)
-                .Days()
-                .At(9, 50));
+            //JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s
+            //    .ToRunOnceAt(DateTime.Now.AddMinutes(1))
+            //    .AndEvery(1)
+            //    .Days()
+            //    .At(9, 50));
 
-            JobManager.AddJob(() => Task.Run(() => UserScoreSeed.Initialize(_context)), s => s
-                .ToRunEvery(1)
-                .Days()
-                .At(10, 00));
+            //JobManager.AddJob(() => Task.Run(() => UserScoreSeed.Initialize(_context)), s => s
+            //    .ToRunEvery(1)
+            //    .Days()
+            //    .At(10, 00));
 
-            JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(6))
-                .AndEvery(1)
-                .Days()
-                .At(10, 10));
+            //JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s
+            //    .ToRunOnceAt(DateTime.Now.AddMinutes(6))
+            //    .AndEvery(1)
+            //    .Days()
+            //    .At(10, 10));
 
-            JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddSeconds(15))
+            //JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s
+            //    .ToRunOnceAt(DateTime.Now.AddSeconds(15))
+            //    .AndEvery(1)
+            //    .Days()
+            //    .At(11, 30));
+
+            JobManager.AddJob(() => Task.Run(() => NextGame.Initialize()), s => s
+                .ToRunOnceAt(DateTime.Now)
                 .AndEvery(1)
                 .Days()
                 .At(11, 30));
