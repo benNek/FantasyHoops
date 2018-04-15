@@ -22,7 +22,7 @@ export class PlayerModal extends Component {
           score = <span className="text-success">W</span>;
         else score = <span className="text-danger">L</span>;
         return <tr key={shortid()} >
-          <td>{moment(s.date).format("ddd MM/D")}</td>
+          <td>{moment(s.date).format("ddd MM/DD")}</td>
           <td><img src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${s.opponent.abbreviation}.svg`} alt={s.opponent.abbreviation} width='40rem' style={{ right: '0' }} /></td>
           <td>{score} {s.score}</td>
           <td>{s.min}</td>
