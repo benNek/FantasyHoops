@@ -172,8 +172,8 @@ namespace fantasy_hoops.Controllers
             return Ok(RequestToken(user.UserName));
         }
 
-        [HttpPost("avatar")]
-        public async Task<IActionResult> Post([FromBody]AvatarViewModel model)
+        [HttpPost("uploadAvatar")]
+        public IActionResult UploadAvatar([FromBody]AvatarViewModel model)
         {
             string avatarDir = @"./ClientApp/content/images/avatars";
             if (!Directory.Exists(avatarDir))
@@ -195,6 +195,30 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(500, "Avatar cannot be uploaded!");
             }
             return Ok("Avatar updated successfully!");
+        }
+
+        [HttpPost("clearAvatar")]
+        public IActionResult ClearAvatar([FromBody]AvatarViewModel model)
+        {
+            string avatarDir = @"./ClientApp/content/images/avatars";
+            if (Directory.Exists(avatarDir))
+            {
+                var filePath = avatarDir + "/" + model.Id + ".png";
+                if(System.IO.File.Exists(filePath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    catch
+                    {
+                        return StatusCode(500, "Avatar cannot be cleared!");
+                    }
+                    return Ok("Avatar cleared successfully!");
+                }
+                return StatusCode(404, "Your avatar is already cleared!");
+            }
+            return StatusCode(404, "Your avatar is already cleared!");
         }
     }
 }

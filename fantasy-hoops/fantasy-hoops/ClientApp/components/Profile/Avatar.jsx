@@ -28,7 +28,7 @@ export class Avatar extends Component {
         />
         <div className="row">
           <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">
-            Change image
+            Change avatar
               </button>
         </div>
         <ChangeAvatar />

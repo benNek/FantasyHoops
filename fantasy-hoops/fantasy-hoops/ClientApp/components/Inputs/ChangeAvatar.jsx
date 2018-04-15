@@ -10,6 +10,7 @@ export class ChangeAvatar extends Component {
     this.onCrop = this.onCrop.bind(this);
     this.onClose = this.onClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClear = this.handleClear.bind(this);
     this.state = {
       preview: null,
       showAlert: false,
@@ -39,7 +40,37 @@ export class ChangeAvatar extends Component {
       id: user.id,
       avatar: this.state.preview
     }
-    fetch('http://localhost:51407/api/user/avatar', {
+    fetch('http://localhost:51407/api/user/uploadAvatar', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.text())
+      .then(res => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: res
+        });
+      })
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        });
+      });
+  }
+
+  handleClear() {
+    const user = parse();
+    const data = {
+      id: user.id
+    }
+    fetch('http://localhost:51407/api/user/clearAvatar', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -76,14 +107,16 @@ export class ChangeAvatar extends Component {
               </a>
             </div>
             <div className="modal-body mx-auto">
+              <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
               <Avatar
                 width={350}
                 height={250}
                 onCrop={this.onCrop}
                 onClose={this.onClose}
               />
-              <div className="mt-3">
-                <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
+              <div className="text-center mt-2 mb-2">or</div>
+              <div className="text-center">
+                <button onClick={this.handleClear} type="button" className="btn btn-outline-danger">Clear avatar</button>
               </div>
             </div>
             <div className="modal-footer mx-auto">
