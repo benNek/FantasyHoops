@@ -1,11 +1,9 @@
 ﻿using System.Net;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
-using System.Globalization;
 using FluentScheduler;
 using fantasy_hoops.Helpers;
 
@@ -19,7 +17,7 @@ namespace fantasy_hoops.Database
         {
             await Calculate(context);
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("playerSeed")
-                .ToRunOnceAt(NextGame.NEXT_GAME.AddMinutes(-1)));
+                .ToRunOnceAt(NextGame.NEXT_GAME.AddSeconds(10)));
         }
 
         private static JObject GetPlayer(int id)
