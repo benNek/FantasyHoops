@@ -116,6 +116,9 @@ export class Lineup extends Component {
     const Completionist = () => <span>The game already started. Come back soon!</span>;
     const renderer = ({ days, hours, minutes, seconds, completed }) => {
       if (completed) {
+        const btn = document.getElementById('submit');
+        btn.disabled = true;
+        btn.className = 'btn btn-outline-primary btn-lg btn-block';
         return <Completionist />;
       } else {
         return <span>Game starts in {days}:{hours}:{minutes}:{seconds}</span>;
