@@ -33,7 +33,8 @@ export class Lineup extends Component {
       alertText: '',
       posIMG: this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/)),
       playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
-      nextGame: ''
+      nextGame: '',
+      serverTime: ''
     };
   }
 
@@ -54,7 +55,8 @@ export class Lineup extends Component {
       })
       .then(res => {
         this.setState({
-          nextGame: res.nextGame
+          nextGame: res.nextGame,
+          serverTime: res.serverTime
         });
       });
   }
@@ -103,9 +105,9 @@ export class Lineup extends Component {
   }
 
   getDate() {
-    const now = new Date();
     const nextGame = new Date(this.state.nextGame);
-    const diff = now.getHours() - now.getUTCHours();
+    const serverTime = new Date(this.state.serverTime);
+    const diff = Math.abs(serverTime.getTimezoneOffset()) / 60;
     return nextGame.setHours(nextGame.getHours() + diff);
   }
 

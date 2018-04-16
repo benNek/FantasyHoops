@@ -122,7 +122,7 @@ namespace fantasy_hoops.Controllers
         public IActionResult NextGame()
         {
             return Ok(new { nextGame = Database.NextGame.NEXT_GAME,
-                            serverTime = DateTime.UtcNow
+                            serverTime = DateTime.Now
             });
         }
     }
