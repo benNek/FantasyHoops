@@ -100,9 +100,11 @@ export class Lineup extends Component {
           </div>
           <button
             type="button"
-            className="btn btn-info mr-3 absolute"
+            className="btn btn-info mr-3 absolute btn-circle btn-lg"
             data-toggle="modal" data-target="#exampleModal"
-            style={{ position: 'absolute', right: '0rem' }}>Scoring Info</button>
+            style={{ position: 'absolute', right: '0rem' }}>
+            <i className="fa fa-info" aria-hidden="true"></i>
+          </button>
           <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
               {this.state.pg}
