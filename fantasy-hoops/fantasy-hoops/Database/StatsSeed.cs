@@ -20,7 +20,7 @@ namespace fantasy_hoops.Database
             int daysFromToday = 30;
             await Calculate(context, daysFromToday);
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("statsSeed")
-                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5)));
+                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(5)));
         }
 
         private static JObject GetBoxscore(string url)

@@ -19,7 +19,7 @@ namespace fantasy_hoops.Database
         {
             await Calculate(context);
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("playerSeed")
-                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5).AddMinutes(6)));
+                .ToRunOnceAt(NextGame.NEXT_GAME.AddMinutes(-1)));
         }
 
         private static JObject GetPlayer(int id)
@@ -76,7 +76,7 @@ namespace fantasy_hoops.Database
 
         private static string GetDate()
         {
-            return NextGame.NEXT_GAME.ToString("yyyyMMdd");
+            return CommonFunctions.UTCToEastern(NextGame.NEXT_GAME).ToString("yyyyMMdd");
         }
 
         private static double FPPG(Player p)

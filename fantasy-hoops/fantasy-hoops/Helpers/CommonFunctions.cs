@@ -11,6 +11,13 @@ namespace fantasy_hoops.Helpers
 {
     public class CommonFunctions
     {
+        public static DateTime UTCToEastern(DateTime time)
+        {
+            DateTime timeUTC = time;
+            TimeZoneInfo eastern = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(timeUTC, eastern);
+        }
+
         public static HttpWebResponse GetResponse(string url)
         {
             try

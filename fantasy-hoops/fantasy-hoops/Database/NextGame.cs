@@ -11,17 +11,16 @@ namespace fantasy_hoops.Database
 {
     public class NextGame
     {
-        public const int HOUR_DIFF = 7;
-        public static DateTime NEXT_GAME = DateTime.Now;
-        public static DateTime LAST_NEXT_GAME = DateTime.Now;
+        public static DateTime NEXT_GAME = DateTime.UtcNow;
+        public static DateTime LAST_NEXT_GAME = DateTime.UtcNow;
 
         public static void Initialize()
         {
             string gameDate = GetDate();
             Calculate(gameDate);
             JobManager.AddJob(() => Task.Run(() => Initialize()), s => s.WithName("nextGame")
-                .ToRunOnceAt(NEXT_GAME.AddHours(HOUR_DIFF).AddMinutes(1)));
-      }
+                .ToRunOnceAt(NEXT_GAME));
+        }
 
         private static string GetDate()
         {
@@ -31,27 +30,26 @@ namespace fantasy_hoops.Database
                 return null;
             string apiResponse = CommonFunctions.ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
-            string date = (string)json["links"]["currentDate"];
-
-            int toAdd = DateTime.Now.Hour >= 19 ? 1 : 0;
-            toAdd = DateTime.Now.Hour < 7 ? 1 : toAdd;
-            date = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture)
-                .AddDays(toAdd).ToString("yyyyMMdd");
-            return date;
+            return (string)json["links"]["currentDate"];
         }
 
         private static void Calculate(string gameDate)
         {
-            DateTime timeUTC;
-            TimeZoneInfo eastern = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             JArray games = CommonFunctions.GetGames(gameDate);
             if (games.Count > 0)
             {
-                timeUTC = DateTime.Parse((string)games[0]["startTimeUTC"]);
-                NEXT_GAME = TimeZoneInfo.ConvertTimeFromUtc(timeUTC, eastern);
-
-                timeUTC = DateTime.Parse((string)games[games.Count - 1]["startTimeUTC"]);
-                LAST_NEXT_GAME = TimeZoneInfo.ConvertTimeFromUtc(timeUTC, eastern);
+                DateTime timeUTC = DateTime.Parse((string)games[0]["startTimeUTC"]);
+                if (timeUTC > DateTime.UtcNow)
+                {
+                    NEXT_GAME = timeUTC;
+                    LAST_NEXT_GAME = DateTime.Parse((string)games[games.Count - 1]["startTimeUTC"]);
+                }
+                else
+                {
+                    gameDate = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture)
+                        .AddDays(1).ToString("yyyyMMdd");
+                    Calculate(gameDate);
+                }
             }
             else
             {

@@ -12,7 +12,7 @@ namespace fantasy_hoops.Database
         {
             await Update(context);
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("userScore")
-                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(NextGame.HOUR_DIFF).AddHours(5).AddMinutes(5)));
+                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(5).AddMinutes(5)));
         }
 
         private static async Task Update(GameContext context)

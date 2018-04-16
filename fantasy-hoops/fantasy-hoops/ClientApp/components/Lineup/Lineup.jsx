@@ -54,7 +54,7 @@ export class Lineup extends Component {
       })
       .then(res => {
         this.setState({
-          nextGame: res
+          nextGame: res.nextGame
         });
       });
   }
@@ -102,8 +102,14 @@ export class Lineup extends Component {
     return images;
   }
 
+  getDate() {
+    const now = new Date();
+    const nextGame = new Date(this.state.nextGame);
+    const diff = now.getHours() - now.getUTCHours();
+    return nextGame.setHours(nextGame.getHours() + diff);
+  }
+
   render() {
-    const nextGame = Date.parse(moment(this.state.nextGame).add(7, 'hours'));
     const remaining = this.calculateRemaining();
     const Completionist = () => <span>The game already started. Come back soon!</span>;
     const renderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -120,7 +126,7 @@ export class Lineup extends Component {
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
           </div>
           <div className="text-center mb-3">
-            <Countdown date={nextGame} renderer={renderer} />
+            <Countdown date={this.getDate()} renderer={renderer} />
           </div>
           <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">

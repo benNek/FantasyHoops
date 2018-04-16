@@ -121,7 +121,9 @@ namespace fantasy_hoops.Controllers
         [HttpGet("nextGame")]
         public IActionResult NextGame()
         {
-            return Ok(Database.NextGame.NEXT_GAME);
+            return Ok(new { nextGame = Database.NextGame.NEXT_GAME,
+                            serverTime = DateTime.UtcNow
+            });
         }
     }
 }
