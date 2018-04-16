@@ -32,7 +32,7 @@ namespace fantasy_hoops
                 .ToRunOnceAt(DateTime.UtcNow.AddMinutes(8)));
 
             JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s.WithName("playerSeed")
-                .ToRunOnceAt(DateTime.Now.AddMinutes(5)));
+                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(5)));
 
             JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s.WithName("news")
                 .ToRunOnceAt(DateTime.UtcNow.AddMinutes(11))
