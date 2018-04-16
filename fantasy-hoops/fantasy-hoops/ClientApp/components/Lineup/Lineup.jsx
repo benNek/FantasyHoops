@@ -6,6 +6,7 @@ import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
 import { Alert } from '../Alert';
 import { PlayerModal } from '../PlayerModal';
+import { InfoModal } from './InfoModal';
 
 const budget = 300; // thousands
 
@@ -97,6 +98,11 @@ export class Lineup extends Component {
           <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
           </div>
+          <button
+            type="button"
+            className="btn btn-info mr-3 absolute"
+            data-toggle="modal" data-target="#exampleModal"
+            style={{ position: 'absolute', right: '0rem' }}>Scoring Info</button>
           <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
               {this.state.pg}
@@ -137,6 +143,7 @@ export class Lineup extends Component {
           selectPlayer={this.selectPlayer}
           showModal={this.showModal}
         />
+        <InfoModal />
       </div>
     );
   }
