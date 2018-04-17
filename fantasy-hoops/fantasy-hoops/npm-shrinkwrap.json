@@ -1444,7 +1444,7 @@
         "regenerator-runtime": {
           "version": "0.11.1",
           "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz",
-          "integrity": "sha1-vgWtf5v30i4Fb5cmzuUBf78Z4uk=",
+          "integrity": "sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==",
           "dev": true
         }
       }
@@ -1984,6 +1984,43 @@
         "has-ansi": "2.0.0",
         "strip-ansi": "3.0.1",
         "supports-color": "2.0.0"
+      }
+    },
+    "chart.js": {
+      "version": "2.7.2",
+      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-2.7.2.tgz",
+      "integrity": "sha512-90wl3V9xRZ8tnMvMlpcW+0Yg13BelsGS9P9t0ClaDxv/hdypHDr/YAGf+728m11P5ljwyB0ZHfPKCapZFqSqYA==",
+      "dev": true,
+      "requires": {
+        "chartjs-color": "2.2.0",
+        "moment": "2.21.0"
+      }
+    },
+    "chartjs-color": {
+      "version": "2.2.0",
+      "resolved": "https://registry.npmjs.org/chartjs-color/-/chartjs-color-2.2.0.tgz",
+      "integrity": "sha1-hKL7dVeH7YXDndbdjHsdiEKbrq4=",
+      "dev": true,
+      "requires": {
+        "chartjs-color-string": "0.5.0",
+        "color-convert": "0.5.3"
+      },
+      "dependencies": {
+        "color-convert": {
+          "version": "0.5.3",
+          "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-0.5.3.tgz",
+          "integrity": "sha1-vbbGnOZg+t/+CwAHzER+G59ygr0=",
+          "dev": true
+        }
+      }
+    },
+    "chartjs-color-string": {
+      "version": "0.5.0",
+      "resolved": "https://registry.npmjs.org/chartjs-color-string/-/chartjs-color-string-0.5.0.tgz",
+      "integrity": "sha512-amWNvCOXlOUYxZVDSa0YOab5K/lmEhbFNKI55PWc4mlv28BDzA7zaoQTGxSBgJMHIW+hGX8YUrvw/FH4LyhwSQ==",
+      "dev": true,
+      "requires": {
+        "color-name": "1.1.2"
       }
     },
     "chokidar": {
@@ -4353,7 +4390,7 @@
     "konva": {
       "version": "1.7.6",
       "resolved": "https://registry.npmjs.org/konva/-/konva-1.7.6.tgz",
-      "integrity": "sha1-es7vEFiwQScHfI9EZTVWs1sRM+Y="
+      "integrity": "sha512-TPYwJi3z3eK94N/eoPfYs8JXBcwrY8uC3GhllsKLCOXkdIpg51+M1ZCIM6sQtlmknRZOy1GGlCendzXajCj+fQ=="
     },
     "lazy-cache": {
       "version": "1.0.4",
@@ -5886,7 +5923,7 @@
     "react-avatar-edit": {
       "version": "0.5.9",
       "resolved": "https://registry.npmjs.org/react-avatar-edit/-/react-avatar-edit-0.5.9.tgz",
-      "integrity": "sha1-3h+mgNeaHSKWPQf3pgVvXlg0bng=",
+      "integrity": "sha512-JRVsCwUYg8H6v7cyO0smqrHAa/kfoVbA8zEnpIyS0KNkEejfRfzg36hq2sPtN44U2YAK62WJYRSM/lFNJPFIUA==",
       "requires": {
         "konva": "1.7.6"
       }
@@ -5908,6 +5945,16 @@
         "react-transition-group": "2.2.1",
         "uncontrollable": "4.1.0",
         "warning": "3.0.0"
+      }
+    },
+    "react-chartjs-2": {
+      "version": "2.7.0",
+      "resolved": "https://registry.npmjs.org/react-chartjs-2/-/react-chartjs-2-2.7.0.tgz",
+      "integrity": "sha512-DkT9TVi+/wKaEWL2iI2ka2L3Q0kq+y7TrAqlWNETAqE5CTPphPg1Af3w9X2uQCQ1ZA60Q3base9mK3dRtlb9bQ==",
+      "dev": true,
+      "requires": {
+        "lodash": "4.17.5",
+        "prop-types": "15.5.10"
       }
     },
     "react-countdown-now": {
