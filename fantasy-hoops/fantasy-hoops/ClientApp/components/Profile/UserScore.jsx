@@ -47,7 +47,8 @@ export class UserScore extends Component {
         </div>
         <div className="card-text user-score-total text-center">
           <h4>323.7</h4>
-          <h6 style={{marginTop: "-0.5rem"}}>PTS</h6>
+          <h6 style={{marginTop: "-0.7rem"}}>PTS</h6>
+          <h6 style={{fontSize: "0.8rem", marginTop: "1.6rem", fontWeight: 400 }}>2018-04-17</h6>
         </div>
       </div>
     );
