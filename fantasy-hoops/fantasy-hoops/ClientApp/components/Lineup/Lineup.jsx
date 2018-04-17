@@ -6,6 +6,8 @@ import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
 import { Alert } from '../Alert';
 import { PlayerModal } from '../PlayerModal';
+import moment from 'moment';
+import Countdown from 'react-countdown-now';
 import { InfoModal } from './InfoModal';
 
 const budget = 300; // thousands
@@ -13,6 +15,7 @@ const budget = 300; // thousands
 export class Lineup extends Component {
   constructor() {
     super();
+
     this.selectPlayer = this.selectPlayer.bind(this);
     this.filter = this.filter.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,7 +33,9 @@ export class Lineup extends Component {
       alertType: '',
       alertText: '',
       posIMG: this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/)),
-      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
+      nextGame: '',
+      serverTime: ''
     };
   }
 
@@ -45,6 +50,16 @@ export class Lineup extends Component {
         });
       });
     this.filter('PG');
+    fetch(`http://localhost:51407/api/lineup/nextGame`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          nextGame: res.nextGame,
+          serverTime: res.serverTime
+        });
+      });
   }
 
   componentDidUpdate() {
@@ -90,13 +105,34 @@ export class Lineup extends Component {
     return images;
   }
 
+  getDate() {
+    const nextGame = new Date(this.state.nextGame);
+    const serverTime = new Date(this.state.serverTime);
+    const diff = Math.abs(serverTime.getTimezoneOffset()) / 60;
+    return nextGame.setHours(nextGame.getHours() + diff);
+  }
+
   render() {
     const remaining = this.calculateRemaining();
+    const Completionist = () => <span>The game already started. Come back soon!</span>;
+    const renderer = ({ days, hours, minutes, seconds, completed }) => {
+      if (completed) {
+        const btn = document.getElementById('submit');
+        btn.disabled = true;
+        btn.className = 'btn btn-outline-primary btn-lg btn-block';
+        return <Completionist />;
+      } else {
+        return <span>Game starts in {days}:{hours}:{minutes}:{seconds}</span>;
+      }
+    };
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem' }}>
           <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
+          </div>
+          <div className="text-center mb-3">
+            <Countdown date={this.getDate()} renderer={renderer} />
           </div>
           <button
             type="button"
@@ -116,7 +152,7 @@ export class Lineup extends Component {
           </div>
           <div className="row"
             style={{
-              fontSize: '25px',
+              fontSize: '1.2rem',
               color: remaining < 0 ? 'red' : 'black',
               marginTop: '-1rem'
             }}>

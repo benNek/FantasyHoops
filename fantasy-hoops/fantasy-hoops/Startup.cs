@@ -1,6 +1,5 @@
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
-using FluentScheduler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace fantasy_hoops
 {
@@ -80,50 +78,7 @@ namespace fantasy_hoops
             var task = Seed.InitializeAsync(_context);
 
             task.Wait();
-            Run(_context);
-        }
-
-        private static async void Run(GameContext _context)
-        {
-            await Task.Run(() => Seed.UpdateTeamColors(_context));
-
-            var registry = new Registry();
-            JobManager.Initialize(registry);
-
-            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)), s => s
-                .ToRunNow()
-                .AndEvery(30)
-                .Minutes());
-
-            JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(10))
-                .AndEvery(1)
-                .Days()
-                .At(16, 00));
-
-            JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(1))
-                .AndEvery(1)
-                .Days()
-                .At(9, 50));
-
-            JobManager.AddJob(() => Task.Run(() => UserScoreSeed.Initialize(_context)), s => s
-                .ToRunEvery(1)
-                .Days()
-                .At(10, 00));
-
-            JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddMinutes(6))
-                .AndEvery(1)
-                .Days()
-                .At(10, 10));
-
-            JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s
-                .ToRunOnceAt(DateTime.Now.AddSeconds(15))
-                .AndEvery(1)
-                .Days()
-                .At(11, 30));
-
+            Scheduler.Run(_context);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

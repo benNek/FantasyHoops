@@ -5910,6 +5910,12 @@
         "warning": "3.0.0"
       }
     },
+    "react-countdown-now": {
+      "version": "1.3.0",
+      "resolved": "https://registry.npmjs.org/react-countdown-now/-/react-countdown-now-1.3.0.tgz",
+      "integrity": "sha512-9MaPhB+PSlLxjpYD5TqLAru56rnTX1D7M6TUCc0UrZDGdYa1ZxdMA5mFxTwX3R5WEwwGgYk5SvmfzRIrcUCzyA==",
+      "dev": true
+    },
     "react-deep-force-update": {
       "version": "2.0.1",
       "resolved": "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-2.0.1.tgz",

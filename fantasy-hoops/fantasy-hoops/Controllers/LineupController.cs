@@ -117,5 +117,13 @@ namespace fantasy_hoops.Controllers
 
             return Ok("Lineup was updated successfully");
         }
+
+        [HttpGet("nextGame")]
+        public IActionResult NextGame()
+        {
+            return Ok(new { nextGame = Database.NextGame.NEXT_GAME,
+                            serverTime = DateTime.Now
+            });
+        }
     }
 }

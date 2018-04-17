@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using fantasy_hoops.Helpers;
 
 namespace fantasy_hoops.Database
 {
@@ -18,8 +19,10 @@ namespace fantasy_hoops.Database
                 return;
             }
 
-            string apiResponse =
-                GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=cm2ujj5ekzrt2r7wae5badha");
+            HttpWebResponse webResponse = CommonFunctions.GetResponse("http://api.sportradar.us/nba/trial/v4/en/seasons/2017/REG/rankings.json?api_key=cm2ujj5ekzrt2r7wae5badha");
+            if (webResponse == null)
+                return;
+            string apiResponse = CommonFunctions.ResponseToString(webResponse);
             System.Threading.Thread.Sleep(1000);
 
             JObject json = JObject.Parse(apiResponse);
@@ -42,7 +45,10 @@ namespace fantasy_hoops.Database
                         var key = teams[k].SelectToken("id");
                         string url = @"http://api.sportradar.us/nba/trial/v4/en/teams/" +
                                key + "/profile.json?api_key=cm2ujj5ekzrt2r7wae5badha";
-                        string playerResponse = GetResponse(url);
+                        HttpWebResponse webPlayerResponse = CommonFunctions.GetResponse(url);
+                        if (webResponse == null)
+                            return;
+                        string playerResponse = CommonFunctions.ResponseToString(webPlayerResponse);
 
                         JObject jobject = JObject.Parse(playerResponse);
                         JArray players = (JArray)jobject["players"];
@@ -93,24 +99,6 @@ namespace fantasy_hoops.Database
                 team.Color = GetTeamColor(team.NbaID);
             }
             context.SaveChanges();
-        }
-
-        private static string GetResponse(string url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.KeepAlive = true;
-            request.ContentType = "application/json";
-
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            string resp = "";
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(response.GetResponseStream()))
-            {
-                resp = sr.ReadToEnd();
-            }
-
-            return resp;
         }
 
         private static string GetTeamColor(int id)
