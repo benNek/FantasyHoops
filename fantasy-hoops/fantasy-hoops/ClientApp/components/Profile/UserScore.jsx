@@ -9,7 +9,7 @@ export class UserScore extends Component {
     return (
       <div className="card-group bg-white rounded mt-3 user-score">
         <div className="row m-0 ml-1">
-          <div style={{ overflow: 'hidden' }}>
+          <div style={{ overflow: 'hxidden' }}>
             <div className="bg-warning card-circle">
               <img className="user-card-player" src={require(`../../content/images/players/${1628366}.png`)} />
             </div>
@@ -46,7 +46,7 @@ export class UserScore extends Component {
           </div>
         </div>
         <div className="card-text user-score-total text-center">
-          <h3>323.7</h3>
+          <h4>323.7</h4>
           <h6 style={{marginTop: "-0.5rem"}}>PTS</h6>
         </div>
       </div>
