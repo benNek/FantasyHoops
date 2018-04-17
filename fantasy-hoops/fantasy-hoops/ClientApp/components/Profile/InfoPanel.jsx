@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { UserScore } from './UserScore';
 
 export class InfoPanel extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export class InfoPanel extends Component {
           </div>
           <div className="col-md-12">
             <h5 className="mt-2"><span className="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
+            <UserScore />
             <table className="table table-sm table-hover table-striped">
               <tbody>
                 <tr>
