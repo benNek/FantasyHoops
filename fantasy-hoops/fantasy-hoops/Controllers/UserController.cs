@@ -125,22 +125,30 @@ namespace fantasy_hoops.Controllers
                 };
             }
 
-            var user = context.Users
-                .Where(x => x.Id.Equals(id))
-                .Select(x => new
-                {
-                    x.Id,
-                    x.UserName,
-                    x.Email,
-                    x.Description,
-                    x.FavoriteTeamId,
-
-                    Team = new
-                    {
-                        Name = team.City + " " + team.Name,
-                        team.Color
-                    }
+            var activity = context.UserPlayers
+                .Where(x => x.Date < DateTime.Today && x.UserID.Equals(id))
+                .Select(x => new {
+                    x.Date,
+                    Score = context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum()
                 })
+                .Distinct()
+                .Take(5).ToList();
+
+            var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
+            {
+                x.Id,
+                x.UserName,
+                x.Email,
+                x.Description,
+                x.FavoriteTeamId,
+
+                Team = new
+                {
+                    Name = team.City + " " + team.Name,
+                    team.Color
+                },
+                RecentActivity = activity
+            })
             .FirstOrDefault();
             if (user == null)
                 return NotFound(String.Format("User with id {0} has not been found!", id));

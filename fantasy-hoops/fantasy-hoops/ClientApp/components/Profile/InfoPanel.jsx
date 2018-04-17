@@ -8,6 +8,35 @@ export class InfoPanel extends Component {
 
   render() {
     const user = this.props.user;
+
+    let recentActivity = '';
+    if (user.recentActivity != null) {
+      recentActivity = _.map(
+        user.recentActivity,
+        (activity) => {
+          return (
+            <tr>
+              <td>
+                <strong>{activity.date.substring(0, 10)}</strong> scored <strong>{activity.score} FP</strong>
+              </td>
+            </tr>
+          )
+        });
+      /*
+      recentActivity = user.recentActivity.forEach(activity => {
+        return (
+          <tr>
+            <td>
+              <strong>W</strong> score <strong>Opponent Name</strong>
+            </td>
+          </tr>
+        );
+      });
+      */
+      console.log('hey', recentActivity);
+    }
+
+
     return (
       <div className="tab-pane active" id="profile">
         <div className="row">
