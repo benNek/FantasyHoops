@@ -2,10 +2,20 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 import moment from 'moment';
 import _ from 'lodash';
+import defaultLogo from '../content/images/defaultLogo.png';
 
 export class PlayerModal extends Component {
   constructor(props) {
     super(props);
+  }
+
+  getLogo(abbreviation) {
+    try {
+      return require(`../content/images/logos/${abbreviation}.svg`);
+    }
+    catch (err) {
+      return defaultLogo;
+    }
   }
 
   render() {
@@ -14,7 +24,7 @@ export class PlayerModal extends Component {
     let rows = '';
     if (this.props.stats) {
       stats = this.props.stats;
-      teamLogo = `http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${stats.team.abbreviation}.svg`;
+      teamLogo = this.getLogo(stats.team.abbreviation);
       rows = _.map(stats.games, (s) => {
         let score = '';
         var str = s.score.split('-');
@@ -23,7 +33,7 @@ export class PlayerModal extends Component {
         else score = <span className="text-danger">L</span>;
         return <tr key={shortid()} >
           <td>{moment(s.date).format("ddd MM/DD")}</td>
-          <td><img src={`http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${s.opponent.abbreviation}.svg`} alt={s.opponent.abbreviation} width='40rem' style={{ right: '0' }} /></td>
+          <td><img src={this.getLogo(s.opponent.abbreviation)} alt={s.opponent.abbreviation} width='40rem' style={{ right: '0' }} /></td>
           <td>{score} {s.score}</td>
           <td>{s.min}</td>
           <td>{s.fgm}</td>

@@ -9,8 +9,30 @@ namespace fantasy_hoops.Database
     public class PhotosSeed
     {
         const string photosDir = "./ClientApp/content/images/players/";
+        const string logosDir = "./ClientApp/content/images/logos/";
 
         public async static Task Initialize(GameContext context)
+        {
+            await ExtractLogos(context);
+            await ExtractPlayerPhotos(context);
+        }
+
+        private async static Task ExtractLogos(GameContext context)
+        {
+            if (!Directory.Exists(logosDir))
+                Directory.CreateDirectory(logosDir);
+
+            foreach (var team in context.Teams)
+            {
+                string teamAbbr = team.Abbreviation;
+                string remoteFileUrl =
+                    "http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/" + teamAbbr + ".svg";
+                string localFileName = "./ClientApp/content/images/logos/" + teamAbbr + ".svg";
+                await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
+            }
+        }
+
+        private async static Task ExtractPlayerPhotos(GameContext context)
         {
             if (!Directory.Exists(photosDir))
                 Directory.CreateDirectory(photosDir);
