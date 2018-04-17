@@ -7,11 +7,11 @@ export class InfoModal extends Component {
 
   render() {
     return (
-      <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h3 className="modal-title" id="exampleModalLabel">Scoring Info</h3>
+              <h3 className="modal-title" id="infoModalLabel">Scoring Info</h3>
               <button type="button" className="close btn-no-outline" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
