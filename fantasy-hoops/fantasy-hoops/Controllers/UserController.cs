@@ -134,6 +134,8 @@ namespace fantasy_hoops.Controllers
                 .Distinct()
                 .Take(5).ToList();
 
+            var totalScore = activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum();
+
             var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
             {
                 x.Id,
@@ -147,7 +149,8 @@ namespace fantasy_hoops.Controllers
                     Name = team.City + " " + team.Name,
                     team.Color
                 },
-                RecentActivity = activity
+                RecentActivity = activity,
+                TotalScore = totalScore
             })
             .FirstOrDefault();
             if (user == null)

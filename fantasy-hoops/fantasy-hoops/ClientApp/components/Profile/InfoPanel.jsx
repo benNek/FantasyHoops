@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { UserScore } from './UserScore';
+import shortid from 'shortid';
 
 export class InfoPanel extends Component {
   constructor(props) {
@@ -15,28 +16,16 @@ export class InfoPanel extends Component {
         user.recentActivity,
         (activity) => {
           return (
-            <tr>
+            <tr key={shortid()}>
               <td>
                 <strong>{activity.date.substring(0, 10)}</strong> scored <strong>{activity.score} FP</strong>
               </td>
             </tr>
           )
         });
-      /*
-      recentActivity = user.recentActivity.forEach(activity => {
-        return (
-          <tr>
-            <td>
-              <strong>W</strong> score <strong>Opponent Name</strong>
-            </td>
-          </tr>
-        );
-      });
-      */
-      console.log('hey', recentActivity);
     }
 
-
+    console.log(user);
     return (
       <div className="tab-pane active" id="profile">
         <div className="row">
@@ -57,7 +46,7 @@ export class InfoPanel extends Component {
             </div>
             <hr />
             <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak</span>
-            <span className="badge badge-success"><i className="fa fa-cog"></i> Total Score</span>
+            <span className="badge badge-success"><i className="fa fa-cog"></i> Weekly Score: {user.totalScore}</span>
             <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking</span>
           </div>
           <div className="col-md-12">
