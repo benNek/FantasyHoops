@@ -29,7 +29,7 @@ export class UserProfile extends Component {
 
   render() {
     return (
-      <div className="container bg-light pt-1">
+      <div className="container bg-light pt-1" style={{ minWidth: '70rem' }}>
         <div className="row my-2">
           <Avatar />
           <div className="col-lg-8 order-lg-2">

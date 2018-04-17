@@ -394,31 +394,27 @@
   left: 0;
 }
 
-.rounded-circle{
-  max-width: 4em;
-  width:auto;
-  height: 4em;
-  margin-left: auto;
-  margin-right: auto;
+/* User players card */
+.user-card-player {
+  z-index: 1;
+  overflow: hidden;
+  height: 3.5rem;
+  margin-top: 0.5rem;
+  margin-left: -0.4rem;
 }
 
-.player{
-  width:auto;
-  height: 4.5em;
-  position: relative;
-  margin-top: -0.5em;
-  margin-left: -1.2em;
+.user-score {
+  width: 35rem;
 }
 
-.crop{
-  background-color:none;
-  border-radius: 0 0 100% 100% / 100%;
+.user-score-total {
+  margin: 3rem 0;
+  width: 7rem;
 }
 
 .player-usertitle {
   text-align: center;
-  margin-top: -1.1em;
-  font-size: 0.9em;
+  font-size: 0.8rem;
   font-weight: 600;
   color: rgb(27, 27, 27);
 }
@@ -426,7 +422,15 @@
 .player-score {
   text-align: center;
   margin-top: -1em;
-  font-size: 1.4em;
+  font-size: 1rem;
   font-weight: 650;
   color: rgb(119, 119, 119);
+}
+
+.card-circle {
+  margin: 0.7rem 0.7rem 0.3rem 0.7rem;
+  overflow: hidden;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
 }

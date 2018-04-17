@@ -34,35 +34,10 @@ export class InfoPanel extends Component {
           <div className="col-md-12">
             <h5 className="mt-2"><span className="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
             <UserScore />
-            <table className="table table-sm table-hover table-striped">
-              <tbody>
-                <tr>
-                  <td>
-                    <strong>W</strong> score <strong>`Opponent Name`</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>W</strong> score <strong>`Opponent Name`</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>L</strong> score <strong>`Opponent Name`</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>L</strong> score <strong>`Opponent Name`</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>W</strong> score <strong>`Opponent Name`</strong>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <UserScore />
+            <UserScore />
+            <UserScore />
+            <UserScore />
           </div>
         </div>
       </div>
