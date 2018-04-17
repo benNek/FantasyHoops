@@ -80,7 +80,8 @@ namespace fantasy_hoops.Controllers
                             s.TOV,
                             s.PTS,
                             s.GS,
-                            s.FP
+                            s.FP,
+                            s.Price
                         })
                         .OrderByDescending(s => s.Date)
                 })
@@ -150,7 +151,8 @@ namespace fantasy_hoops.Controllers
                             s.TOV,
                             s.PTS,
                             s.GS,
-                            s.FP
+                            s.FP,
+                            s.Price
                         })
                         .OrderByDescending(s => s.Date)
                 })

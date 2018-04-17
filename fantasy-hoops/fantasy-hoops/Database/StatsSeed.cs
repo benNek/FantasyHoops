@@ -113,6 +113,8 @@ namespace fantasy_hoops.Database
                 statsObj.FP = Math.Round(statsObj.PTS + 1.2 * (statsObj.DREB + statsObj.OREB)
                     + 1.5 * statsObj.AST + 3 * statsObj.STL + 3 * statsObj.BLK - statsObj.TOV, 2);
 
+                statsObj.Price = (int)((statsObj.GS + statsObj.FP) * 7 / 5);
+
                 if (count < 5)
                 {
                     context.Stats.Add(statsObj);

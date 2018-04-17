@@ -41,7 +41,7 @@ export class Select extends Component {
           onChange={this.props.onChange}
           required={this.props.notRequired ? false : true}
         >
-          <option value="" defaultValue>Choose your favourite team</option>
+          <option value="" defaultValue>{this.props.defaultValue}</option>
           {values}
         </select>
         <div className="invalid-feedback">

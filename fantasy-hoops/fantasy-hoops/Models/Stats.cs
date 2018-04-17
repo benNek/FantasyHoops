@@ -30,6 +30,7 @@ namespace fantasy_hoops.Models
         public double FP { get; set; }
         public int PlayerID { get; set; }
         public int OppID { get; set; }
+        public int Price { get; set; }
 
         public virtual Player Player { get; set; }
     }

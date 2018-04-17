@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
+import { Select } from './Inputs/Select';
 import shortid from 'shortid';
 import moment from 'moment';
 import _ from 'lodash';
@@ -7,15 +8,60 @@ import _ from 'lodash';
 export class PlayerModal extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      criteria: 'pts',
+      criteriaTitle: 'Points'
+    }
+    this.options = [
+      {
+        teamId: 1,
+        name: 'Points',
+        criteria: 'pts'
+      },
+      {
+        teamId: 2,
+        name: 'Assists',
+        criteria: 'ast'
+      },
+      {
+        teamId: 3,
+        name: 'Turnovers',
+        criteria: 'tov'
+      },
+      {
+        teamId: 4,
+        name: 'Rebounds',
+        criteria: 'treb'
+      },
+      {
+        teamId: 5,
+        name: 'Steals',
+        criteria: 'stl'
+      },
+      {
+        teamId: 6,
+        name: 'Blocks',
+        criteria: 'blk'
+      },
+      {
+        teamId: 7,
+        name: 'Fantasy Points',
+        criteria: 'fp'
+      },
+      {
+        teamId: 8,
+        name: 'Price',
+        criteria: 'price'
+      }
+    ];
+    this.handleChange = this.handleChange.bind(this);
   }
 
   render() {
     let stats = '';
     let teamLogo = '';
     let rows = '';
-    let chartData = this.getChartData('null', 'null');
     if (this.props.stats) {
-      chartData = this.getChartData('Points', 'pts');
       stats = this.props.stats;
       teamLogo = `http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/${stats.team.abbreviation}.svg`;
       rows = _.map(stats.games, (s) => {
@@ -142,7 +188,14 @@ export class PlayerModal extends Component {
                   </table>
                 </div>
                 <div className="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
-                  <Line data={chartData} />
+                  <Select
+                    options={this.options}
+                    id="criteria"
+                    value={this.state.criteriaTitle}
+                    defaultValue="Choose a category"
+                    onChange={this.handleChange}
+                  />
+                  <Line data={this.getChartData()} />
                 </div>
               </div>
             </div>
@@ -152,20 +205,14 @@ export class PlayerModal extends Component {
     );
   }
 
-  getChartData(title, criteria) {
-    if (title == 'null') {
-      const data = {
-        labels: labels,
-        datasets: [
-          {
-            label: title
-          }
-        ]
-      }
-      return data;
+  getChartData() {
+    if (!this.props.stats) {
+      return {};
     }
     let labels = [];
     let values = [];
+
+    console.log(this.props.stats.games)
 
     const games = this.props.stats.games;
     games.sort(function (a, b) {
@@ -174,14 +221,14 @@ export class PlayerModal extends Component {
 
     games.forEach(game => {
       labels.push(game.date.substring(5, 10));
-      values.push(game[criteria]);
+      values.push(game[this.state.criteria]);
     });
 
     const data = {
       labels: labels,
       datasets: [
         {
-          label: title,
+          label: this.state.criteriaTitle,
           fill: false,
           lineTension: 0.1,
           backgroundColor: 'rgba(75,192,192,0.4)',
@@ -204,5 +251,16 @@ export class PlayerModal extends Component {
       ]
     };
     return data;
+  }
+
+  handleChange(e) {
+    this.options.forEach(option => {
+      if(option.name === e.target.value) {
+        this.setState({
+          criteria: option.criteria,
+          criteriaTitle: option.name
+        });
+      }
+    })
   }
 }
