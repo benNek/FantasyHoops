@@ -8,6 +8,7 @@ import { Alert } from '../Alert';
 import { PlayerModal } from '../PlayerModal';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
+import { InfoModal } from './InfoModal';
 
 const budget = 300; // thousands
 
@@ -133,6 +134,13 @@ export class Lineup extends Component {
           <div className="text-center mb-3">
             <Countdown date={this.getDate()} renderer={renderer} />
           </div>
+          <button
+            type="button"
+            className="btn btn-info mr-3 absolute btn-circle btn-lg"
+            data-toggle="modal" data-target="#exampleModal"
+            style={{ position: 'absolute', right: '0rem' }}>
+            <i className="fa fa-info" aria-hidden="true"></i>
+          </button>
           <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
               {this.state.pg}
@@ -173,6 +181,7 @@ export class Lineup extends Component {
           selectPlayer={this.selectPlayer}
           showModal={this.showModal}
         />
+        <InfoModal />
       </div>
     );
   }

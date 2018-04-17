@@ -1444,7 +1444,7 @@
         "regenerator-runtime": {
           "version": "0.11.1",
           "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz",
-          "integrity": "sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==",
+          "integrity": "sha1-vgWtf5v30i4Fb5cmzuUBf78Z4uk=",
           "dev": true
         }
       }
@@ -4353,7 +4353,7 @@
     "konva": {
       "version": "1.7.6",
       "resolved": "https://registry.npmjs.org/konva/-/konva-1.7.6.tgz",
-      "integrity": "sha512-TPYwJi3z3eK94N/eoPfYs8JXBcwrY8uC3GhllsKLCOXkdIpg51+M1ZCIM6sQtlmknRZOy1GGlCendzXajCj+fQ=="
+      "integrity": "sha1-es7vEFiwQScHfI9EZTVWs1sRM+Y="
     },
     "lazy-cache": {
       "version": "1.0.4",
@@ -5886,7 +5886,7 @@
     "react-avatar-edit": {
       "version": "0.5.9",
       "resolved": "https://registry.npmjs.org/react-avatar-edit/-/react-avatar-edit-0.5.9.tgz",
-      "integrity": "sha512-JRVsCwUYg8H6v7cyO0smqrHAa/kfoVbA8zEnpIyS0KNkEejfRfzg36hq2sPtN44U2YAK62WJYRSM/lFNJPFIUA==",
+      "integrity": "sha1-3h+mgNeaHSKWPQf3pgVvXlg0bng=",
       "requires": {
         "konva": "1.7.6"
       }
