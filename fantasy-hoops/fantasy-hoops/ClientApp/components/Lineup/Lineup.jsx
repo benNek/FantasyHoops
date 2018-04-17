@@ -25,8 +25,8 @@ export class Lineup extends Component {
       position: '',
       pg: <PlayerCard image={require('../../content/images/positions/pg.png')} filter={this.filter} status={0} position="PG" />,
       sg: <PlayerCard image={require('../../content/images/positions/sg.png')} filter={this.filter} status={0} position="SG" />,
-      sf: <PlayerCard image={require('../../content/images/positions/sg.png')} filter={this.filter} status={0} position="SF" />,
-      pf: <PlayerCard image={require('../../content/images/positions/pg.png')} filter={this.filter} status={0} position="PF" />,
+      sf: <PlayerCard image={require('../../content/images/positions/sf.png')} filter={this.filter} status={0} position="SF" />,
+      pf: <PlayerCard image={require('../../content/images/positions/pf.png')} filter={this.filter} status={0} position="PF" />,
       c: <PlayerCard image={require('../../content/images/positions/c.png')} filter={this.filter} status={0} position="C" />,
       loadedPlayers: false,
       showAlert: false,
@@ -127,7 +127,7 @@ export class Lineup extends Component {
     };
     return (
       <div className="container bg-light" style={{ padding: '0' }}>
-        <div className="bg-light sticky-top" style={{ top: '4rem' }}>
+        <div className="bg-light sticky-top" style={{ top: '4rem', width: '100%' }}>
           <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
           </div>
@@ -137,11 +137,11 @@ export class Lineup extends Component {
           <button
             type="button"
             className="btn btn-info mr-3 absolute btn-circle btn-lg"
-            data-toggle="modal" data-target="#exampleModal"
-            style={{ position: 'absolute', right: '0rem' }}>
+            data-toggle="modal" data-target="#infoModal"
+            style={{ position: 'absolute', right: '1rem' }}>
             <i className="fa fa-info" aria-hidden="true"></i>
           </button>
-          <div className="" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
+          <div className="mx-auto" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
               {this.state.pg}
               {this.state.sg}
