@@ -10,6 +10,7 @@ import { Rules } from './components/Rules';
 import { Login } from './components/Authentication/Login'
 import { NewsFeed } from './components/News/NewsFeed';
 import { UserLeaderboard } from './components/Leaderboard/UserLeaderboard';
+import { PlayerLeaderboard } from './components/Leaderboard/PlayerLeaderboard';
 
 export const routes = <div>
     <Route path='/' component={Header} />
@@ -21,4 +22,5 @@ export const routes = <div>
     <Route path='/rules' component={Rules} />
     <Route path='/news' component={NewsFeed} />
     <Route exact path='/leaderboard/users' component={UserLeaderboard} />
+    <Route path='/leaderboard/players' component={PlayerLeaderboard} />
 </div>;
