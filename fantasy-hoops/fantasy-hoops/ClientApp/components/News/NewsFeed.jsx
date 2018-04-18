@@ -4,6 +4,7 @@ import _ from 'lodash'
 import shortid from 'shortid';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Loader } from '../Loader';
+import defaultLogo from '../../content/images/defaultLogo.png';
 
 export class NewsFeed extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ export class NewsFeed extends Component {
     this.state = {
       news: '',
       hasMore: true,
-      newsLoader: false
+      newsLoader: false,
+      logoIMG: this.getImages()
     }
     this.fetchData = this.fetchData.bind(this);
   }
@@ -49,10 +51,29 @@ export class NewsFeed extends Component {
       });
   }
 
+  getImages() {
+    try {
+      return this.importAll(require.context('../../content/images/logos', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
+  }
+
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
   render() {
     let news = _.map(this.state.news,
       (news) => {
-        return <NewsCard key={shortid()} news={news} />
+        return <NewsCard
+          hTeam={this.state.logoIMG[`${news.hTeam}.svg`] || defaultLogo}
+          vTeam={this.state.logoIMG[`${news.vTeam}.svg`] || defaultLogo}
+          key={shortid()}
+          news={news} />
       }
     );
     return (
@@ -62,8 +83,8 @@ export class NewsFeed extends Component {
             dataLength={news.length}
             next={this.fetchData}
             hasMore={this.state.hasMore}
-            loader={<Loader show={this.state.newsLoader}/>}
-            >
+            loader={<Loader show={this.state.newsLoader} />}
+          >
             {news}
           </InfiniteScroll>
         </div>
