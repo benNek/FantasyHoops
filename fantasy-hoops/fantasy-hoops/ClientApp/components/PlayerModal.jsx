@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Radar, Line } from 'react-chartjs-2';
 import { Select } from './Inputs/Select';
 import shortid from 'shortid';
 import moment from 'moment';
@@ -9,10 +9,15 @@ export class PlayerModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      criteria: 'pts',
-      criteriaTitle: 'Points'
+      criteria: 'ovr',
+      criteriaTitle: 'Overall'
     }
     this.options = [
+      {
+        teamId: 0,
+        name: 'Overall',
+        criteria: 'ovr'
+      },
       {
         teamId: 1,
         name: 'Points',
@@ -188,6 +193,7 @@ export class PlayerModal extends Component {
                   </table>
                 </div>
                 <div className="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
+
                   <Select
                     options={this.options}
                     id="criteria"
@@ -195,7 +201,12 @@ export class PlayerModal extends Component {
                     defaultValue="Choose a category"
                     onChange={this.handleChange}
                   />
-                  <Line data={this.getChartData()} />
+                  {
+                    this.state.criteria == 'ovr' ?
+                      <Radar data={this.getRadarData()} options={this.getRadarOptions()} />
+                      :
+                      <Line data={this.getChartData()} options={this.getChartOptions()} />
+                  }
                 </div>
               </div>
             </div>
@@ -205,14 +216,53 @@ export class PlayerModal extends Component {
     );
   }
 
+  getRadarData() {
+    if (!this.props.stats) {
+      return {};
+    }
+    let labels = ['Points', 'Assists', 'Turnovers', 'Rebounds', 'Blocks', 'Steals'];
+    let values = [];
+    values.push(this.props.stats.percentages.pts);
+    values.push(this.props.stats.percentages.ast);
+    values.push(this.props.stats.percentages.tov);
+    values.push(this.props.stats.percentages.reb);
+    values.push(this.props.stats.percentages.blk);
+    values.push(this.props.stats.percentages.stl);
+
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          backgroundColor: this.hexToRgbA(this.props.stats.team.color),
+          data: values
+        }
+      ]
+    }
+    return data;
+  }
+
+  getRadarOptions() {
+    const options = {
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          min: 0,
+          max: 100
+        }
+      },
+      legend: {
+        display: false
+      },
+    }
+    return options;
+  }
+
   getChartData() {
     if (!this.props.stats) {
       return {};
     }
     let labels = [];
     let values = [];
-
-    console.log(this.props.stats.games)
 
     const games = this.props.stats.games;
     games.sort(function (a, b) {
@@ -248,19 +298,57 @@ export class PlayerModal extends Component {
           pointHitRadius: 10,
           data: values
         }
-      ]
+      ],
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
     };
     return data;
   }
 
+  getChartOptions() {
+    const options = {
+      scales: {
+        yAxes: [{
+          display: true,
+          ticks: {
+            suggestedMin: 0,
+            beginAtZero: true
+          }
+        }]
+      },
+      legend: {
+        display: false
+      },
+    }
+    return options;
+  }
+
   handleChange(e) {
     this.options.forEach(option => {
-      if(option.name === e.target.value) {
+      if (option.name === e.target.value) {
         this.setState({
           criteria: option.criteria,
           criteriaTitle: option.name
         });
       }
     })
+  }
+
+  hexToRgbA(hex) {
+    var c;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+      c = hex.substring(1).split('');
+      if (c.length == 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c = '0x' + c.join('');
+      return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',0.4)';
+    }
+    throw new Error('Bad Hex');
   }
 }
