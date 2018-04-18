@@ -3,6 +3,7 @@ import { NewsCard } from './NewsCard';
 import _ from 'lodash'
 import shortid from 'shortid';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Loader } from '../Loader';
 import defaultLogo from '../../content/images/defaultLogo.png';
 
 export class NewsFeed extends Component {
@@ -11,24 +12,32 @@ export class NewsFeed extends Component {
     this.state = {
       news: '',
       hasMore: true,
+      newsLoader: false,
       logoIMG: this.getImages()
     }
     this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
+    this.setState({
+      newsLoader: true
+    });
     fetch(`http://localhost:51407/api/news`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          news: res
+          news: res,
+          newsLoader: false
         });
       });
   }
 
   fetchData() {
+    this.setState({
+      newsLoader: true
+    });
     fetch(`http://localhost:51407/api/news?start=${this.state.news.length}`)
       .then(res => {
         return res.json()
@@ -36,7 +45,8 @@ export class NewsFeed extends Component {
       .then(res => {
         this.setState({
           news: this.state.news.concat(res),
-          hasMore: res.length == 6
+          hasMore: res.length == 6,
+          newsLoader: false
         });
       });
   }
@@ -73,7 +83,7 @@ export class NewsFeed extends Component {
             dataLength={news.length}
             next={this.fetchData}
             hasMore={this.state.hasMore}
-            loader={<h4>Loading...</h4>}
+            loader={<Loader show={this.state.newsLoader} />}
           >
             {news}
           </InfiniteScroll>

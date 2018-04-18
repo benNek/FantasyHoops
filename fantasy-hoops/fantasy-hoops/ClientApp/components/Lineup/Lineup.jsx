@@ -9,6 +9,7 @@ import { PlayerModal } from '../PlayerModal';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
 import { InfoModal } from './InfoModal';
+import { Loader } from '../Loader';
 
 const budget = 300; // thousands
 
@@ -35,18 +36,24 @@ export class Lineup extends Component {
       posIMG: this.getPosImages(),
       playerIMG: this.getPlayerImages(),
       nextGame: '',
-      serverTime: ''
+      serverTime: '',
+      playerLoader: false
     };
   }
 
   componentDidMount() {
+    this.setState({
+      playerLoader: true
+    });
+
     fetch(`http://localhost:51407/api/player`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          players: res
+          players: res,
+          playerLoader: false
         });
       });
     this.filter('PG');
@@ -173,6 +180,7 @@ export class Lineup extends Component {
             ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
             : ''}
         />
+        <Loader show={this.state.playerLoader}/>
         <PlayerPool
           playerIMG={this.state.playerIMG}
           posIMG={this.state.posIMG}
