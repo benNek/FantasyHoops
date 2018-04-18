@@ -16,12 +16,12 @@ namespace fantasy_hoops
 
             JobManager.AddJob(() => Task.Run(() => NextGame.Initialize(_context)),
                 s => s.WithName("nextGame")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(5)));
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
 
             JobManager.AddJob(() => Task.Run(() => NextGame.SetClientTime()),
                 s => s.WithName("setTime")
                 .AndThen(() => NextGame.SetLastGame())
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(15)));
 
             JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)),
                 s => s.WithName("injuries")
