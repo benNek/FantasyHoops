@@ -13,14 +13,14 @@ import { UserLeaderboard } from './components/Leaderboard/UserLeaderboard';
 import { PlayerLeaderboard } from './components/Leaderboard/PlayerLeaderboard';
 
 export const routes = <div>
-    <Route path='/' component={Header} />
-    <Route exact path='/login' component={Login} />
-    <Route exact path='/register' component={Registration} />
-    <PrivateRoute path='/profile/:edit?' component={UserProfile} />
-    <PrivateRoute path='/lineup' component={Lineup} />
-    <Route path='/injuries' component={InjuriesFeed} />
-    <Route path='/rules' component={Rules} />
-    <Route path='/news' component={NewsFeed} />
-    <Route exact path='/leaderboard/users' component={UserLeaderboard} />
-    <Route path='/leaderboard/players' component={PlayerLeaderboard} />
+  <Route path='/' component={Header} />
+  <Route exact path='/login' component={Login} />
+  <Route exact path='/register' component={Registration} />
+  <PrivateRoute path='/profile/:edit?' component={UserProfile} />
+  <PrivateRoute path='/lineup' component={Lineup} />
+  <Route path='/injuries' component={InjuriesFeed} />
+  <Route path='/rules' component={Rules} />
+  <Route path='/news' component={NewsFeed} />
+  <Route exact path='/leaderboard/users' component={UserLeaderboard} />
+  <Route exact path='/leaderboard/players' component={PlayerLeaderboard} />
 </div>;
