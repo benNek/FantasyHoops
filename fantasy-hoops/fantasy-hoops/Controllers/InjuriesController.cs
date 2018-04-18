@@ -23,7 +23,7 @@ namespace fantasy_hoops.Controllers
             return context.Injuries
                 .Select(x => new {
                     x.InjuryID,
-                    date = x.Date.ToString("yyyy-MM-dd HH:mm"),
+                    date = x.Date,
                     Player = new {
                         x.Player.NbaID,
                         x.Player.FirstName,

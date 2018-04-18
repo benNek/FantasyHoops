@@ -17,10 +17,16 @@ export class InjuriesFeed extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      injuryLoader: true
-    });
-    const response = fetch(`http://localhost:51407/api/injuries`)
+    fetch(`http://localhost:51407/api/lineup/nextGame`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          serverTime: res.serverTime
+        });
+      })
+    fetch(`http://localhost:51407/api/injuries`)
       .then(res => {
         return res.json()
       })
@@ -52,6 +58,7 @@ export class InjuriesFeed extends Component {
       (injury) => {
         const pos = injury.player.position.toLowerCase();
         return <InjuryCard
+          serverTime={this.state.serverTime}
           key={shortid()}
           image={this.state.playerIMG[`${injury.player.nbaID}.png`] || this.state.posIMG[`${pos}.png`]}
           injury={injury}
@@ -63,7 +70,7 @@ export class InjuriesFeed extends Component {
         <div className="row">
           <Loader show={this.state.injuryLoader}/>
           {injuries}
-          {this.state.noInjuries ? <div>No injuries report today</div> : ''}
+          {this.state.noInjuries ? <div className="m-5 mx-auto">No injuries report today</div> : ''}
         </div>
       </div>
     );

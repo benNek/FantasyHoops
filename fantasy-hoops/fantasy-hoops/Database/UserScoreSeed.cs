@@ -12,12 +12,12 @@ namespace fantasy_hoops.Database
         {
             await Update(context);
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("userScore")
-                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(5).AddMinutes(5)));
+                .ToRunOnceAt(NextGame.NEXT_LAST_GAME.AddHours(5).AddMinutes(5)));
         }
 
         private static async Task Update(GameContext context)
         {
-            var allPlayers = context.UserPlayers.Where(x => x.Date == DateTime.Today.AddDays(-1).Date)
+            var allPlayers = context.UserPlayers.Where(x => x.Date == NextGame.NEXT_GAME)
                 .Include(x => x.Player).ThenInclude(x => x.Stats)
                 .ToList();
             foreach (var player in allPlayers)

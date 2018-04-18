@@ -20,7 +20,7 @@ namespace fantasy_hoops.Database
             int daysFromToday = 30;
             await Calculate(context, daysFromToday);
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("statsSeed")
-                .ToRunOnceAt(NextGame.LAST_NEXT_GAME.AddHours(5)));
+                .ToRunOnceAt(NextGame.NEXT_LAST_GAME.AddHours(5)));
         }
 
         private static JObject GetBoxscore(string url)
@@ -35,7 +35,7 @@ namespace fantasy_hoops.Database
         {
             while (days > 0)
             {
-                string gameDate = DateTime.Today.AddDays(-days).ToString("yyyyMMdd");
+                string gameDate = NextGame.NEXT_GAME.AddDays(-days).ToString("yyyyMMdd");
                 JArray games = CommonFunctions.GetGames(gameDate);
                 DateTime date = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture);
 

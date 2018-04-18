@@ -22,7 +22,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var players = context.UserPlayers.Where(x => x.UserID.Equals(id) && x.Date == DateTime.Now.Date).Select(x => new
+            var players = context.UserPlayers.Where(x => x.UserID.Equals(id) && x.Date == Database.NextGame.NEXT_GAME).Select(x => new
             {
                 id = x.Player.NbaID,
                 firstName = x.Player.FirstName,
@@ -39,7 +39,7 @@ namespace fantasy_hoops.Controllers
         [HttpPost("submit")]
         public async Task<IActionResult> SubmitLineup([FromBody]SumbitLineupViewModel model)
         {
-            bool updating = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Date == DateTime.Now.Date).Any();
+            bool updating = context.UserPlayers.Where(x => x.UserID.Equals(model.UserID) && x.Date == Database.NextGame.NEXT_GAME).Any();
 
             if (!updating)
             {
@@ -48,7 +48,7 @@ namespace fantasy_hoops.Controllers
                     UserID = model.UserID,
                     PlayerID = model.PgID,
                     Position = "PG",
-                    Date = DateTime.Today
+                    Date = Database.NextGame.NEXT_GAME
                 };
                 context.UserPlayers.Add(pg);
 
@@ -57,7 +57,7 @@ namespace fantasy_hoops.Controllers
                     UserID = model.UserID,
                     PlayerID = model.SgID,
                     Position = "SG",
-                    Date = DateTime.Today
+                    Date = Database.NextGame.NEXT_GAME
                 };
                 context.UserPlayers.Add(sg);
 
@@ -66,7 +66,7 @@ namespace fantasy_hoops.Controllers
                     UserID = model.UserID,
                     PlayerID = model.SfID,
                     Position = "SF",
-                    Date = DateTime.Today
+                    Date = Database.NextGame.NEXT_GAME
                 };
                 context.UserPlayers.Add(sf);
 
@@ -75,7 +75,7 @@ namespace fantasy_hoops.Controllers
                     UserID = model.UserID,
                     PlayerID = model.PfID,
                     Position = "PF",
-                    Date = DateTime.Today
+                    Date = Database.NextGame.NEXT_GAME
                 };
                 context.UserPlayers.Add(pf);
 
@@ -84,10 +84,9 @@ namespace fantasy_hoops.Controllers
                     UserID = model.UserID,
                     PlayerID = model.CID,
                     Position = "C",
-                    Date = DateTime.Today
+                    Date = Database.NextGame.NEXT_GAME
                 };
                 context.UserPlayers.Add(c);
-                
             }
 
             else
