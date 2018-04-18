@@ -5,6 +5,7 @@ import { EditProfile } from './EditProfile';
 import { InfoPanel } from './InfoPanel';
 import { Friends } from './Friends';
 
+
 export class UserProfile extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +29,7 @@ export class UserProfile extends Component {
 
   render() {
     return (
-      <div className="container bg-light pt-1">
+      <div className="container bg-light pt-1" style={{ minWidth: '70rem' }}>
         <div className="row my-2">
           <Avatar />
           <div className="col-lg-8 order-lg-2">
@@ -50,7 +51,7 @@ export class UserProfile extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 

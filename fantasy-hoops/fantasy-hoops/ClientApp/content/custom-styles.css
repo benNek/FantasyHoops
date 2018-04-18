@@ -387,9 +387,52 @@
 .select:-moz-focusring {
   color: transparent;
   text-shadow: 0 0 0 #000;
-  }
+}
 
 .img-modal {
   position: absolute;
   left: 0;
+}
+
+/* User players card */
+.user-card-player {
+  z-index: 1;
+  overflow: hidden;
+  height: 3rem;
+  margin-top: 0.5rem;
+  margin-left: -0.3rem;
+}
+
+.user-score {
+  max-height: 8rem;
+  min-height: 6rem;
+  width: 35rem;
+}
+
+.user-score-total {
+  margin: 0.5rem 0 0 2.5rem;
+}
+
+.player-usertitle {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgb(27, 27, 27);
+}
+
+.player-score {
+  text-align: center;
+  margin-top: -1.2rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: rgb(119, 119, 119);
+}
+
+.card-circle {
+  margin: 0.5rem 0.8rem 0.1rem 0.8rem;
+  overflow: hidden;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
 }
