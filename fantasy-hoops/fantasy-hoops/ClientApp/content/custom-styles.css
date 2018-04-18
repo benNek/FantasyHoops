@@ -409,10 +409,6 @@
   width: 35rem;
 }
 
-.user-score-total {
-  margin: 0.5rem 0 0 2.5rem;
-}
-
 .player-usertitle {
   text-align: center;
   font-size: 0.7rem;
@@ -439,4 +435,33 @@
 
 .tab-no-outline {
   outline: none !important;
+}
+
+.image-list .img {
+width: 3rem;
+height: 3rem;
+margin-left: -18.5rem;
+border-radius: 0rem;
+margin-bottom: 1.5rem;
+}
+
+.borderless td, .borderless th {
+  border: none;
+}
+
+.leader-name {
+  margin-left: -15rem;
+}
+.points {
+  margin-left: -28rem;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: #69706D;
+  font-weight: 450;
+}
+
+.player-name {
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: rgb(119, 119, 119);
 }
