@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UserLeaderboardCard } from './UserLeaderboardCard';
+import { LeaderboardPanel } from './LeaderboardPanel';
 
 export class UserLeaderboard extends Component {
   constructor(props) {
@@ -9,9 +9,8 @@ export class UserLeaderboard extends Component {
   render() {
     return (
       <div className="container bg-light pt-5 pb-1">
-      <UserLeaderboardCard />
+      <LeaderboardPanel />
       </div>
-
     );
   }
 }
