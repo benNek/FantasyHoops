@@ -20,5 +20,5 @@ export const routes = <div>
     <Route path='/injuries' component={InjuriesFeed} />
     <Route path='/rules' component={Rules} />
     <Route path='/news' component={NewsFeed} />
-    <Route path='/leaderboard' component={UserLeaderboard} />
+    <Route exact path='/leaderboard/users' component={UserLeaderboard} />
 </div>;
