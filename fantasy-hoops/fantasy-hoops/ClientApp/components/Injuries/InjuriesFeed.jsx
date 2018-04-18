@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { InjuryCard } from './InjuryCard';
 import _ from 'lodash'
 import shortid from 'shortid';
+import { Loader } from '../Loader';
 
 export class InjuriesFeed extends Component {
   constructor(props) {
@@ -10,11 +11,15 @@ export class InjuriesFeed extends Component {
       noInjuries: false,
       injuries: '',
       playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
-      posIMG: this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/))
+      posIMG: this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/)),
+      injuryLoader: false,
     }
   }
 
   componentDidMount() {
+    this.setState({
+      injuryLoader: true
+    });
     const response = fetch(`http://localhost:51407/api/injuries`)
       .then(res => {
         return res.json()
@@ -22,7 +27,8 @@ export class InjuriesFeed extends Component {
       .then(res => {
         this.setState({
           injuries: res,
-          noInjuries: false
+          noInjuries: false,
+          injuryLoader: false
         });
       });
   }
@@ -55,6 +61,7 @@ export class InjuriesFeed extends Component {
     return (
       <div className="container bg-light">
         <div className="row">
+          <Loader show={this.state.injuryLoader}/>
           {injuries}
           {this.state.noInjuries ? <div>No injuries report today</div> : ''}
         </div>

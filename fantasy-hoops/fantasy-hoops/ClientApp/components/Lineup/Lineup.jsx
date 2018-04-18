@@ -71,9 +71,6 @@ export class Lineup extends Component {
 
   componentDidUpdate() {
     if (!this.state.loadedPlayers && this.state.players) {
-      this.setState({
-        lineupLoader: true
-      });
       const user = parse();
       fetch(`http://localhost:51407/api/lineup/${user.id}`)
         .then(res => {
@@ -89,9 +86,6 @@ export class Lineup extends Component {
               }
             });
           })
-          this.setState({
-            lineupLoader: false
-          });
         });
       this.setState({
         loadedPlayers: true
@@ -154,7 +148,6 @@ export class Lineup extends Component {
             style={{ position: 'absolute', right: '1rem' }}>
             <i className="fa fa-info" aria-hidden="true"></i>
           </button>
-          <Loader show={this.state.lineupLoader}/>
           <div className="mx-auto" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
             <div className="row justify-content-center">
               {this.state.pg}
