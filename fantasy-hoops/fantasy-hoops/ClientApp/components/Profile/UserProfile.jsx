@@ -35,13 +35,13 @@ export class UserProfile extends Component {
           <div className="col-lg-8 order-lg-2">
             <ul className="nav nav-tabs">
               <li className="nav-item">
-                <a href="" data-target="#profile" data-toggle="tab" id="navLinkProfile" className="nav-link active btn-no-outline">Profile</a>
+                <a href="" data-target="#profile" data-toggle="tab" id="navLinkProfile" className="nav-link active tab-no-outline">Profile</a>
               </li>
               <li className="nav-item">
-                <a href="" data-target="#friends" data-toggle="tab" id="navLinkFriends" className="nav-link btn-no-outline">Friends</a>
+                <a href="" data-target="#friends" data-toggle="tab" id="navLinkFriends" className="nav-link tab-no-outline">Friends</a>
               </li>
               <li className="nav-item">
-                <a href="" data-target="#edit" data-toggle="tab" id="navLinkEdit" className="nav-link btn-no-outline">Edit</a>
+                <a href="" data-target="#edit" data-toggle="tab" id="navLinkEdit" className="nav-link tab-no-outline">Edit</a>
               </li>
             </ul>
             <div className="tab-content py-4">

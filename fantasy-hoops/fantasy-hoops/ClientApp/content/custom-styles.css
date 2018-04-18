@@ -436,3 +436,7 @@
   width: 3.5rem;
   height: 3.5rem;
 }
+
+.tab-no-outline {
+  outline: none !important;
+}
