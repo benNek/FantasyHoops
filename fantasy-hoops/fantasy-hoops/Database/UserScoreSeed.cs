@@ -1,6 +1,4 @@
-﻿using FluentScheduler;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,13 +9,11 @@ namespace fantasy_hoops.Database
         public static async Task Initialize(GameContext context)
         {
             await Update(context);
-            JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("userScore")
-                .ToRunOnceAt(NextGame.NEXT_LAST_GAME.AddHours(5).AddMinutes(5)));
         }
 
         private static async Task Update(GameContext context)
         {
-            var allPlayers = context.UserPlayers.Where(x => x.Date == NextGame.NEXT_GAME)
+            var allPlayers = context.UserPlayers.Where(x => x.Date == NextGame.LAST_GAME)
                 .Include(x => x.Player).ThenInclude(x => x.Stats)
                 .ToList();
             foreach (var player in allPlayers)

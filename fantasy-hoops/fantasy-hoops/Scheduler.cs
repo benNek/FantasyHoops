@@ -14,35 +14,27 @@ namespace fantasy_hoops
             JobManager.Initialize(registry);
             JobManager.UseUtcTime();
 
-            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)), s => s.WithName("injuries")
+            JobManager.AddJob(() => Task.Run(() => NextGame.Initialize(_context)),
+                s => s.WithName("nextGame")
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(5)));
+
+            JobManager.AddJob(() => Task.Run(() => NextGame.SetClientTime()),
+                s => s.WithName("setTime")
+                .AndThen(() => NextGame.SetLastGame())
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
+
+            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)),
+                s => s.WithName("injuries")
                 .ToRunNow()
                 .AndEvery(33)
                 .Minutes());
 
-            JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)), s => s.WithName("photos")
+            JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)),
+                s => s.WithName("photos")
                 .ToRunOnceAt(DateTime.UtcNow.AddMinutes(15))
                 .AndEvery(1)
                 .Days()
                 .At(16, 00));   // 12p.m. Eastern Time
-
-            JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(_context)), s => s.WithName("stats")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(20)));
-
-            JobManager.AddJob(() => Task.Run(() => UserScoreSeed.Initialize(_context)), s => s.WithName("userScore")
-                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(8)));
-
-            JobManager.AddJob(() => Task.Run(() => PlayerSeed.Initialize(_context)), s => s.WithName("playerSeed")
-                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(5)));
-
-            JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s.WithName("news")
-                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(11)));
-
-            JobManager.AddJob(() => Task.Run(() => NextGame.Initialize()),
-                s => s.WithName("nextGame")
-                .ToRunNow());
-
-            JobManager.AddJob(() => Task.Run(() => NextGame.SetClientTime()), s => s.WithName("setTime")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
         }
     }
 }
