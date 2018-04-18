@@ -125,15 +125,32 @@ namespace fantasy_hoops.Controllers
                 };
             }
 
+            // Getting all players that user has selected in recent 5 games
+            var players = context.UserPlayers
+                .Where(x => x.UserID.Equals(id) && x.Date < DateTime.Today)
+                .Select(x => new {
+                    x.Player.NbaID,
+                    x.Player.LastName,
+                    x.Player.Team.Color,
+                    FP = context.Stats
+                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(x.Date))
+                        .Select(y => y.FP).FirstOrDefault()
+                })
+                .Take(25)
+                .ToList();
+
+            // Getting 5 recent games
             var activity = context.UserPlayers
                 .Where(x => x.Date < DateTime.Today && x.UserID.Equals(id))
                 .Select(x => new {
                     x.Date,
-                    Score = context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum()
+                    Score = context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(),
+                    players
                 })
                 .Distinct()
                 .Take(5).ToList();
 
+            // Weekly score
             var totalScore = activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum();
 
             var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new

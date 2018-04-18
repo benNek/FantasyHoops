@@ -16,16 +16,11 @@ export class InfoPanel extends Component {
         user.recentActivity,
         (activity) => {
           return (
-            <tr key={shortid()}>
-              <td>
-                <strong>{activity.date.substring(0, 10)}</strong> scored <strong>{activity.score} FP</strong>
-              </td>
-            </tr>
+            <UserScore activity={activity} />
           )
         });
     }
 
-    console.log(user);
     return (
       <div className="tab-pane active" id="profile">
         <div className="row">
@@ -51,11 +46,7 @@ export class InfoPanel extends Component {
           </div>
           <div className="col-md-12">
             <h5 className="mt-2"><span className="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
-            <UserScore />
-            <UserScore />
-            <UserScore />
-            <UserScore />
-            <UserScore />
+            {recentActivity}
           </div>
         </div>
       </div>
