@@ -127,11 +127,13 @@ namespace fantasy_hoops.Controllers
 
             // Getting all players that user has selected in recent 5 games
             var players = context.UserPlayers
-                .Where(x => x.UserID.Equals(id) && x.Date < DateTime.Today)
+                .Where(x => x.UserID.Equals(id) && x.Date < NextGame.NEXT_GAME)
+                .OrderByDescending(x => x.Date)
                 .Select(x => new {
                     x.Player.NbaID,
                     x.Player.LastName,
                     x.Player.Team.Color,
+                    x.Date,
                     FP = context.Stats
                         .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(x.Date))
                         .Select(y => y.FP).FirstOrDefault()
@@ -141,7 +143,8 @@ namespace fantasy_hoops.Controllers
 
             // Getting 5 recent games
             var activity = context.UserPlayers
-                .Where(x => x.Date < DateTime.Today && x.UserID.Equals(id))
+                .Where(x => x.Date.DayOfYear < NextGame.NEXT_GAME.DayOfYear && x.UserID.Equals(id))
+                .OrderByDescending(x => x.Date)
                 .Select(x => new {
                     x.Date,
                     Score = context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(),
@@ -149,6 +152,15 @@ namespace fantasy_hoops.Controllers
                 })
                 .Distinct()
                 .Take(5).ToList();
+
+            // Streak
+            int streak = 0;
+            DateTime date = NextGame.NEXT_GAME.AddDays(-1);
+            while(context.UserPlayers.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
+            {
+                streak++;
+                date = date.AddDays(-1);
+            }
 
             // Weekly score
             var totalScore = activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum();
@@ -160,6 +172,7 @@ namespace fantasy_hoops.Controllers
                 x.Email,
                 x.Description,
                 x.FavoriteTeamId,
+                date,
 
                 Team = new
                 {
@@ -167,6 +180,7 @@ namespace fantasy_hoops.Controllers
                     team.Color
                 },
                 RecentActivity = activity,
+                streak,
                 TotalScore = totalScore
             })
             .FirstOrDefault();

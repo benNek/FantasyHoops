@@ -9,7 +9,6 @@ export class InfoPanel extends Component {
 
   render() {
     const user = this.props.user;
-
     let recentActivity = '';
     if (user.recentActivity != null) {
       recentActivity = _.map(
@@ -40,7 +39,7 @@ export class InfoPanel extends Component {
               </span>
             </div>
             <hr />
-            <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak</span>
+            <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak: {user.streak}</span>
             <span className="badge badge-success"><i className="fa fa-cog"></i> Weekly Score: {user.totalScore}</span>
             <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking</span>
           </div>
