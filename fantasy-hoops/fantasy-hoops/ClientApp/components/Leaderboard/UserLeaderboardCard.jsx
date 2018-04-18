@@ -19,7 +19,7 @@ export class UserLeaderboardCard extends Component {
             <p className="align-middle player-name" style={{ paddingLeft: '5rem', paddingTop: '0.3rem' }}>naidze</p>
           </div>
           <div className="d-inline-block float-right" style={{ paddingTop: '0.3rem' }}>
-            <h5>69.0 FP</h5>
+            <h5>189.4 FP</h5>
           </div>
         </div>
       </div>

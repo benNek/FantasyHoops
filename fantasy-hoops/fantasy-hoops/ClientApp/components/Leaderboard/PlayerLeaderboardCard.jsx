@@ -7,18 +7,21 @@ export class PlayerLeaderboardCard extends Component {
 
   render() {
     return (
-      <div className="row ml-1">
-        <h6 className="mt-4 ml-1">1</h6>
-        <div className="card-group bg-white ml-3 rounded user-score">
-          <div className="row m-0 mr-1">
-            <div className="bg-secondary card-circle pr-4">
-              <img className="user-card-player" src={require(`../../content/images/players/${2544}.png`)} />
-            </div>
-            <p className="player-usertitle mt-4">Lebron</p>
+      <div className="card bg-white rounded mt-1 mx-auto" style={{ width: '40%', height: '4.5rem' }}>
+        <div className="card-body">
+          <div className="d-inline-block align-middle mr-1">
+            <h4>1</h4>
           </div>
-          <div className="card-text mr-7 user-score-total ml-3 mt-3">
-            <h5 style={{ marginLeft: "2rem", marginTop: "3" }}>323.7</h5>
-            <h6 style={{ marginLeft: "5rem", marginTop: "-28" }}>FP</h6>
+          <div className="d-inline-block align-middle mr-1">
+            <div className="bg-success card-circle position-absolute" style={{top: '0rem'}}>
+              <img className="user-card-player" src={require(`../../content/images/players/${203507}.png`)} />
+            </div>
+          </div>
+          <div className="d-inline-block">
+            <p className="align-middle player-name" style={{ paddingLeft: '5rem' }}>Giannis Antetokounmpo</p>
+          </div>
+          <div className="d-inline-block float-right" style={{ paddingTop: '0.3rem' }}>
+            <h5>72.8 FP</h5>
           </div>
         </div>
       </div>
