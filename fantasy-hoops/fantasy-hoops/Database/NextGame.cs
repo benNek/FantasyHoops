@@ -11,7 +11,13 @@ namespace fantasy_hoops.Database
     public class NextGame
     {
         public static DateTime NEXT_GAME = DateTime.UtcNow;
+        public static DateTime NEXT_GAME_CLIENT = DateTime.UtcNow;
         public static DateTime NEXT_LAST_GAME = DateTime.UtcNow;
+
+        public static void SetClientTime()
+        {
+            NEXT_GAME_CLIENT = NEXT_GAME;
+        }
 
         public static void Initialize()
         {
@@ -40,7 +46,6 @@ namespace fantasy_hoops.Database
                 DateTime timeUTC = DateTime.Parse((string)games[0]["startTimeUTC"]);
                 if (timeUTC > DateTime.UtcNow)
                 {
-                    LAST_GAME = NEXT_GAME;
                     NEXT_GAME = timeUTC;
                     NEXT_LAST_GAME = DateTime.Parse((string)games[games.Count - 1]["startTimeUTC"]);
                 }

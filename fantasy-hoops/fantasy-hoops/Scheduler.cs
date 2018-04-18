@@ -35,13 +35,14 @@ namespace fantasy_hoops
                 .ToRunOnceAt(DateTime.UtcNow.AddMinutes(5)));
 
             JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(_context)), s => s.WithName("news")
-                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(11))
-                .AndEvery(1)
-                .Days()
-                .At(7, 30));   // 3:30 a.m. Eastern Time
+                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(11)));
 
-            JobManager.AddJob(() => Task.Run(() => NextGame.Initialize()), s => s.WithName("nextGame")
+            JobManager.AddJob(() => Task.Run(() => NextGame.Initialize()),
+                s => s.WithName("nextGame")
                 .ToRunNow());
+
+            JobManager.AddJob(() => Task.Run(() => NextGame.SetClientTime()), s => s.WithName("setTime")
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
         }
     }
 }

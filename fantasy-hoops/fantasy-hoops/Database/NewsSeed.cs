@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using System.Globalization;
 using fantasy_hoops.Helpers;
+using FluentScheduler;
 
 namespace fantasy_hoops.Database
 {
@@ -15,6 +16,8 @@ namespace fantasy_hoops.Database
         public static async Task Initialize(GameContext context)
         {
             await Extract(context);
+            JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("news")
+                .ToRunOnceAt(NextGame.NEXT_LAST_GAME.AddHours(6)));
         }
 
         private static async Task Extract(GameContext context)

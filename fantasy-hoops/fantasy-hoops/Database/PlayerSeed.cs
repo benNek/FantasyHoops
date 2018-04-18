@@ -16,6 +16,7 @@ namespace fantasy_hoops.Database
         public static async Task Initialize(GameContext context)
         {
             await Calculate(context);
+            NextGame.NEXT_GAME_CLIENT = NextGame.NEXT_GAME;
             JobManager.AddJob(() => Task.Run(() => Initialize(context)), s => s.WithName("playerSeed")
                 .ToRunOnceAt(NextGame.NEXT_GAME.AddSeconds(10)));
         }
