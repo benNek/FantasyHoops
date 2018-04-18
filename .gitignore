@@ -24,6 +24,7 @@ bld/
 dist/
 fantasy-hoops/fantasy-hoops/ClientApp/content/images/players/
 fantasy-hoops/fantasy-hoops/ClientApp/content/images/avatars/
+fantasy-hoops/fantasy-hoops/ClientApp/content/images/logos/
 
 # Visual Studio 2015 cache/options directory
 .vs/

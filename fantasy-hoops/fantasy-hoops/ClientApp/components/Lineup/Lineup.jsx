@@ -32,8 +32,8 @@ export class Lineup extends Component {
       showAlert: false,
       alertType: '',
       alertText: '',
-      posIMG: this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/)),
-      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
+      posIMG: this.getPosImages(),
+      playerIMG: this.getPlayerImages(),
       nextGame: '',
       serverTime: ''
     };
@@ -277,5 +277,23 @@ export class Lineup extends Component {
           alertText: err.message
         });
       });
+  }
+
+  getPosImages() {
+    try {
+      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
+  }
+
+  getPlayerImages() {
+    try {
+      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
   }
 }
