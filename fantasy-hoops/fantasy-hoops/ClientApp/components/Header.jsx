@@ -112,8 +112,8 @@ export class Header extends Component {
                   Game</a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a className="dropdown-item btn" href="/lineup">Lineup</a>
-                  <a className="dropdown-item" href="/leaderboard/users">Top users</a>
-                  <a className="dropdown-item" href="#">Most selected players</a>
+                  <a className="dropdown-item" href="/leaderboard/users">Top Users</a>
+                  <a className="dropdown-item" href="/leaderboard/players">Top NBA Players</a>
                   <a className="dropdown-item" href="/rules">Rules</a>
                 </div>
               </li>
