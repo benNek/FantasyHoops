@@ -201,12 +201,14 @@ export class PlayerModal extends Component {
                     defaultValue="Choose a category"
                     onChange={this.handleChange}
                   />
-                  {
-                    this.state.criteria == 'ovr' ?
-                      <Radar data={this.getRadarData()} options={this.getRadarOptions()} />
-                      :
-                      <Line data={this.getChartData()} options={this.getChartOptions()} />
-                  }
+                  <div className='mt-3'>
+                    {
+                      this.state.criteria == 'ovr' ?
+                        <Radar data={this.getRadarData()} options={this.getRadarOptions()} />
+                        :
+                        <Line data={this.getChartData()} options={this.getChartOptions()} />
+                    }
+                  </div>
                 </div>
               </div>
             </div>
