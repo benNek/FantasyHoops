@@ -15,7 +15,7 @@ export class InfoPanel extends Component {
         user.recentActivity,
         (activity) => {
           return (
-            <UserScore activity={activity} />
+            <UserScore key={shortid()} activity={activity} />
           )
         });
     }
