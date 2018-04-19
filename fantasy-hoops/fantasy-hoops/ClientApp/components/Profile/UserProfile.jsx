@@ -5,7 +5,6 @@ import { EditProfile } from './EditProfile';
 import { InfoPanel } from './InfoPanel';
 import { Friends } from './Friends';
 
-
 export class UserProfile extends Component {
   constructor(props) {
     super(props);

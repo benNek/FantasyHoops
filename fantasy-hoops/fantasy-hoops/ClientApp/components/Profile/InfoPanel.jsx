@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { UserScore } from './UserScore';
+import shortid from 'shortid';
 
 export class InfoPanel extends Component {
   constructor(props) {
@@ -8,6 +9,17 @@ export class InfoPanel extends Component {
 
   render() {
     const user = this.props.user;
+    let recentActivity = '';
+    if (user.recentActivity != null) {
+      recentActivity = _.map(
+        user.recentActivity,
+        (activity) => {
+          return (
+            <UserScore key={shortid()} activity={activity} />
+          )
+        });
+    }
+
     return (
       <div className="tab-pane active" id="profile">
         <div className="row">
@@ -27,17 +39,13 @@ export class InfoPanel extends Component {
               </span>
             </div>
             <hr />
-            <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak</span>
-            <span className="badge badge-success"><i className="fa fa-cog"></i> Total Score</span>
+            <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak: {user.streak}</span>
+            <span className="badge badge-success"><i className="fa fa-cog"></i> Weekly Score: {user.totalScore}</span>
             <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking</span>
           </div>
           <div className="col-md-12">
             <h5 className="mt-2"><span className="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
-            <UserScore />
-            <UserScore />
-            <UserScore />
-            <UserScore />
-            <UserScore />
+            {recentActivity}
           </div>
         </div>
       </div>

@@ -125,22 +125,68 @@ namespace fantasy_hoops.Controllers
                 };
             }
 
-            var user = context.Users
-                .Where(x => x.Id.Equals(id))
-                .Select(x => new
-                {
-                    x.Id,
-                    x.UserName,
-                    x.Email,
-                    x.Description,
-                    x.FavoriteTeamId,
-
-                    Team = new
-                    {
-                        Name = team.City + " " + team.Name,
-                        team.Color
-                    }
+            // Getting all players that user has selected in recent 5 games
+            var players = context.UserPlayers
+                .Where(x => x.UserID.Equals(id) && x.Date < NextGame.NEXT_GAME)
+                .OrderByDescending(x => x.Date)
+                .Select(x => new {
+                    x.Player.NbaID,
+                    x.Player.LastName,
+                    x.Player.Team.Color,
+                    x.Date,
+                    FP = context.UserPlayers
+                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(y.Date))
+                        .Select(y => y.FP)
+                        .FirstOrDefault()
                 })
+                .Take(25)
+                .ToList();
+
+            // Getting 5 recent games
+            var activity = context.UserPlayers
+                .Where(x => x.Date < NextGame.NEXT_GAME && x.UserID.Equals(id))
+                .OrderByDescending(x => x.Date)
+                .Select(x => new {
+                    x.Date,
+                    Score = Math.Round(context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(), 1),
+                    players = players.Where(y => y.Date.Equals(x.Date)).ToList()
+                })
+                .Take(25)
+                .ToList()
+                .Where((x, index) => index % 5 == 0)
+                .ToList()
+           ;
+
+            // Streak
+            int streak = 0;
+            DateTime date = NextGame.NEXT_GAME.AddDays(-1);
+            while(context.UserPlayers.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
+            {
+                streak++;
+                date = date.AddDays(-1);
+            }
+
+            // Weekly score
+            var totalScore = Math.Round(activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum(), 1);
+
+            var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
+            {
+                x.Id,
+                x.UserName,
+                x.Email,
+                x.Description,
+                x.FavoriteTeamId,
+                date,
+
+                Team = new
+                {
+                    Name = team.City + " " + team.Name,
+                    team.Color
+                },
+                RecentActivity = activity,
+                streak,
+                TotalScore = totalScore
+            })
             .FirstOrDefault();
             if (user == null)
                 return NotFound(String.Format("User with id {0} has not been found!", id));
