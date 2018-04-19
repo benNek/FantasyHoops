@@ -134,24 +134,28 @@ namespace fantasy_hoops.Controllers
                     x.Player.LastName,
                     x.Player.Team.Color,
                     x.Date,
-                    FP = context.Stats
-                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(x.Date))
-                        .Select(y => y.FP).FirstOrDefault()
+                    FP = context.UserPlayers
+                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(y.Date))
+                        .Select(y => y.FP)
+                        .FirstOrDefault()
                 })
                 .Take(25)
                 .ToList();
 
             // Getting 5 recent games
             var activity = context.UserPlayers
-                .Where(x => x.Date.DayOfYear < NextGame.NEXT_GAME.DayOfYear && x.UserID.Equals(id))
+                .Where(x => x.Date < NextGame.NEXT_GAME && x.UserID.Equals(id))
                 .OrderByDescending(x => x.Date)
                 .Select(x => new {
                     x.Date,
-                    Score = context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(),
-                    players
+                    Score = Math.Round(context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(), 1),
+                    players = players.Where(y => y.Date.Equals(x.Date)).ToList()
                 })
-                .Distinct()
-                .Take(5).ToList();
+                .Take(25)
+                .ToList()
+                .Where((x, index) => index % 5 == 0)
+                .ToList()
+           ;
 
             // Streak
             int streak = 0;
@@ -163,7 +167,7 @@ namespace fantasy_hoops.Controllers
             }
 
             // Weekly score
-            var totalScore = activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum();
+            var totalScore = Math.Round(activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum(), 1);
 
             var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
             {
