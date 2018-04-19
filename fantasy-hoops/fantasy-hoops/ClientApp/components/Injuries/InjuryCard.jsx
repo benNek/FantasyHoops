@@ -6,6 +6,13 @@ export class InjuryCard extends Component {
     super();
   }
 
+  getDate() {
+    const date = new Date(this.props.injury.date);
+    const serverTime = new Date(this.props.serverTime);
+    const diff = Math.abs(serverTime.getTimezoneOffset()) / 60;
+    return date.setHours(date.getHours() + diff);
+  }
+
   render() {
     let status = '';
     if (this.props.injury.status.toLowerCase().includes("active"))
@@ -41,7 +48,7 @@ export class InjuryCard extends Component {
               <div className='post-meta'>
                 {link}
                 <span style={{ float: 'right' }} className='timestamp'>
-                  <i className='fa fa-clock-o'></i> {moment(this.props.injury.date).add(6, "hours").fromNow()}
+                  <i className='fa fa-clock-o'></i> {moment(this.getDate()).fromNow()}
                 </span>
               </div>
             </div>

@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
@@ -13,7 +12,7 @@ namespace fantasy_hoops.Database
     public class InjuriesSeed
     {
         const int DAYS_TO_SAVE = 1;
-        static DateTime dayFrom = DateTime.Today.AddDays(-DAYS_TO_SAVE);
+        static DateTime dayFrom = NextGame.NEXT_GAME.AddDays(-DAYS_TO_SAVE - 1);
 
         public static async Task Initialize(GameContext context)
         {
@@ -34,7 +33,7 @@ namespace fantasy_hoops.Database
             JArray injuries = GetInjuries();
             foreach (JObject injury in injuries)
             {
-                if (dayFrom.CompareTo(DateTime.Parse(injury["CreatedDate"].ToString())) > 0)
+                if (dayFrom.CompareTo(DateTime.Parse(injury["CreatedDate"].ToString()).ToUniversalTime()) > 0)
                     break;
                 AddToDatabase(context, injury);
             }
@@ -49,7 +48,7 @@ namespace fantasy_hoops.Database
                 Status = (string)injury["PlayerStatus"],
                 Injury = (string)injury["Injury"],
                 Description = (string)injury["News"],
-                Date = DateTime.Parse(injury["CreatedDate"].ToString()),
+                Date = DateTime.Parse(injury["CreatedDate"].ToString()).ToUniversalTime(),
                 Link = (string)injury["Link"]
             };
             injuryObj.Player = context.Players.Where(x => x.NbaID == (int)injury["PrimarySourceKey"]).FirstOrDefault();

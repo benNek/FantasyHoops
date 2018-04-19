@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace fantasy_hoops.Controllers
 {
@@ -21,7 +20,7 @@ namespace fantasy_hoops.Controllers
         public IEnumerable<Object> GetUserLeaderboard(int from = 0, int limit = 10)
         {
             return context.UserPlayers
-                .Where(x => x.Date.Equals(DateTime.Today.AddDays(-1)))
+                .Where(x => x.Date.Equals(NextGame.NEXT_GAME))
                 .Select(x => new {
                     x.UserID,
                     x.Date,
@@ -39,7 +38,7 @@ namespace fantasy_hoops.Controllers
         public IEnumerable<Object> GetPlayerLeaderboard(int from = 0, int limit = 10)
         {
             return context.Stats
-                .Where(x => x.Date.Equals(DateTime.Today.AddDays(-1)))
+                .Where(x => x.Date.Equals(NextGame.NEXT_GAME))
                 .Select(x => new
                 {
                     x.PlayerID,

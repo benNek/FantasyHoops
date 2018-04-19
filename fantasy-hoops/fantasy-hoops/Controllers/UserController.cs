@@ -109,8 +109,13 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(String id)
         {
-            var team = context.Teams.Where(x => x.TeamID == context.Users.Where(y => y.Id.Equals(id)).Select(y => y.FavoriteTeamId).FirstOrDefault()).FirstOrDefault();
-            if(team == null)
+            var team = context.Teams
+                .Where(x => x.TeamID == context.Users
+                    .Where(y => y.Id.Equals(id))
+                    .Select(y => y.FavoriteTeamId)
+                    .FirstOrDefault())
+                .FirstOrDefault();
+            if (team == null)
             {
                 team = new Team()
                 {
@@ -120,20 +125,22 @@ namespace fantasy_hoops.Controllers
                 };
             }
 
-            var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
-            {
-                x.Id,
-                x.UserName,
-                x.Email,
-                x.Description,
-                x.FavoriteTeamId,
-
-                Team = new
+            var user = context.Users
+                .Where(x => x.Id.Equals(id))
+                .Select(x => new
                 {
-                    Name = team.City + " " + team.Name,
-                    team.Color
-                }
-            })
+                    x.Id,
+                    x.UserName,
+                    x.Email,
+                    x.Description,
+                    x.FavoriteTeamId,
+
+                    Team = new
+                    {
+                        Name = team.City + " " + team.Name,
+                        team.Color
+                    }
+                })
             .FirstOrDefault();
             if (user == null)
                 return NotFound(String.Format("User with id {0} has not been found!", id));
@@ -183,7 +190,7 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(400, "Please select a file!");
 
             var fileType = model.Avatar.Substring(11, 3);
-            if(!(fileType.Equals("png") || fileType.Equals("jpg")))
+            if (!(fileType.Equals("png") || fileType.Equals("jpg")))
                 return StatusCode(415, "Only .png and .jpg extensions are allowed!");
             model.Avatar = model.Avatar.Substring(22);
             try
@@ -204,7 +211,7 @@ namespace fantasy_hoops.Controllers
             if (Directory.Exists(avatarDir))
             {
                 var filePath = avatarDir + "/" + model.Id + ".png";
-                if(System.IO.File.Exists(filePath))
+                if (System.IO.File.Exists(filePath))
                 {
                     try
                     {
