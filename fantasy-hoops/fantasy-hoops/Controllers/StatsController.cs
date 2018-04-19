@@ -1,4 +1,5 @@
 ﻿using fantasy_hoops.Database;
+using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -80,7 +81,8 @@ namespace fantasy_hoops.Controllers
                             s.TOV,
                             s.PTS,
                             s.GS,
-                            s.FP
+                            s.FP,
+                            s.Price
                         })
                         .OrderByDescending(s => s.Date)
                 })
@@ -90,6 +92,18 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
+            double maxPoints = 0, maxAssists = 0, maxTurnovers = 0,
+            maxRebounds = 0, maxBlocks = 0, maxSteals = 0;
+            foreach (Player p in context.Players)
+            {
+                maxPoints = Math.Max(maxPoints, p.PTS);
+                maxAssists = Math.Max(maxAssists, p.AST);
+                maxTurnovers = Math.Max(maxTurnovers, p.TOV);
+                maxRebounds = Math.Max(maxRebounds, p.REB);
+                maxBlocks = Math.Max(maxBlocks, p.BLK);
+                maxSteals = Math.Max(maxSteals, p.STL);
+            }
+
             var player = context.Players
                 .Where(x => x.NbaID == id)
                 .Select(x => new
@@ -108,6 +122,15 @@ namespace fantasy_hoops.Controllers
                     x.TOV,
                     x.FPPG,
                     x.Price,
+                    Percentages = new
+                    {
+                        PTS = Math.Round(x.PTS / maxPoints * 100, 0),
+                        AST = Math.Round(x.AST / maxAssists * 100, 0),
+                        TOV = Math.Round(x.TOV / maxTurnovers * 100, 0),
+                        REB = Math.Round(x.REB / maxRebounds * 100, 0),
+                        BLK = Math.Round(x.BLK / maxBlocks * 100, 0),
+                        STL = Math.Round(x.STL / maxSteals * 100, 0)
+                    },      
                     Team = new
                     {
                         x.TeamID,
@@ -150,7 +173,8 @@ namespace fantasy_hoops.Controllers
                             s.TOV,
                             s.PTS,
                             s.GS,
-                            s.FP
+                            s.FP,
+                            s.Price
                         })
                         .OrderByDescending(s => s.Date)
                 })
