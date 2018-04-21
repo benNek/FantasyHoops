@@ -10,27 +10,44 @@ export class UserProfile extends Component {
     super(props);
     this.state = {
       edit: this.props.match.params.edit || '',
-      user: ''
+      user: '',
+      readOnly: false,
     }
   }
 
   componentDidMount() {
-    this.editProfile();
-    const user = parse();
-    fetch(`http://localhost:51407/api/user/${user.id}`)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          user: res
+    if (this.props.match.params.name == null) {
+      this.editProfile();
+      const user = parse();
+      fetch(`http://localhost:51407/api/user/${user.id}`)
+        .then(res => res.json())
+        .then(res => {
+          this.setState({
+            user: res
+          });
         });
+    }
+    else {
+      const userName = this.props.match.params.name;
+      this.setState({
+        readOnly: true
       });
+      fetch(`http://localhost:51407/api/user/name/${userName}`)
+        .then(res => res.json())
+        .then(res => {
+          this.setState({
+            user: res
+          });
+        });
+    }
+
   }
 
   render() {
     return (
       <div className="container bg-light pt-1" style={{ minWidth: '70rem' }}>
         <div className="row my-2">
-          <Avatar />
+          <Avatar user={this.state.user} readOnly={this.state.readOnly} />
           <div className="col-lg-8 order-lg-2">
             <ul className="nav nav-tabs">
               <li className="nav-item">
@@ -39,9 +56,11 @@ export class UserProfile extends Component {
               <li className="nav-item">
                 <a href="" data-target="#friends" data-toggle="tab" id="navLinkFriends" className="nav-link tab-no-outline">Friends</a>
               </li>
-              <li className="nav-item">
-                <a href="" data-target="#edit" data-toggle="tab" id="navLinkEdit" className="nav-link tab-no-outline">Edit</a>
-              </li>
+              {!this.state.readOnly &&
+                <li className="nav-item">
+                  <a href="" data-target="#edit" data-toggle="tab" id="navLinkEdit" className="nav-link tab-no-outline">Edit</a>
+                </li>
+              }
             </ul>
             <div className="tab-content py-4">
               <InfoPanel user={this.state.user} />

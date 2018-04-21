@@ -16,7 +16,7 @@ export const routes = <div>
   <Route path='/' component={Header} />
   <Route exact path='/login' component={Login} />
   <Route exact path='/register' component={Registration} />
-  <PrivateRoute path='/profile/:edit?' component={UserProfile} />
+  <PrivateRoute path='/profile/:edit?/:name?' component={UserProfile} />
   <PrivateRoute path='/lineup' component={Lineup} />
   <Route path='/injuries' component={InjuriesFeed} />
   <Route path='/rules' component={Rules} />

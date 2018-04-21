@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ChangeAvatar } from '../Inputs/ChangeAvatar';
-import { parse } from '../../utils/auth';
 import defaultPhoto from '../../content/images/default.png';
 
 export class Avatar extends Component {
@@ -9,13 +8,14 @@ export class Avatar extends Component {
   }
 
   render() {
-    const user = parse();
+    const user = this.props.user;
     let avatar = defaultPhoto;
     try {
       avatar = require(`../../content/images/avatars/${user.id}.png`);
     }
     catch (err) {
     }
+
     return (
       <div className="col-lg-4 order-lg-1">
         <div className="row">
@@ -26,12 +26,15 @@ export class Avatar extends Component {
           className="mx-auto img-fluid img-circle d-block round-img"
           style={{ width: '10rem' }}
         />
-        <div className="row">
-          <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">
-            Change avatar
-              </button>
-        </div>
-        <ChangeAvatar />
+        {!this.props.readOnly &&
+          <div className="row">
+            <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">
+              Change avatar
+            </button>
+            <ChangeAvatar />
+          </div>
+        }
+
       </div>
     );
   }

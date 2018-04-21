@@ -193,6 +193,17 @@ namespace fantasy_hoops.Controllers
             return Ok(user);
         }
 
+        [HttpGet("name/{name}")]
+        public IActionResult GetByName(String name)
+        {
+            var userId = context.Users.Where(x => x.UserName.ToLower().Equals(name.ToLower())).Select(x => x.Id).FirstOrDefault();
+            if (userId == null)
+            {
+                return NotFound(String.Format("User with name {0} has not been found!", name));
+            }
+            return Get(userId);
+        }
+
         [HttpPut("editprofile")]
         public async Task<IActionResult> EditProfile([FromBody]EditProfileView model)
         {
