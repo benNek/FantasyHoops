@@ -135,7 +135,7 @@ namespace fantasy_hoops.Controllers
                     x.Player.Team.Color,
                     x.Date,
                     FP = context.UserPlayers
-                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(y.Date))
+                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date.Equals(x.Date))
                         .Select(y => y.FP)
                         .FirstOrDefault()
                 })
