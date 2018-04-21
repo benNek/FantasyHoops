@@ -54,7 +54,7 @@ export class Header extends Component {
                       <p className="text-left"><strong>{user.username}</strong></p>
                       <p className="text-left small">{user.email}</p>
                       <p className="text-left">
-                        <a href="/profile/edit" className="btn btn-primary btn-block btn-sm">Edit profile</a>
+                        <a href={`/profile/${user.username}/edit`} className="btn btn-primary btn-block btn-sm">Edit profile</a>
                       </p>
                     </div>
                   </div>
