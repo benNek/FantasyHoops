@@ -154,8 +154,7 @@ namespace fantasy_hoops.Controllers
                 .Take(25)
                 .ToList()
                 .Where((x, index) => index % 5 == 0)
-                .ToList()
-           ;
+                .ToList();
 
             // Streak
             int streak = 0;

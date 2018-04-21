@@ -15,11 +15,10 @@ export class Avatar extends Component {
     }
     catch (err) {
     }
-
     return (
       <div className="col-lg-4 order-lg-1">
         <div className="row">
-          <h3 className="mt-3 mx-auto">{user.username}</h3>
+          <h3 className="mt-3 mx-auto">{user.userName}</h3>
         </div>
         <img
           src={avatar} alt="Preview"

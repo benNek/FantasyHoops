@@ -16,7 +16,7 @@ export class UserProfile extends Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.name == null) {
+    if (this.props.match.params.name == null || (this.props.match.params.name != null && parse().username == this.props.match.params.name)) {
       this.editProfile();
       const user = parse();
       fetch(`http://localhost:51407/api/user/${user.id}`)
