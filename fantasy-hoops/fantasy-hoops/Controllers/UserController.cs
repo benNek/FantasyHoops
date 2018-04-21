@@ -139,7 +139,7 @@ namespace fantasy_hoops.Controllers
                         .Select(y => y.FP)
                         .FirstOrDefault()
                 })
-                .Take(25)
+                .Take(30)
                 .ToList();
 
             // Getting 5 recent games
@@ -151,6 +151,7 @@ namespace fantasy_hoops.Controllers
                     Score = Math.Round(context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(), 1),
                     players = players.Where(y => y.Date.Equals(x.Date)).ToList()
                 })
+                .Where(x => x.Score != 0 || x.Date.AddDays(-1) < NextGame.NEXT_GAME)
                 .Take(25)
                 .ToList()
                 .Where((x, index) => index % 5 == 0)
