@@ -30,7 +30,7 @@ export class UserScoreCard extends Component {
           >
             <img
               className="user-card-player"
-              src={require(`../../content/images/players/${this.props.player.nbaID}.png`)}
+              src={this.props.image}
             />
           </div>
           <p className="player-usertitle">{this.props.player.lastName}</p>

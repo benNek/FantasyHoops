@@ -16,6 +16,8 @@ export class UserScore extends Component {
           return (
             <UserScoreCard
               key={shortid()}
+              image={this.props.playerIMG[`${player.nbaID}.png`]
+                || this.props.posIMG[`${player.position.toLowerCase()}.png`]}
               player={player}
               showModal={this.props.showModal}
             />

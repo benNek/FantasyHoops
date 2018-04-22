@@ -132,6 +132,7 @@ namespace fantasy_hoops.Controllers
                 .Select(x => new {
                     x.Player.NbaID,
                     x.Player.LastName,
+                    x.Player.Position,
                     x.Player.Team.Color,
                     x.Date,
                     FP = context.UserPlayers

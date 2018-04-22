@@ -35,6 +35,8 @@ export class InfoPanel extends Component {
           return (
             <UserScore
               key={shortid()}
+              posIMG={this.state.posIMG}
+              playerIMG={this.state.playerIMG}
               activity={activity}
               showModal={this.showModal}
             />
