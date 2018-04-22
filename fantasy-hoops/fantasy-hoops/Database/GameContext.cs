@@ -14,7 +14,7 @@ namespace fantasy_hoops.Database
         public DbSet<Injuries> Injuries { get; set; }
         public DbSet<Paragraph> Paragraphs { get; set; }
         public DbSet<News> News { get; set; }
-        public DbSet<UserPlayers> UserPlayers { get; set; }
+        public DbSet<Lineup> Lineups { get; set; }
 
         private static string connectionString = "Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;";
 

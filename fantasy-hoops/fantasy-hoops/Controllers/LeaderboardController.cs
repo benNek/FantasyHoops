@@ -19,12 +19,12 @@ namespace fantasy_hoops.Controllers
         [HttpGet("user")]
         public IEnumerable<Object> GetUserLeaderboard(int from = 0, int limit = 10)
         {
-            return context.UserPlayers
+            return context.Lineups
                 .Where(x => x.Date.Equals(NextGame.NEXT_GAME))
                 .Select(x => new {
                     x.UserID,
                     x.Date,
-                    Score = context.UserPlayers.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(),
+                    Score = context.Lineups.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(),
                     x.User.UserName
                 })
                 .Distinct()
