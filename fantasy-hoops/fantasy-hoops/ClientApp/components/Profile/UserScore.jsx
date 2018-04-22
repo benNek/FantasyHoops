@@ -14,7 +14,11 @@ export class UserScore extends Component {
         this.props.activity.players,
         (player) => {
           return (
-            <UserScoreCard key={shortid()} player={player} />
+            <UserScoreCard
+              key={shortid()}
+              player={player}
+              showModal={this.props.showModal}
+            />
           )
         });
     }
