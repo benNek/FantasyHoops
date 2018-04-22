@@ -7,7 +7,7 @@ export class UserScoreCard extends Component {
 
   render() {
     return (
-      <div style={{ overflow: 'hxidden' }}>
+      <div style={{ overflow: 'hidden' }}>
         <div className="card-circle" style={{ backgroundColor: this.props.player.color }}>
           <img className="user-card-player" src={require(`../../content/images/players/${this.props.player.nbaID}.png`)} />
         </div>

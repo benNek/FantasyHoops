@@ -44,7 +44,7 @@ export class InfoPanel extends Component {
             <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking</span>
           </div>
           <div className="col-md-12">
-            <h5 className="mt-2"><span className="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
+            <h5 className="mt-2"><span className="fa fa-clock-o ion-clock"></span> Recent Activity</h5>
             {recentActivity}
           </div>
         </div>
