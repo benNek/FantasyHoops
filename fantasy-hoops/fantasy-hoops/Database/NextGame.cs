@@ -13,16 +13,18 @@ namespace fantasy_hoops.Database
         public static DateTime NEXT_GAME = DateTime.UtcNow;
         public static DateTime NEXT_GAME_CLIENT = DateTime.UtcNow;
         public static DateTime NEXT_LAST_GAME = DateTime.UtcNow;
-        public static DateTime LAST_GAME = DateTime.UtcNow;
+        public static DateTime PREVIOUS_GAME = DateTime.UtcNow;
+        public static DateTime PREVIOUS_LAST_GAME = DateTime.UtcNow;
 
         public static void SetClientTime()
         {
             NEXT_GAME_CLIENT = NEXT_GAME;
         }
 
-        public static void SetLastGame()
+        public static void SetPreviousGame()
         {
-            LAST_GAME = NEXT_GAME;
+            PREVIOUS_GAME = NEXT_GAME;
+            PREVIOUS_LAST_GAME = NEXT_LAST_GAME;
         }
 
         public async static void Initialize(GameContext context)
@@ -37,11 +39,11 @@ namespace fantasy_hoops.Database
 
             JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(context)),
                 s => s.WithName("statsSeed")
-                .ToRunOnceAt(NEXT_LAST_GAME.AddHours(5)));
+                .ToRunOnceAt(PREVIOUS_LAST_GAME.AddHours(5)));
 
             JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(context)),
                 s => s.WithName("news")
-                .ToRunOnceAt(NEXT_LAST_GAME.AddHours(6)));
+                .ToRunOnceAt(PREVIOUS_LAST_GAME.AddHours(8)));
         }
 
         private static string GetDate()
@@ -63,7 +65,8 @@ namespace fantasy_hoops.Database
                 DateTime timeUTC = DateTime.Parse((string)games[0]["startTimeUTC"]);
                 if (timeUTC > DateTime.UtcNow)
                 {
-                    LAST_GAME = NEXT_GAME;
+                    PREVIOUS_GAME = NEXT_GAME;
+                    PREVIOUS_LAST_GAME = NEXT_LAST_GAME;
                     NEXT_GAME = timeUTC;
                     NEXT_LAST_GAME = DateTime.Parse((string)games[games.Count - 1]["startTimeUTC"]);
                 }
