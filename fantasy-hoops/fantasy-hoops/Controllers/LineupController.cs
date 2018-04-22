@@ -21,7 +21,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var players = context.UserPlayers
+            var players = context.Lineups
                 .Where(x => x.UserID.Equals(id) && x.Date == Database.NextGame.NEXT_GAME)
                 .Select(x => new
                 {
@@ -40,100 +40,26 @@ namespace fantasy_hoops.Controllers
         [HttpPost("submit")]
         public async Task<IActionResult> SubmitLineup([FromBody]SumbitLineupViewModel model)
         {
-            bool updating = context.UserPlayers
+            bool updating = context.Lineups
                 .Where(x => x.UserID.Equals(model.UserID)
                         && x.Date == Database.NextGame.NEXT_GAME)
                 .Any();
 
             if (!updating)
             {
-                var pg = new UserPlayers
-                {
-                    UserID = model.UserID,
-                    PlayerID = model.PgID,
-                    Position = "PG",
-                    Date = Database.NextGame.NEXT_GAME
-                };
-                context.UserPlayers.Add(pg);
-
-                var sg = new UserPlayers
-                {
-                    UserID = model.UserID,
-                    PlayerID = model.SgID,
-                    Position = "SG",
-                    Date = Database.NextGame.NEXT_GAME
-                };
-                context.UserPlayers.Add(sg);
-
-                var sf = new UserPlayers
-                {
-                    UserID = model.UserID,
-                    PlayerID = model.SfID,
-                    Position = "SF",
-                    Date = Database.NextGame.NEXT_GAME
-                };
-                context.UserPlayers.Add(sf);
-
-                var pf = new UserPlayers
-                {
-                    UserID = model.UserID,
-                    PlayerID = model.PfID,
-                    Position = "PF",
-                    Date = Database.NextGame.NEXT_GAME
-                };
-                context.UserPlayers.Add(pf);
-
-                var c = new UserPlayers
-                {
-                    UserID = model.UserID,
-                    PlayerID = model.CID,
-                    Position = "C",
-                    Date = Database.NextGame.NEXT_GAME
-                };
-                context.UserPlayers.Add(c);
+                Add(model.UserID, "PG", model.PgID);
+                Add(model.UserID, "SG", model.SgID);
+                Add(model.UserID, "SF", model.SfID);
+                Add(model.UserID, "PF", model.PfID);
+                Add(model.UserID, "C", model.CID);
             }
-
             else
             {
-                var pg = context.UserPlayers
-                    .Where(x => x.UserID.Equals(model.UserID)
-                            && x.Position.Equals("PG")
-                            && x.Date == Database.NextGame.NEXT_GAME)
-                    .FirstOrDefault();
-                pg.PlayerID = model.PgID;
-                pg.FP = 0.0;
-
-                var sg = context.UserPlayers
-                    .Where(x => x.UserID.Equals(model.UserID)
-                            && x.Position.Equals("SG")
-                            && x.Date == Database.NextGame.NEXT_GAME)
-                    .FirstOrDefault();
-                sg.PlayerID = model.SgID;
-                sg.FP = 0.0;
-
-                var sf = context.UserPlayers
-                    .Where(x => x.UserID.Equals(model.UserID)
-                            && x.Position.Equals("SF")
-                            && x.Date == Database.NextGame.NEXT_GAME)
-                    .FirstOrDefault();
-                sf.PlayerID = model.SfID;
-                sf.FP = 0.0;
-
-                var pf = context.UserPlayers
-                    .Where(x => x.UserID.Equals(model.UserID)
-                            && x.Position.Equals("PF")
-                            && x.Date == Database.NextGame.NEXT_GAME)
-                    .FirstOrDefault();
-                pf.PlayerID = model.PfID;
-                pf.FP = 0.0;
-
-                var c = context.UserPlayers
-                    .Where(x => x.UserID.Equals(model.UserID)
-                            && x.Position.Equals("C")
-                            && x.Date == Database.NextGame.NEXT_GAME)
-                    .FirstOrDefault();
-                c.PlayerID = model.CID;
-                c.FP = 0.0;
+                Update(model.UserID, "PG", model.PgID);
+                Update(model.UserID, "SG", model.SgID);
+                Update(model.UserID, "SF", model.SfID);
+                Update(model.UserID, "PF", model.PfID);
+                Update(model.UserID, "C", model.CID);
             }
 
             await context.SaveChangesAsync();
@@ -149,6 +75,31 @@ namespace fantasy_hoops.Controllers
                 nextGame = Database.NextGame.NEXT_GAME_CLIENT,
                 serverTime = DateTime.Now
             });
+        }
+
+        public void Add(String UserID, String position, int id)
+        {
+            var player = new Lineup
+            {
+                UserID = UserID,
+                PlayerID = id,
+                Position = position,
+                Date = Database.NextGame.NEXT_GAME,
+                Calculated = false
+            };
+            context.Lineups.Add(player);
+        }
+
+        public void Update(String UserID, String position, int newId)
+        {
+            var player = context.Lineups
+                    .Where(x => x.UserID.Equals(UserID)
+                            && x.Position.Equals(position)
+                            && x.Date == Database.NextGame.NEXT_GAME)
+                    .FirstOrDefault();
+            player.PlayerID = newId;
+            player.FP = 0.0;
+            player.Calculated = false;
         }
     }
 }
