@@ -13,12 +13,13 @@ namespace fantasy_hoops.Database
 
         private static async Task Update(GameContext context)
         {
-            var allPlayers = context.UserPlayers.Where(x => x.Date == NextGame.LAST_GAME)
+            var allPlayers = context.Lineups.Where(x => x.Date == NextGame.PREVIOUS_GAME)
                 .Include(x => x.Player).ThenInclude(x => x.Stats)
                 .ToList();
             foreach (var player in allPlayers)
             {
                 player.FP = player.Player.Stats.OrderByDescending(x => x.Date).Select(x => x.FP).FirstOrDefault();
+                player.Calculated = true;
             }
             await context.SaveChangesAsync();
         }

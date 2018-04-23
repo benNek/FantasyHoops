@@ -403,12 +403,6 @@
   margin-left: -0.3rem;
 }
 
-.user-score {
-  max-height: 8rem;
-  min-height: 6rem;
-  width: 35rem;
-}
-
 .player-usertitle {
   text-align: center;
   font-size: 0.7rem;
@@ -426,7 +420,7 @@
 }
 
 .card-circle {
-  margin: 0.5rem 0.8rem 0.1rem 0.8rem;
+  margin: 0rem 0.8rem 0.1rem 0.8rem;
   overflow: hidden;
   border-radius: 50%;
   width: 3.5rem;
