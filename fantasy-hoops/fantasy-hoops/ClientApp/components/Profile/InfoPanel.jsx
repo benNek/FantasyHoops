@@ -1,10 +1,28 @@
 import React, { Component } from 'react';
 import { UserScore } from './UserScore';
+import { PlayerModal } from '../PlayerModal';
 import shortid from 'shortid';
 
 export class InfoPanel extends Component {
   constructor(props) {
     super(props);
+    this.showModal = this.showModal.bind(this);
+
+    this.state = {
+      stats: '',
+      posIMG: this.getPosImages(),
+      playerIMG: this.getPlayerImages(),
+    }
+  }
+
+  showModal(player) {
+    fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          stats: res
+        });
+      });
   }
 
   render() {
@@ -15,7 +33,13 @@ export class InfoPanel extends Component {
         user.recentActivity,
         (activity) => {
           return (
-            <UserScore key={shortid()} activity={activity} />
+            <UserScore
+              key={shortid()}
+              posIMG={this.state.posIMG}
+              playerIMG={this.state.playerIMG}
+              activity={activity}
+              showModal={this.showModal}
+            />
           )
         });
     }
@@ -44,11 +68,41 @@ export class InfoPanel extends Component {
             <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking</span>
           </div>
           <div className="col-md-12">
-            <h5 className="mt-2"><span className="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
+            <h5 className="mt-2"><span className="fa fa-clock-o ion-clock"></span> Recent Activity</h5>
             {recentActivity}
           </div>
         </div>
+        <PlayerModal
+          stats={this.state.stats}
+          image={this.state.stats
+            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+            : ''}
+        />
       </div>
     );
+  }
+
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
+  getPosImages() {
+    try {
+      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
+  }
+
+  getPlayerImages() {
+    try {
+      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
   }
 }

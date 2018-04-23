@@ -10,8 +10,8 @@ export class InjuriesFeed extends Component {
     this.state = {
       noInjuries: false,
       injuries: '',
-      playerIMG: this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/)),
-      posIMG: this.importAll(require.context('../../content/images/', false, /\.(png|jpe?g|svg)$/)),
+      playerIMG: this.getPlayerImages(),
+      posIMG: this.getPosImages(),
       injuryLoader: false,
     }
   }
@@ -47,12 +47,6 @@ export class InjuriesFeed extends Component {
       });
   }
 
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
-  }
-
   render() {
     let injuries = _.map(this.state.injuries,
       (injury) => {
@@ -74,5 +68,29 @@ export class InjuriesFeed extends Component {
         </div>
       </div>
     );
+  }
+
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
+  getPosImages() {
+    try {
+      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
+  }
+
+  getPlayerImages() {
+    try {
+      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
   }
 }
