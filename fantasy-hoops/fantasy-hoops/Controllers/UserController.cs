@@ -155,8 +155,7 @@ namespace fantasy_hoops.Controllers
                 .Take(25)
                 .ToList()
                 .Where((x, index) => index % 5 == 0)
-                .ToList()
-           ;
+                .ToList();
 
             // Streak
             int streak = 0;
@@ -192,6 +191,17 @@ namespace fantasy_hoops.Controllers
             if (user == null)
                 return NotFound(String.Format("User with id {0} has not been found!", id));
             return Ok(user);
+        }
+
+        [HttpGet("name/{name}")]
+        public IActionResult GetByName(String name)
+        {
+            var userId = context.Users.Where(x => x.UserName.ToLower().Equals(name.ToLower())).Select(x => x.Id).FirstOrDefault();
+            if (userId == null)
+            {
+                return NotFound(String.Format("User with name {0} has not been found!", name));
+            }
+            return Get(userId);
         }
 
         [HttpPut("editprofile")]
