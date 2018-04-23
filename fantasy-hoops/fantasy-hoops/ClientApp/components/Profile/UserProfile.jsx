@@ -4,6 +4,8 @@ import { Avatar } from './Avatar';
 import { EditProfile } from './EditProfile';
 import { InfoPanel } from './InfoPanel';
 import { Friends } from './Friends';
+import { Error } from '../Error';
+import { handleErrors } from '../../utils/errors'
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -12,6 +14,9 @@ export class UserProfile extends Component {
       edit: this.props.match.params.edit || '',
       user: '',
       readOnly: false,
+      error: false,
+      errorStatus: '200',
+      errorMessage: ''
     }
   }
 
@@ -34,10 +39,20 @@ export class UserProfile extends Component {
         readOnly: true
       });
       fetch(`http://localhost:51407/api/user/name/${userName}`)
+        .then(res => handleErrors(res))
         .then(res => res.json())
         .then(res => {
           this.setState({
             user: res
+          });
+        })
+        .catch(err => {
+          const status = err.message.substring(0, 3);
+          const message = err.message.substring(4);
+          this.setState({
+            error: true,
+            errorStatus: status,
+            errorMessage: message
           });
         });
     }
@@ -45,6 +60,11 @@ export class UserProfile extends Component {
   }
 
   render() {
+    if (this.state.error) {
+      return (
+        <Error status={this.state.errorStatus} message={this.state.errorMessage}/>
+      );
+    }
     return (
       <div className="container bg-light pt-1" style={{ minWidth: '70rem' }}>
         <div className="row p-4">
