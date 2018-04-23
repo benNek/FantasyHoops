@@ -55,7 +55,7 @@ export class Header extends Component {
           </button>
           <li className="dropdown">
             <a
-              className="fa fa-bell text-light mt-1 ml-3 nav-link dropdown-toggle btn-no-outline"
+              className="fa fa-bell text-light mt-1 ml-3 nav-link dropdown-toggle no-arrow btn-no-outline"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
               aria-haspopup="true"
@@ -70,7 +70,7 @@ export class Header extends Component {
           </li>
           <li className="dropdown">
             <a
-              className="fa fa-user-circle text-light mt-1 ml-2 mr-3 nav-link dropdown-toggle btn-no-outline"
+              className="fa fa-user-circle text-light mt-1 ml-2 mr-3 nav-link dropdown-toggle no-arrow btn-no-outline"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
               aria-haspopup="true"

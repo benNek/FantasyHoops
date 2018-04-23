@@ -461,6 +461,6 @@ margin-bottom: 1.5rem;
   color: rgb(119, 119, 119);
 }
 
-.dropdown-toggle::after {
+.no-arrow::after {
   display:none
 }
