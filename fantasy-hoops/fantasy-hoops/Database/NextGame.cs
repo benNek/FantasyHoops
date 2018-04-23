@@ -27,19 +27,24 @@ namespace fantasy_hoops.Database
 
             await Task.Run(() => SetLastGame(gameDate));
             await Task.Run(() => SetNextGame(gameDate));
-            await PlayerSeed.Initialize(context);
 
             JobManager.AddJob(() => Task.Run(() => Initialize(context)),
                 s => s.WithName("nextGame")
                 .ToRunOnceAt(NEXT_GAME));
 
+            DateTime nextRun = NEXT_LAST_GAME;
+            if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
+                nextRun = PREVIOUS_LAST_GAME;
+
             JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(context)),
                 s => s.WithName("statsSeed")
-                .ToRunOnceAt(PREVIOUS_LAST_GAME.AddHours(5)));
+                .ToRunOnceAt(nextRun.AddHours(5)));
 
             JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(context)),
                 s => s.WithName("news")
-                .ToRunOnceAt(PREVIOUS_LAST_GAME.AddHours(8)));
+                .ToRunOnceAt(nextRun.AddHours(8)));
+
+            await PlayerSeed.Initialize(context);
         }
 
         private static string GetDate()
