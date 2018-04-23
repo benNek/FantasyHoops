@@ -460,3 +460,7 @@ margin-bottom: 1.5rem;
   font-weight: 650;
   color: rgb(119, 119, 119);
 }
+
+.dropdown-toggle::after {
+  display:none
+}

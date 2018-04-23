@@ -5,7 +5,18 @@ import defaultPhoto from '../content/images/default.png';
 export class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { navHeight: '4rem' };
+    this.increment = this.increment.bind(this);
+
+    this.state = {
+      navHeight: '4rem',
+      notificationCount: 0
+    };
+  }
+
+  increment() {
+    this.setState({
+      notificationCount: this.state.notificationCount + 1
+    });
   }
 
   render() {
@@ -28,20 +39,47 @@ export class Header extends Component {
       }
       catch (err) {
       }
+      const badge = this.state.notificationCount > 0
+        ? <span className="badge badge-danger" style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}>{this.state.notificationCount}</span>
+        : '';
       profile = (
         <ul className="nav navbar-nav ml-auto">
+          {/* Just for notification testing */}
+          <button
+            onClick={this.increment}
+            type="button"
+            className="btn btn-outline-light"
+            style={{ height: '2.5rem' }}
+          >
+            Test notifications
+          </button>
           <li className="dropdown">
-            <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Friend  requests </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a className="dropdown-item">No friend requests now</a>
+            <a
+              className="fa fa-bell text-light mt-1 ml-3 nav-link dropdown-toggle btn-no-outline"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              style={{ fontSize: '2rem' }}
+            >{badge}
+            </a>
+            <div className="dropdown-menu dropdown-menu-right w-100" aria-labelledby="navbarDropdownMenuLink">
+              <h6 className="dropdown-header">Notifications</h6>
+              <a className="dropdown-item">No notifications</a>
             </div>
           </li>
           <li className="dropdown">
-            <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Account
-        </a>
+            <a
+              className="fa fa-user-circle text-light mt-1 ml-2 mr-3 nav-link dropdown-toggle btn-no-outline"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              style={{ fontSize: '2rem' }}
+            >
+            </a>
             <ul className="dropdown-menu dropdown-menu-right">
+              <h6 className="dropdown-header">Account</h6>
               <li>
                 <div className="navbar-login">
                   <div className="row">
