@@ -11,13 +11,23 @@ export class Notifications extends Component {
     this.readAll = this.readAll.bind(this);
 
     this.state = {
+      serverTime: '',
       userNotifications: '',
       unreadCount: 0
     };
   }
 
-  componentDidMount() {
-    fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
+  async componentDidMount() {
+    await fetch(`http://localhost:51407/api/lineup/nextGame`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          serverTime: res.serverTime
+        });
+      })
+    await fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
       .then(res => {
         return res.json()
       })
@@ -81,9 +91,12 @@ export class Notifications extends Component {
   }
 
   getNotifications() {
+    if (this.state.userNotifications.length < 1)
+      return 'No notifications';
     return _.slice(this.state.userNotifications, 0, 5)
       .map(not => {
         return <GSCard
+          serverTime={this.state.serverTime}
           key={shortid()}
           toggleNotification={this.toggleNotification}
           notification={not}
@@ -95,9 +108,7 @@ export class Notifications extends Component {
     const badge = this.state.unreadCount > 0
       ? <span className="badge badge-danger" style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}>{this.state.unreadCount}</span>
       : '';
-
     const notifications = this.getNotifications();
-
     return (
       <li className="dropdown">
         <a
@@ -114,13 +125,15 @@ export class Notifications extends Component {
           <a
               onClick={this.readAll}
               className="position-absolute"
-              style={{ right: '2rem' }}
+              style={{ right: '1rem' }}
               href="javascript:void(0);"
             >
               Mark All as Read
             </a>
           </h6>
-          {notifications}
+          <div style={{ marginBottom: '-0.5rem' }}>
+            {notifications}
+          </div>
         </div>
       </li>
     );

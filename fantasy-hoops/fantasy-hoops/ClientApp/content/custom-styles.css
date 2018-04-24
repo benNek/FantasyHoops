@@ -468,3 +468,19 @@ margin-bottom: 1.5rem;
 .cursor-default {
   cursor: default;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.link {
+  color: #0060B6;
+  text-decoration: none;
+}
+
+.link:hover 
+{
+   color:#00A0C6; 
+   text-decoration:none; 
+   cursor:pointer;  
+}

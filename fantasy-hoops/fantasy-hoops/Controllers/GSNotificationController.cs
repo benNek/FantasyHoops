@@ -71,11 +71,10 @@ namespace fantasy_hoops.Controllers
         [HttpPost("readall/{id}")]
         public IActionResult ReadAll(string id)
         {
-            var userNotifications = context.GSNotifications
-                .Where(x => x.UserID.Equals(id))
-                .ToList();
-            foreach (var notification in userNotifications)
-                notification.ReadStatus = true;
+            context.GSNotifications
+                .Where(x => x.UserID.Equals(id) && x.ReadStatus == false)
+                .ToList()
+                .ForEach(n => n.ReadStatus = true);
 
             context.SaveChanges();
             return Ok();
