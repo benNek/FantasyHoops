@@ -9,7 +9,7 @@ namespace fantasy_hoops.Models
 
     public enum RequestStatus
     {
-        PENDING, ACCEPTED, DECLINED
+        PENDING, ACCEPTED, DECLINED, CANCELED
     }
 
     public class FriendRequest
@@ -22,8 +22,8 @@ namespace fantasy_hoops.Models
         public RequestStatus Status { get; set; }
 
         [ForeignKey("SenderID")]
-        public User Sender { get; set; }
+        public virtual User Sender { get; set; }
         [ForeignKey("ReceiverID")]
-        public User Receiver { get; set; }
+        public virtual User Receiver { get; set; }
     }
 }
