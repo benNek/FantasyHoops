@@ -464,3 +464,7 @@ margin-bottom: 1.5rem;
 .no-arrow::after {
   display:none
 }
+
+.cursor-default {
+  cursor: default;
+}

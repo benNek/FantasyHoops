@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { isAuth, parse, logout } from '../utils/auth';
 import defaultPhoto from '../content/images/default.png';
 
 export class Header extends Component {
   constructor(props) {
     super(props);
-    this.increment = this.increment.bind(this);
 
     this.state = {
       navHeight: '4rem',
-      notificationCount: 0
+      userNotifications: '',
+      unreadCount: 0
     };
   }
 
-  increment() {
-    this.setState({
-      notificationCount: this.state.notificationCount + 1
-    });
+  componentDidMount() {
+    if (isAuth()) {
+      const user = parse();
+      fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
+        .then(res => {
+          return res.json()
+        })
+        .then(res => {
+          this.setState({
+            userNotifications: res,
+            unreadCount: res.filter(n => n.readStatus == false).length
+          });
+        })
+    }
   }
 
   render() {
@@ -39,20 +50,17 @@ export class Header extends Component {
       }
       catch (err) {
       }
-      const badge = this.state.notificationCount > 0
-        ? <span className="badge badge-danger" style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}>{this.state.notificationCount}</span>
+      const badge = this.state.unreadCount > 0
+        ? <span className="badge badge-danger" style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}>{this.state.unreadCount}</span>
         : '';
+      const notifications = _.slice(this.state.userNotifications, 0, 5)
+        .map(not => {
+          if (not.readStatus)
+            return <a className="dropdown-item cursor-default">Game has finished! Your lineup scored {not.score} FP</a>
+          else return <a className="dropdown-item bg-info text-light cursor-default">Game has finished! Your lineup scored {not.score} FP</a>
+        });
       profile = (
         <ul className="nav navbar-nav ml-auto">
-          {/* Just for notification testing */}
-          <button
-            onClick={this.increment}
-            type="button"
-            className="btn btn-outline-light"
-            style={{ height: '2.5rem' }}
-          >
-            Test notifications
-          </button>
           <li className="dropdown">
             <a
               className="fa fa-bell text-light mt-1 ml-3 nav-link dropdown-toggle no-arrow btn-no-outline"
@@ -63,9 +71,10 @@ export class Header extends Component {
               style={{ fontSize: '2rem' }}
             >{badge}
             </a>
-            <div className="dropdown-menu dropdown-menu-right w-100" aria-labelledby="navbarDropdownMenuLink">
+            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
               <h6 className="dropdown-header">Notifications</h6>
-              <a className="dropdown-item">No notifications</a>
+              {notifications}
+              {/* <a className="dropdown-item">No notifications</a> */}
             </div>
           </li>
           <li className="dropdown">
@@ -85,7 +94,7 @@ export class Header extends Component {
                   <div className="row">
                     <div className="col-lg-4">
                       <p className="text-center">
-                        <a href='/profile'><img src={avatar} width="100" height="100" alt="" /></a>
+                        <a className="btn-no-outline" href='/profile'><img src={avatar} width="100" height="100" alt="" /></a>
                       </p>
                     </div>
                     <div className="col-lg-8">

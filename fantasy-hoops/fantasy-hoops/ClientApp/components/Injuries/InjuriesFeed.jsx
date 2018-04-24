@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { InjuryCard } from './InjuryCard';
-import _ from 'lodash'
+import _ from 'lodash';
 import shortid from 'shortid';
 import { Loader } from '../Loader';
 
