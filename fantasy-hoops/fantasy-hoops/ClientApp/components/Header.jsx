@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { isAuth, parse, logout } from '../utils/auth';
 import defaultPhoto from '../content/images/default.png';
+import { Notifications } from './Notifications/Notifications';
 
 export class Header extends Component {
   constructor(props) {
@@ -12,22 +13,6 @@ export class Header extends Component {
       userNotifications: '',
       unreadCount: 0
     };
-  }
-
-  componentDidMount() {
-    if (isAuth()) {
-      const user = parse();
-      fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
-        .then(res => {
-          return res.json()
-        })
-        .then(res => {
-          this.setState({
-            userNotifications: res,
-            unreadCount: res.filter(n => n.readStatus == false).length
-          });
-        })
-    }
   }
 
   render() {
@@ -50,47 +35,24 @@ export class Header extends Component {
       }
       catch (err) {
       }
-      const badge = this.state.unreadCount > 0
-        ? <span className="badge badge-danger" style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}>{this.state.unreadCount}</span>
-        : '';
-      const notifications = _.slice(this.state.userNotifications, 0, 5)
-        .map(not => {
-          if (not.readStatus)
-            return <a className="dropdown-item cursor-default">Game has finished! Your lineup scored {not.score} FP</a>
-          else return <a className="dropdown-item bg-info text-light cursor-default">Game has finished! Your lineup scored {not.score} FP</a>
-        });
+
       profile = (
         <ul className="nav navbar-nav ml-auto">
+          <Notifications />
           <li className="dropdown">
             <a
-              className="fa fa-bell text-light mt-1 ml-3 nav-link dropdown-toggle no-arrow btn-no-outline"
+              className="text-light ml-2 mr-3 nav-link dropdown-toggle no-arrow btn-no-outline"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-              style={{ fontSize: '2rem' }}
-            >{badge}
-            </a>
-            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <h6 className="dropdown-header">Notifications</h6>
-              {notifications}
-              {/* <a className="dropdown-item">No notifications</a> */}
-            </div>
-          </li>
-          <li className="dropdown">
-            <a
-              className="fa fa-user-circle text-light mt-1 ml-2 mr-3 nav-link dropdown-toggle no-arrow btn-no-outline"
-              id="navbarDropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-              style={{ fontSize: '2rem' }}
             >
+              <img src={avatar} alt={user.username} width="36rem" />
             </a>
             <ul className="dropdown-menu dropdown-menu-right">
               <h6 className="dropdown-header">Account</h6>
               <li>
-                <div className="navbar-login">
+                <div className="navbar-login" style={{ width: '25rem' }}>
                   <div className="row">
                     <div className="col-lg-4">
                       <p className="text-center">
@@ -98,10 +60,10 @@ export class Header extends Component {
                       </p>
                     </div>
                     <div className="col-lg-8">
-                      <p className="text-left"><strong>{user.username}</strong></p>
+                      <a className="btn-no-outline text-dark" href='/profile'><h4 className="text-left"><strong>{user.username}</strong></h4></a>
                       <p className="text-left small">{user.email}</p>
                       <p className="text-left">
-                        <a href={`/profile/${user.username}/edit`} className="btn btn-primary btn-block btn-sm">Edit profile</a>
+                        <button type="button" href={`/profile/${user.username}/edit`} className="btn btn-outline-primary btn-block btn-sm">Edit profile</button>
                       </p>
                     </div>
                   </div>
@@ -109,11 +71,11 @@ export class Header extends Component {
               </li>
               <li className="divider"></li>
               <li>
-                <div className="navbar-login navbar-login-session">
+                <div className="navbar-login navbar-login-session w-100">
                   <div className="row">
                     <div className="col-lg-12">
                       <p>
-                        <a onClick={logout} className="btn btn-light btn-block">Logout</a>
+                        <button type="button" onClick={logout} className="btn btn-outline-danger btn-block">Logout</button>
                       </p>
                     </div>
                   </div>
