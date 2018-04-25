@@ -92,7 +92,7 @@ export class Notifications extends Component {
 
   getNotifications() {
     if (this.state.userNotifications.length < 1)
-      return 'No notifications';
+      return <a className="dropdown-item cursor-default text-center">No notifications</a>;
     return _.slice(this.state.userNotifications, 0, 5)
       .map(not => {
         return <GSCard
@@ -120,7 +120,7 @@ export class Notifications extends Component {
           style={{ fontSize: '2rem' }}
         >{badge}
         </a>
-        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '22rem' }}>
           <h6 className="dropdown-header">Notifications
           <a
               onClick={this.readAll}

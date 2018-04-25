@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using fantasy_hoops.Database;
+using fantasy_hoops.Models;
+using fantasy_hoops.Models.Notifications;
 using fantasy_hoops.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fantasy_hoops.Controllers
 {
     [Route("api/[controller]")]
-    public class GSNotificationController : Controller
+    public class NotificationController : Controller
     {
 
         private readonly GameContext context;
 
-        public GSNotificationController()
+        public NotificationController()
         {
             context = new GameContext();
         }
@@ -21,14 +23,13 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.GSNotifications
+            return context.Notifications.OfType<GameScoreNotification>()
                 .Select(x => new
                 {
                     x.NotificationID,
                     x.DateCreated,
                     x.ReadStatus,
-                    x.Score,
-                    x.UserID
+                    x.UserID,
                 })
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
@@ -37,13 +38,12 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var userNotifications = context.GSNotifications
+            var userNotifications = context.Notifications.OfType<GameScoreNotification>()
                 .Select(x => new
                 {
                     x.NotificationID,
                     x.DateCreated,
                     x.ReadStatus,
-                    x.Score,
                     x.UserID
                 })
             .Where(y => y.UserID == id)
@@ -58,7 +58,7 @@ namespace fantasy_hoops.Controllers
         [HttpPost("toggle")]
         public IActionResult ToggleNotification([FromBody]GSNotificationViewModel model)
         {
-            context.GSNotifications
+            context.Notifications
                 .Where(x => x.NotificationID == model.NotificationID
                         && x.UserID.Equals(model.UserID))
                 .FirstOrDefault()
@@ -71,7 +71,7 @@ namespace fantasy_hoops.Controllers
         [HttpPost("readall/{id}")]
         public IActionResult ReadAll(string id)
         {
-            context.GSNotifications
+            context.Notifications
                 .Where(x => x.UserID.Equals(id) && x.ReadStatus == false)
                 .ToList()
                 .ForEach(n => n.ReadStatus = true);
