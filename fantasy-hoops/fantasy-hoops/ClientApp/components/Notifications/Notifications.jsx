@@ -46,6 +46,10 @@ export class Notifications extends Component {
   async toggleNotification(notification) {
     if (notification.readStatus)
       return;
+    const data = {
+      notificationID: notification.notificationID,
+      userID: notification.userID
+    }
     await fetch('http://localhost:51407/api/notification/toggle', {
       method: 'POST',
       headers: {
@@ -68,7 +72,6 @@ export class Notifications extends Component {
           unreadCount: res.filter(n => n.readStatus == false).length
         });
       });
-    window.location.href = '/profile';
   }
 
   async readAll() {
@@ -107,9 +110,10 @@ export class Notifications extends Component {
             toggleNotification={this.toggleNotification}
             notification={notification}
           />;
-        if (notification.friendID)
-          console.log(notification.friend);
-        return <a key={shortid()} className="dropdown-item cursor-default text-center">Friend request from {notification.friendID}</a>;
+        if (notification.friend)
+          return <a key={shortid()} className="dropdown-item cursor-default text-center">{notification.message}</a>;
+        if (notification.injury)
+          return <a key={shortid()} className="dropdown-item cursor-default text-center">{notification.injury.player.firstName} {notification.injury.player.lastName} {notification.injury.injury}</a>;
       });
   }
 

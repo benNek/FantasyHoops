@@ -24,7 +24,17 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Notifications
+            return context.Notifications.OfType<GameScoreNotification>()
+                    .Include(gs => gs.User)
+                    .AsEnumerable()
+                    .OfType<Notification>()
+                    .Union(context.Notifications
+                        .OfType<FriendRequestNotification>()
+                        .Include(fr => fr.Friend))
+                    .Union(context.Notifications
+                        .OfType<InjuryNotification>()
+                        .Include(inj => inj.Injury)
+                        .ThenInclude(p => p.Player))
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
         }
@@ -32,10 +42,20 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var userNotifications = context.Notifications
-            .Where(y => y.UserID == id)
-            .OrderByDescending(d => d.DateCreated)
-            .ToList();
+            var userNotifications = context.Notifications.OfType<GameScoreNotification>()
+                    .Where(y => y.UserID == id)
+                    .Include(gs => gs.User)
+                    .AsEnumerable()
+                    .OfType<Notification>()
+                    .Union(context.Notifications
+                        .OfType<FriendRequestNotification>()
+                        .Include(fr => fr.Friend))
+                    .Union(context.Notifications
+                        .OfType<InjuryNotification>()
+                        .Include(inj => inj.Injury)
+                        .ThenInclude(p => p.Player))
+                    .OrderByDescending(y => y.DateCreated)
+                    .ToList();
 
             if (userNotifications == null)
                 return NotFound(new { error = String.Format("User with id {0} do not have any notifications!", id) });
@@ -43,7 +63,7 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpPost("toggle")]
-        public IActionResult ToggleNotification([FromBody]GSNotificationViewModel model)
+        public IActionResult ToggleNotification([FromBody]NotificationViewModel model)
         {
             context.Notifications
                 .Where(x => x.NotificationID == model.NotificationID

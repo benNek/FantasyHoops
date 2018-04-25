@@ -22,11 +22,11 @@ namespace fantasy_hoops
                 s => s.WithName("setTime")
                 .ToRunOnceAt(DateTime.UtcNow.AddSeconds(15)));
 
-            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)),
-                s => s.WithName("injuries")
-                .ToRunNow()
-                .AndEvery(33)
-                .Minutes());
+            //JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)),
+            //    s => s.WithName("injuries")
+            //    .ToRunNow()
+            //    .AndEvery(33)
+            //    .Minutes());
 
             JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)),
                 s => s.WithName("photos")
