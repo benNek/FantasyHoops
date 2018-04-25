@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-export class GameScoreCard extends Component {
+export class GameScoreNotification extends Component {
   constructor(props) {
     super(props);
     this.select = this.select.bind(this);

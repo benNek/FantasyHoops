@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using System.Globalization;
 using fantasy_hoops.Helpers;
+using FluentScheduler;
 
 namespace fantasy_hoops.Database
 {
@@ -18,7 +19,10 @@ namespace fantasy_hoops.Database
             // Gets each day's stats the number of days before today
             int daysFromToday = 30;
             await Calculate(context, daysFromToday);
-            await UserScoreSeed.Initialize(context);
+
+            JobManager.AddJob(async () => await UserScoreSeed.Initialize(context),
+                s => s.WithName("userScore")
+                .ToRunNow());
         }
 
         private static JObject GetBoxscore(string url)

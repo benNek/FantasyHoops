@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using Microsoft.EntityFrameworkCore;
 using fantasy_hoops.Helpers;
+using fantasy_hoops.Models.Notifications;
+using FluentScheduler;
+using System.Threading;
 
 namespace fantasy_hoops.Database
 {
@@ -16,6 +19,9 @@ namespace fantasy_hoops.Database
 
         public static async Task Initialize(GameContext context)
         {
+            while (JobManager.RunningSchedules.Any(s => !s.Name.Equals("injuries")))
+                Thread.Sleep(5000);
+
             await Extract(context);
         }
 
@@ -56,6 +62,32 @@ namespace fantasy_hoops.Database
             if (injuryObj.Player == null)
                 return;
             context.Injuries.Add(injuryObj);
+            UpdateNotifications(context, injuryObj);
+        }
+
+        private static void UpdateNotifications(GameContext context, Injuries injury)
+        {
+            context.Lineups
+                .Where(x => x.Date.Equals(NextGame.NEXT_GAME)
+                            && x.PlayerID == injury.PlayerID)
+                .ToList()
+                .ForEach(s =>
+                {
+                    var inj = new InjuryNotification
+                    {
+                        UserID = s.UserID,
+                        ReadStatus = false,
+                        DateCreated = DateTime.UtcNow,
+                        PlayerID = s.PlayerID,
+                        InjuryStatus = injury.Status,
+                        InjuryDescription = injury.Injury
+                    };
+
+                    if (!context.InjuryNotifications
+                    .Any(x => x.InjuryStatus.Equals(inj.InjuryStatus)
+                                && x.PlayerID == inj.PlayerID))
+                        context.InjuryNotifications.Add(inj);
+                });
         }
     }
 }

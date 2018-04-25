@@ -21,14 +21,14 @@ namespace fantasy_hoops.Database
             NEXT_GAME_CLIENT = NEXT_GAME;
         }
 
-        public async static void Initialize(GameContext context)
+        public async static Task Initialize(GameContext context)
         {
             string gameDate = GetDate();
 
             await Task.Run(() => SetLastGame(gameDate));
             await Task.Run(() => SetNextGame(gameDate));
 
-            JobManager.AddJob(() => Task.Run(() => Initialize(context)),
+            JobManager.AddJob(async () => await Initialize(context),
                 s => s.WithName("nextGame")
                 .ToRunOnceAt(NEXT_GAME));
 
@@ -36,15 +36,17 @@ namespace fantasy_hoops.Database
             if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
                 nextRun = PREVIOUS_LAST_GAME;
 
-            JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(context)),
+            JobManager.AddJob(async () => await StatsSeed.Initialize(context),
                 s => s.WithName("statsSeed")
                 .ToRunOnceAt(nextRun.AddHours(5)));
 
-            JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(context)),
+            JobManager.AddJob(async () => await NewsSeed.Initialize(context),
                 s => s.WithName("news")
                 .ToRunOnceAt(nextRun.AddHours(8)));
 
-            await PlayerSeed.Initialize(context);
+            JobManager.AddJob(async () => await PlayerSeed.Initialize(context),
+                s => s.WithName("playerSeed")
+                .ToRunNow());
         }
 
         private static string GetDate()

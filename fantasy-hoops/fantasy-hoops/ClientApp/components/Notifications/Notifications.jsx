@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { isAuth, parse, logout } from '../../utils/auth';
-import { GameScoreCard } from './GameScoreCard';
+import { GameScoreNotification } from './GameScoreNotification';
+import { InjuryNotification } from './InjuryNotification';
+import { FriendRequestNotification } from './FriendRequestNotification';
 import shortid from 'shortid';
 const user = parse();
 
@@ -104,16 +106,26 @@ export class Notifications extends Component {
     return _.slice(this.state.userNotifications, 0, 5)
       .map(notification => {
         if (notification.score)
-          return <GameScoreCard
-            serverTime={this.state.serverTime}
+          return <GameScoreNotification
             key={shortid()}
+            serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
           />;
         if (notification.friend)
-          return <a key={shortid()} className="dropdown-item cursor-default text-center">{notification.message}</a>;
-        if (notification.injury)
-          return <a key={shortid()} className="dropdown-item cursor-default text-center">{notification.injury.player.firstName} {notification.injury.player.lastName} {notification.injury.injury}</a>;
+          return <FriendRequestNotification
+            key={shortid()}
+            serverTime={this.state.serverTime}
+            toggleNotification={this.toggleNotification}
+            notification={notification}
+          />;
+        if (notification.player)
+          return <InjuryNotification
+            key={shortid()}
+            serverTime={this.state.serverTime}
+            toggleNotification={this.toggleNotification}
+            notification={notification}
+          />;
       });
   }
 
@@ -137,7 +149,7 @@ export class Notifications extends Component {
           <h6 className="dropdown-header">Notifications
           <a
               onClick={this.readAll}
-              className="position-absolute"
+              className="position-absolute btn-no-outline"
               style={{ right: '1rem' }}
               href="javascript:void(0);"
             >

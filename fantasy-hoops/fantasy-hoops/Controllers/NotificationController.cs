@@ -33,8 +33,7 @@ namespace fantasy_hoops.Controllers
                         .Include(fr => fr.Friend))
                     .Union(context.Notifications
                         .OfType<InjuryNotification>()
-                        .Include(inj => inj.Injury)
-                        .ThenInclude(p => p.Player))
+                        .Include(inj => inj.Player))
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
         }
@@ -52,8 +51,7 @@ namespace fantasy_hoops.Controllers
                         .Include(fr => fr.Friend))
                     .Union(context.Notifications
                         .OfType<InjuryNotification>()
-                        .Include(inj => inj.Injury)
-                        .ThenInclude(p => p.Player))
+                        .Include(inj => inj.Player))
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
 
