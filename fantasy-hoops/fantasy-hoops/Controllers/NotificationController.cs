@@ -6,6 +6,7 @@ using fantasy_hoops.Models;
 using fantasy_hoops.Models.Notifications;
 using fantasy_hoops.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Controllers
 {
@@ -23,15 +24,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Notifications.OfType<GameScoreNotification>()
-                .Select(x => new
-                {
-                    x.NotificationID,
-                    x.DateCreated,
-                    x.ReadStatus,
-                    x.UserID,
-                    x.Score
-                })
+            return context.Notifications
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
         }
@@ -39,15 +32,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var userNotifications = context.Notifications.OfType<GameScoreNotification>()
-                .Select(x => new
-                {
-                    x.NotificationID,
-                    x.DateCreated,
-                    x.ReadStatus,
-                    x.UserID,
-                    x.Score
-                })
+            var userNotifications = context.Notifications
             .Where(y => y.UserID == id)
             .OrderByDescending(d => d.DateCreated)
             .ToList();

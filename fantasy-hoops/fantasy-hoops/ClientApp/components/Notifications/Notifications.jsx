@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { isAuth, parse, logout } from '../../utils/auth';
-import { GSCard } from './GSCard';
+import { GameScoreCard } from './GameScoreCard';
 import shortid from 'shortid';
 const user = parse();
 
@@ -37,6 +37,10 @@ export class Notifications extends Component {
           unreadCount: res.filter(n => n.readStatus == false).length
         });
       })
+    await fetch(`http://localhost:51407/api/notification/`)
+      .then(res => {
+        return res.json()
+      });
   }
 
   async toggleNotification(notification) {
@@ -54,7 +58,7 @@ export class Notifications extends Component {
       .catch(err => {
       });
 
-    fetch(`http://localhost:51407/api/notification/${user.id}`)
+    await fetch(`http://localhost:51407/api/notification/${user.id}`)
       .then(res => {
         return res.json()
       })
@@ -63,7 +67,8 @@ export class Notifications extends Component {
           userNotifications: res,
           unreadCount: res.filter(n => n.readStatus == false).length
         });
-      })
+      });
+    window.location.href = '/profile';
   }
 
   async readAll() {
@@ -94,13 +99,17 @@ export class Notifications extends Component {
     if (this.state.userNotifications.length < 1)
       return <a className="dropdown-item cursor-default text-center">No notifications</a>;
     return _.slice(this.state.userNotifications, 0, 5)
-      .map(not => {
-        return <GSCard
-          serverTime={this.state.serverTime}
-          key={shortid()}
-          toggleNotification={this.toggleNotification}
-          notification={not}
-        />;
+      .map(notification => {
+        if (notification.score)
+          return <GameScoreCard
+            serverTime={this.state.serverTime}
+            key={shortid()}
+            toggleNotification={this.toggleNotification}
+            notification={notification}
+          />;
+        if (notification.friendID)
+          console.log(notification.friend);
+        return <a key={shortid()} className="dropdown-item cursor-default text-center">Friend request from {notification.friendID}</a>;
       });
   }
 

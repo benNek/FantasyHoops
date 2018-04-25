@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-export class GSCard extends Component {
+export class GameScoreCard extends Component {
   constructor(props) {
     super(props);
     this.select = this.select.bind(this);
@@ -26,7 +26,7 @@ export class GSCard extends Component {
     if (this.props.notification.readStatus)
       read = "card-body text-muted";
     return (
-      <a onClick={this.select} className="card cursor-pointer link" style={{ width: '22rem' }} href="/profile">
+      <a onClick={this.select} className="card cursor-pointer link" style={{ width: '22rem' }}>
         <div className={read} style={{ margin: '-0.6rem' }}>
           <div className="row">
             <div className="col-1 mr-2">
