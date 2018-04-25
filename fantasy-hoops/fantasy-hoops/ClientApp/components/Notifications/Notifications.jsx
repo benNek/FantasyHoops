@@ -27,7 +27,7 @@ export class Notifications extends Component {
           serverTime: res.serverTime
         });
       })
-    await fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
+    await fetch(`http://localhost:51407/api/notification/${user.id}`)
       .then(res => {
         return res.json()
       })
@@ -42,7 +42,7 @@ export class Notifications extends Component {
   async toggleNotification(notification) {
     if (notification.readStatus)
       return;
-    await fetch('http://localhost:51407/api/gsnotification/toggle', {
+    await fetch('http://localhost:51407/api/notification/toggle', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -54,7 +54,7 @@ export class Notifications extends Component {
       .catch(err => {
       });
 
-    fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
+    fetch(`http://localhost:51407/api/notification/${user.id}`)
       .then(res => {
         return res.json()
       })
@@ -67,7 +67,7 @@ export class Notifications extends Component {
   }
 
   async readAll() {
-    await fetch(`http://localhost:51407/api/gsnotification/readall/${user.id}`, {
+    await fetch(`http://localhost:51407/api/notification/readall/${user.id}`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -78,7 +78,7 @@ export class Notifications extends Component {
       .catch(err => {
       });
 
-    fetch(`http://localhost:51407/api/gsnotification/${user.id}`)
+    fetch(`http://localhost:51407/api/notification/${user.id}`)
       .then(res => {
         return res.json()
       })

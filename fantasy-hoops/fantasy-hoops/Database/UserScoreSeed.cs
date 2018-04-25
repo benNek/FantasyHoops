@@ -28,22 +28,22 @@ namespace fantasy_hoops.Database
                 .Where(x => x.Date == NextGame.PREVIOUS_GAME)
                 .Select(x => x.UserID)
                 .Distinct();
-            //foreach (var userID in allUsersID)
-            //{
-            //    var userScore = Math.Round(allPlayers
-            //        .Where(x => x.Date == NextGame.PREVIOUS_GAME
-            //                && x.UserID.Equals(userID))
-            //        .Select(x => x.FP).Sum(), 1);
+            foreach (var userID in allUsersID)
+            {
+                var userScore = Math.Round(allPlayers
+                    .Where(x => x.Date == NextGame.PREVIOUS_GAME
+                            && x.UserID.Equals(userID))
+                    .Select(x => x.FP).Sum(), 1);
 
-            //    var notificationObj = new GameScoreNotification
-            //    {
-            //        UserID = userID,
-            //        ReadStatus = false,
-            //        DateCreated = DateTime.UtcNow,
-            //        Score = userScore
-            //    };
-            //    context.GSNotifications.Add(notificationObj);
-            //}
+                var notificationObj = new GameScoreNotification
+                {
+                    UserID = userID,
+                    ReadStatus = false,
+                    DateCreated = DateTime.UtcNow,
+                    Score = userScore
+                };
+                context.Notifications.Add(notificationObj);
+            }
             await context.SaveChangesAsync();
         }
     }

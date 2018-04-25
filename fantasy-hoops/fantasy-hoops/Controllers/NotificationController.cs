@@ -30,6 +30,7 @@ namespace fantasy_hoops.Controllers
                     x.DateCreated,
                     x.ReadStatus,
                     x.UserID,
+                    x.Score
                 })
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
@@ -44,7 +45,8 @@ namespace fantasy_hoops.Controllers
                     x.NotificationID,
                     x.DateCreated,
                     x.ReadStatus,
-                    x.UserID
+                    x.UserID,
+                    x.Score
                 })
             .Where(y => y.UserID == id)
             .OrderByDescending(d => d.DateCreated)
