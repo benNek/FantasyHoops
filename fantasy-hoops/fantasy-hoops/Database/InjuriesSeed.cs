@@ -20,7 +20,7 @@ namespace fantasy_hoops.Database
         public static async Task Initialize(GameContext context)
         {
             while (JobManager.RunningSchedules.Any(s => !s.Name.Equals("injuries")))
-                Thread.Sleep(5000);
+                Thread.Sleep(15000);
 
             await Extract(context);
         }

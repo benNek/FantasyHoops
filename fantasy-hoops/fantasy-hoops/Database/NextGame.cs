@@ -29,7 +29,7 @@ namespace fantasy_hoops.Database
             await Task.Run(() => SetNextGame(gameDate));
 
             JobManager.AddJob(async () => await Initialize(context),
-                s => s.WithName("nextGame")
+                s => s.WithName(NEXT_GAME.ToLongDateString())
                 .ToRunOnceAt(NEXT_GAME));
 
             DateTime nextRun = NEXT_LAST_GAME;
@@ -37,15 +37,15 @@ namespace fantasy_hoops.Database
                 nextRun = PREVIOUS_LAST_GAME;
 
             JobManager.AddJob(async () => await StatsSeed.Initialize(context),
-                s => s.WithName("statsSeed")
+                s => s.WithName("statsSeed_"+nextRun.ToLongDateString())
                 .ToRunOnceAt(nextRun.AddHours(5)));
 
             JobManager.AddJob(async () => await NewsSeed.Initialize(context),
-                s => s.WithName("news")
+                s => s.WithName("news_"+nextRun.ToLongDateString())
                 .ToRunOnceAt(nextRun.AddHours(8)));
 
             JobManager.AddJob(async () => await PlayerSeed.Initialize(context),
-                s => s.WithName("playerSeed")
+                s => s.WithName("playerSeed_"+nextRun.ToLongDateString())
                 .ToRunNow());
         }
 
