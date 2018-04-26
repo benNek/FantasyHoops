@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { isAuth, parse, logout } from '../utils/auth';
 import defaultPhoto from '../content/images/default.png';
+import { Notifications } from './Notifications/Notifications';
 
 export class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { navHeight: '4rem' };
+
+    this.state = {
+      navHeight: '4rem',
+      userNotifications: '',
+      unreadCount: 0
+    };
   }
 
   render() {
@@ -28,33 +35,35 @@ export class Header extends Component {
       }
       catch (err) {
       }
+
       profile = (
         <ul className="nav navbar-nav ml-auto">
+          <Notifications />
           <li className="dropdown">
-            <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Friend  requests </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a className="dropdown-item">No friend requests now</a>
-            </div>
-          </li>
-          <li className="dropdown">
-            <a className="nav-link dropdown-toggle btn-no-outline" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Account
-        </a>
+            <a
+              className="text-light ml-2 mr-3 nav-link dropdown-toggle no-arrow btn-no-outline"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <img src={avatar} alt={user.username} width="36rem" />
+            </a>
             <ul className="dropdown-menu dropdown-menu-right">
+              <h6 className="dropdown-header">Account</h6>
               <li>
-                <div className="navbar-login">
+                <div className="navbar-login" style={{ width: '25rem' }}>
                   <div className="row">
                     <div className="col-lg-4">
                       <p className="text-center">
-                        <a href='/profile'><img src={avatar} width="100" height="100" alt="" /></a>
+                        <a className="btn-no-outline" href='/profile'><img src={avatar} width="100" height="100" alt="" /></a>
                       </p>
                     </div>
                     <div className="col-lg-8">
-                      <p className="text-left"><strong>{user.username}</strong></p>
+                      <a className="btn-no-outline text-dark" href='/profile'><h4 className="text-left"><strong>{user.username}</strong></h4></a>
                       <p className="text-left small">{user.email}</p>
                       <p className="text-left">
-                        <a href={`/profile/${user.username}/edit`} className="btn btn-primary btn-block btn-sm">Edit profile</a>
+                        <button type="button" href={`/profile/${user.username}/edit`} className="btn btn-outline-primary btn-block btn-sm">Edit profile</button>
                       </p>
                     </div>
                   </div>
@@ -62,11 +71,11 @@ export class Header extends Component {
               </li>
               <li className="divider"></li>
               <li>
-                <div className="navbar-login navbar-login-session">
+                <div className="navbar-login navbar-login-session w-100">
                   <div className="row">
                     <div className="col-lg-12">
                       <p>
-                        <a onClick={logout} className="btn btn-light btn-block">Logout</a>
+                        <button type="button" onClick={logout} className="btn btn-outline-danger btn-block">Logout</button>
                       </p>
                     </div>
                   </div>

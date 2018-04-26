@@ -460,3 +460,27 @@ margin-bottom: 1.5rem;
   font-weight: 650;
   color: rgb(119, 119, 119);
 }
+
+.no-arrow::after {
+  display:none
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.link {
+  color: #0060B6;
+  text-decoration: none;
+}
+
+.link:hover 
+{
+   color:#00A0C6; 
+   text-decoration:none; 
+   cursor:pointer;  
+}

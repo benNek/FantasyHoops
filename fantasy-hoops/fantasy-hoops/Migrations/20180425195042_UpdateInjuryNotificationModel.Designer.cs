@@ -12,9 +12,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180425195042_UpdateInjuryNotificationModel")]
+    partial class UpdateInjuryNotificationModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -442,7 +443,7 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<string>("FriendID");
 
-                    b.Property<string>("RequestMessage");
+                    b.Property<string>("Message");
 
                     b.HasIndex("FriendID");
 

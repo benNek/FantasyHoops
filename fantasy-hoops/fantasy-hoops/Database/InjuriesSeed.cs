@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using Microsoft.EntityFrameworkCore;
 using fantasy_hoops.Helpers;
+using fantasy_hoops.Models.Notifications;
+using FluentScheduler;
+using System.Threading;
 
 namespace fantasy_hoops.Database
 {
@@ -14,9 +17,12 @@ namespace fantasy_hoops.Database
         const int DAYS_TO_SAVE = 1;
         static DateTime dayFrom = NextGame.NEXT_GAME.AddDays(-DAYS_TO_SAVE - 1);
 
-        public static async Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
-            await Extract(context);
+            while (JobManager.RunningSchedules.Any(s => !s.Name.Equals("injuries")))
+                Thread.Sleep(15000);
+
+            Extract(context);
         }
 
         private static JArray GetInjuries()
@@ -27,7 +33,7 @@ namespace fantasy_hoops.Database
             return injuries;
         }
 
-        private static async Task Extract(GameContext context)
+        private static void Extract(GameContext context)
         {
             context.Database.ExecuteSqlCommand("DELETE FROM [fantasyhoops].[dbo].[Injuries]");
             JArray injuries = GetInjuries();
@@ -37,7 +43,7 @@ namespace fantasy_hoops.Database
                     break;
                 AddToDatabase(context, injury);
             }
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         private static void AddToDatabase(GameContext context, JToken injury)
@@ -56,6 +62,32 @@ namespace fantasy_hoops.Database
             if (injuryObj.Player == null)
                 return;
             context.Injuries.Add(injuryObj);
+            UpdateNotifications(context, injuryObj);
+        }
+
+        private static void UpdateNotifications(GameContext context, Injuries injury)
+        {
+            context.Lineups
+                .Where(x => x.Date.Equals(NextGame.NEXT_GAME)
+                            && x.PlayerID == injury.PlayerID)
+                .ToList()
+                .ForEach(s =>
+                {
+                    var inj = new InjuryNotification
+                    {
+                        UserID = s.UserID,
+                        ReadStatus = false,
+                        DateCreated = DateTime.UtcNow,
+                        PlayerID = s.PlayerID,
+                        InjuryStatus = injury.Status,
+                        InjuryDescription = injury.Injury
+                    };
+
+                    if (!context.InjuryNotifications
+                    .Any(x => x.InjuryStatus.Equals(inj.InjuryStatus)
+                                && x.PlayerID == inj.PlayerID))
+                        context.InjuryNotifications.Add(inj);
+                });
         }
     }
 }

@@ -11,12 +11,12 @@ namespace fantasy_hoops.Database
 {
     public class NewsSeed
     {
-        public static async Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
-            await Extract(context);
+            Extract(context);
         }
 
-        private static async Task Extract(GameContext context)
+        private static void Extract(GameContext context)
         {
             string today = GetDate();
             string yesterday = DateTime.ParseExact(today, "yyyyMMdd", CultureInfo.InvariantCulture)
@@ -32,7 +32,7 @@ namespace fantasy_hoops.Database
                 AddToDatabase(context, newsObj);
             }
 
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
         public static JArray GetRecaps(ref JArray news, JArray games, string date)
         {

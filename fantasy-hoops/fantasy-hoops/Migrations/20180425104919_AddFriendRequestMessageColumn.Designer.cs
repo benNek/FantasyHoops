@@ -12,9 +12,10 @@ using System;
 namespace fantasy_hoops.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20180425104919_AddFriendRequestMessageColumn")]
+    partial class AddFriendRequestMessageColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -442,7 +443,7 @@ namespace fantasy_hoops.Migrations
 
                     b.Property<string>("FriendID");
 
-                    b.Property<string>("RequestMessage");
+                    b.Property<string>("Message");
 
                     b.HasIndex("FriendID");
 
@@ -455,13 +456,9 @@ namespace fantasy_hoops.Migrations
                 {
                     b.HasBaseType("fantasy_hoops.Models.Notification");
 
-                    b.Property<string>("InjuryDescription");
+                    b.Property<int>("InjuryID");
 
-                    b.Property<string>("InjuryStatus");
-
-                    b.Property<int>("PlayerID");
-
-                    b.HasIndex("PlayerID");
+                    b.HasIndex("InjuryID");
 
                     b.ToTable("InjuryNotification");
 
@@ -580,9 +577,9 @@ namespace fantasy_hoops.Migrations
 
             modelBuilder.Entity("fantasy_hoops.Models.Notifications.InjuryNotification", b =>
                 {
-                    b.HasOne("fantasy_hoops.Models.Player", "Player")
+                    b.HasOne("fantasy_hoops.Models.Injuries", "Injury")
                         .WithMany()
-                        .HasForeignKey("PlayerID")
+                        .HasForeignKey("InjuryID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

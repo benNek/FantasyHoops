@@ -14,23 +14,23 @@ namespace fantasy_hoops
             JobManager.Initialize(registry);
             JobManager.UseUtcTime();
 
-            JobManager.AddJob(() => Task.Run(() => NextGame.Initialize(_context)),
+            JobManager.AddJob(() => NextGame.Initialize(_context),
                 s => s.WithName("nextGame")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(5)));
 
-            JobManager.AddJob(() => Task.Run(() => NextGame.SetClientTime()),
+            JobManager.AddJob(() => NextGame.SetClientTime(),
                 s => s.WithName("setTime")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(15)));
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(8)));
 
-            JobManager.AddJob(() => Task.Run(() => InjuriesSeed.Initialize(_context)),
+            JobManager.AddJob(() => InjuriesSeed.Initialize(_context),
                 s => s.WithName("injuries")
-                .ToRunNow()
-                .AndEvery(33)
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10))
+                .AndEvery(30)
                 .Minutes());
 
-            JobManager.AddJob(() => Task.Run(() => PhotosSeed.Initialize(_context)),
+            JobManager.AddJob(async () => await PhotosSeed.Initialize(_context),
                 s => s.WithName("photos")
-                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(15))
+                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(5))
                 .AndEvery(1)
                 .Days()
                 .At(16, 00));   // 12p.m. Eastern Time
