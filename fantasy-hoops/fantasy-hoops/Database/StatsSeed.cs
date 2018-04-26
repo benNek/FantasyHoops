@@ -14,13 +14,13 @@ namespace fantasy_hoops.Database
     public class StatsSeed
     {
 
-        public static async Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
             // Gets each day's stats the number of days before today
             int daysFromToday = 30;
-            await Calculate(context, daysFromToday);
+            Calculate(context, daysFromToday);
 
-            JobManager.AddJob(async () => await UserScoreSeed.Initialize(context),
+            JobManager.AddJob(() => UserScoreSeed.Initialize(context),
                 s => s.WithName("userScore")
                 .ToRunNow());
         }
@@ -33,7 +33,7 @@ namespace fantasy_hoops.Database
             return json;
         }
 
-        private static async Task Calculate(GameContext context, int days)
+        private static void Calculate(GameContext context, int days)
         {
             while (days > 0)
             {
@@ -69,7 +69,7 @@ namespace fantasy_hoops.Database
                         }
                         AddToDatabase(context, player, date, oppId, score);
                     }
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
                 }
                 days--;
             }

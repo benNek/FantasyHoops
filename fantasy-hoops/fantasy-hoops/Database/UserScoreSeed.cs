@@ -8,12 +8,12 @@ namespace fantasy_hoops.Database
 {
     public class UserScoreSeed
     {
-        public static async Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
-            await Update(context);
+            Update(context);
         }
 
-        private static async Task Update(GameContext context)
+        private static void Update(GameContext context)
         {
             var allPlayers = context.Lineups.Where(x => x.Date == NextGame.PREVIOUS_GAME)
                 .Include(x => x.Player).ThenInclude(x => x.Stats)
@@ -24,27 +24,33 @@ namespace fantasy_hoops.Database
                 player.Calculated = true;
             }
 
-            var allUsersID = context.Lineups
+            context.Lineups
                 .Where(x => x.Date == NextGame.PREVIOUS_GAME)
                 .Select(x => x.UserID)
-                .Distinct();
-            foreach (var userID in allUsersID)
-            {
-                var userScore = Math.Round(allPlayers
-                    .Where(x => x.Date == NextGame.PREVIOUS_GAME
-                            && x.UserID.Equals(userID))
-                    .Select(x => x.FP).Sum(), 1);
-
-                var notificationObj = new GameScoreNotification
+                .Distinct()
+                .ToList()
+                .ForEach(userID =>
                 {
-                    UserID = userID,
-                    ReadStatus = false,
-                    DateCreated = DateTime.UtcNow,
-                    Score = userScore
-                };
-                context.Notifications.Add(notificationObj);
-            }
-            await context.SaveChangesAsync();
+                    var userScore = Math.Round(allPlayers
+                        .Where(x => x.Date == NextGame.PREVIOUS_GAME
+                                && x.UserID.Equals(userID))
+                        .Select(x => x.FP).Sum(), 1);
+
+                    var gs = new GameScoreNotification
+                    {
+                        UserID = userID,
+                        ReadStatus = false,
+                        DateCreated = DateTime.UtcNow,
+                        Score = userScore
+                    };
+                    if (!context.GameScoreNotifications
+                    .Any(x => x.UserID.Equals(userID)
+                                && x.Score == userScore
+                                && x.DateCreated < DateTime.UtcNow
+                                && x.DateCreated > NextGame.PREVIOUS_LAST_GAME))
+                        context.GameScoreNotifications.Add(gs);
+                });
+            context.SaveChanges();
         }
     }
 }

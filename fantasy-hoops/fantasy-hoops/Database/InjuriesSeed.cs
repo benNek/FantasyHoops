@@ -17,12 +17,12 @@ namespace fantasy_hoops.Database
         const int DAYS_TO_SAVE = 1;
         static DateTime dayFrom = NextGame.NEXT_GAME.AddDays(-DAYS_TO_SAVE - 1);
 
-        public static async Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
             while (JobManager.RunningSchedules.Any(s => !s.Name.Equals("injuries")))
                 Thread.Sleep(15000);
 
-            await Extract(context);
+            Extract(context);
         }
 
         private static JArray GetInjuries()
@@ -33,7 +33,7 @@ namespace fantasy_hoops.Database
             return injuries;
         }
 
-        private static async Task Extract(GameContext context)
+        private static void Extract(GameContext context)
         {
             context.Database.ExecuteSqlCommand("DELETE FROM [fantasyhoops].[dbo].[Injuries]");
             JArray injuries = GetInjuries();
@@ -43,7 +43,7 @@ namespace fantasy_hoops.Database
                     break;
                 AddToDatabase(context, injury);
             }
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         private static void AddToDatabase(GameContext context, JToken injury)

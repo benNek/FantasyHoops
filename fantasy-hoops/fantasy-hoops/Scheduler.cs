@@ -14,17 +14,17 @@ namespace fantasy_hoops
             JobManager.Initialize(registry);
             JobManager.UseUtcTime();
 
-            JobManager.AddJob(async () => await NextGame.Initialize(_context),
+            JobManager.AddJob(() => NextGame.Initialize(_context),
                 s => s.WithName("nextGame")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10)));
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(5)));
 
             JobManager.AddJob(() => NextGame.SetClientTime(),
                 s => s.WithName("setTime")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(15)));
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(8)));
 
-            JobManager.AddJob(async () => await InjuriesSeed.Initialize(_context),
+            JobManager.AddJob(() => InjuriesSeed.Initialize(_context),
                 s => s.WithName("injuries")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(20))
+                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10))
                 .AndEvery(30)
                 .Minutes());
 

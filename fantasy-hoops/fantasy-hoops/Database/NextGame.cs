@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using fantasy_hoops.Helpers;
+using System.Linq;
+using System.Threading;
 
 namespace fantasy_hoops.Database
 {
@@ -21,14 +23,14 @@ namespace fantasy_hoops.Database
             NEXT_GAME_CLIENT = NEXT_GAME;
         }
 
-        public async static Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
             string gameDate = GetDate();
 
-            await Task.Run(() => SetLastGame(gameDate));
-            await Task.Run(() => SetNextGame(gameDate));
+            SetLastGame(gameDate);
+            SetNextGame(gameDate);
 
-            JobManager.AddJob(async () => await Initialize(context),
+            JobManager.AddJob(() => Initialize(context),
                 s => s.WithName(NEXT_GAME.ToLongDateString())
                 .ToRunOnceAt(NEXT_GAME));
 
@@ -36,15 +38,15 @@ namespace fantasy_hoops.Database
             if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
                 nextRun = PREVIOUS_LAST_GAME;
 
-            JobManager.AddJob(async () => await StatsSeed.Initialize(context),
+            JobManager.AddJob(() => StatsSeed.Initialize(context),
                 s => s.WithName("statsSeed_"+nextRun.ToLongDateString())
                 .ToRunOnceAt(nextRun.AddHours(5)));
 
-            JobManager.AddJob(async () => await NewsSeed.Initialize(context),
+            JobManager.AddJob(() => NewsSeed.Initialize(context),
                 s => s.WithName("news_"+nextRun.ToLongDateString())
                 .ToRunOnceAt(nextRun.AddHours(8)));
 
-            JobManager.AddJob(async () => await PlayerSeed.Initialize(context),
+            JobManager.AddJob(() => PlayerSeed.Initialize(context),
                 s => s.WithName("playerSeed_"+nextRun.ToLongDateString())
                 .ToRunNow());
         }
