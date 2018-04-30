@@ -30,7 +30,7 @@ export class FriendRequestNotification extends Component {
         onClick={this.select}
         className="dropdown-item cursor-default text-center"
       >
-        {this.props.notification.message}
+            {this.props.notification.requestMessage}
       </a>
     );
   }

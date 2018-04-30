@@ -145,7 +145,7 @@ export class Notifications extends Component {
           style={{ fontSize: '2rem' }}
         >{badge}
         </a>
-        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '22rem' }}>
+        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '24rem' }}>
           <h6 className="dropdown-header">Notifications
           <a
               onClick={this.readAll}
