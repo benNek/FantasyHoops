@@ -460,3 +460,52 @@ margin-bottom: 1.5rem;
   font-weight: 650;
   color: rgb(119, 119, 119);
 }
+
+.no-arrow::after {
+  display:none
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.link {
+  color: #0060B6;
+  text-decoration: none;
+}
+
+.link:hover 
+{
+   color:#00A0C6; 
+   text-decoration:none; 
+   cursor:pointer;  
+}
+
+#main-video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+  z-index: -1;
+}
+
+#main-text {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  margin: 0 auto;
+  border: none;
+  font: normal 82px/normal "Anton", Helvetica, sans-serif;
+  color: #007BFF;
+  text-align: center;
+  text-transform: uppercase;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  letter-spacing: 10px;
+  text-shadow: 4px 4px 0 black , 6px 6px 0 #007BFF ;
+}

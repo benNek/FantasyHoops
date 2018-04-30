@@ -12,9 +12,9 @@ namespace fantasy_hoops.Database
     {
         public static int PRICE_FLOOR = 10;
 
-        public static async Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
-            await Calculate(context);
+            Calculate(context);
             NextGame.NEXT_GAME_CLIENT = NextGame.NEXT_GAME;
         }
 
@@ -29,7 +29,7 @@ namespace fantasy_hoops.Database
             return json;
         }
 
-        private static async Task Calculate(GameContext context)
+        private static void Calculate(GameContext context)
         {
             string date = GetDate();
             JArray games = CommonFunctions.GetGames(date);
@@ -55,7 +55,7 @@ namespace fantasy_hoops.Database
                 player.Price = gamesPlayed <= 0 ? PRICE_FLOOR : Price(context, player);
                 player.IsPlaying = IsPlaying(player, games);
             }
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         private static bool IsPlaying(Player player, JArray games)

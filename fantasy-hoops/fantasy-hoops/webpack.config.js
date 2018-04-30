@@ -17,6 +17,8 @@ module.exports = (env) => {
     },
     module: {
       rules: [
+        { test: /\.html$/, loader: 'html-loader?attrs[]=video:src' },
+        { test: /\.(mov|mp4)$/, loader: 'url-loader' },
         { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' },
         { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
         { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },

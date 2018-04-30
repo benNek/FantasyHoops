@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 
 namespace fantasy_hoops.Migrations
@@ -111,6 +112,29 @@ namespace fantasy_hoops.Migrations
                     b.HasKey("NewsID");
 
                     b.ToTable("News");
+                });
+
+            modelBuilder.Entity("fantasy_hoops.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<bool>("ReadStatus");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("NotificationID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Notifications");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Notification");
                 });
 
             modelBuilder.Entity("fantasy_hoops.Models.Paragraph", b =>
@@ -433,6 +457,47 @@ namespace fantasy_hoops.Migrations
                     b.HasOne("fantasy_hoops.Models.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID");
+            modelBuilder.Entity("fantasy_hoops.Models.GameScoreNotification", b =>
+                {
+                    b.HasBaseType("fantasy_hoops.Models.Notification");
+
+                    b.Property<double>("Score");
+
+                    b.ToTable("GameScoreNotification");
+
+                    b.HasDiscriminator().HasValue("GameScoreNotification");
+                });
+
+            modelBuilder.Entity("fantasy_hoops.Models.Notifications.FriendRequestNotification", b =>
+                {
+                    b.HasBaseType("fantasy_hoops.Models.Notification");
+
+                    b.Property<string>("FriendID");
+
+                    b.Property<string>("RequestMessage");
+
+                    b.HasIndex("FriendID");
+
+                    b.ToTable("FriendRequestNotification");
+
+                    b.HasDiscriminator().HasValue("FriendRequestNotification");
+                });
+
+            modelBuilder.Entity("fantasy_hoops.Models.Notifications.InjuryNotification", b =>
+                {
+                    b.HasBaseType("fantasy_hoops.Models.Notification");
+
+                    b.Property<string>("InjuryDescription");
+
+                    b.Property<string>("InjuryStatus");
+
+                    b.Property<int>("PlayerID");
+
+                    b.HasIndex("PlayerID");
+
+                    b.ToTable("InjuryNotification");
+
+                    b.HasDiscriminator().HasValue("InjuryNotification");
                 });
 
             modelBuilder.Entity("fantasy_hoops.Models.Injuries", b =>
@@ -452,6 +517,13 @@ namespace fantasy_hoops.Migrations
 
                     b.HasOne("fantasy_hoops.Models.User", "User")
                         .WithMany("Lineups")
+                        .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("fantasy_hoops.Models.Notification", b =>
+                {
+                    b.HasOne("fantasy_hoops.Models.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserID");
                 });
 
@@ -528,6 +600,21 @@ namespace fantasy_hoops.Migrations
                     b.HasOne("fantasy_hoops.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("fantasy_hoops.Models.Notifications.FriendRequestNotification", b =>
+                {
+                    b.HasOne("fantasy_hoops.Models.User", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendID");
+                });
+
+            modelBuilder.Entity("fantasy_hoops.Models.Notifications.InjuryNotification", b =>
+                {
+                    b.HasOne("fantasy_hoops.Models.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

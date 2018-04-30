@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using fantasy_hoops.Helpers;
+using System.Linq;
+using System.Threading;
 
 namespace fantasy_hoops.Database
 {
@@ -21,30 +23,32 @@ namespace fantasy_hoops.Database
             NEXT_GAME_CLIENT = NEXT_GAME;
         }
 
-        public async static void Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
             string gameDate = GetDate();
 
-            await Task.Run(() => SetLastGame(gameDate));
-            await Task.Run(() => SetNextGame(gameDate));
+            SetLastGame(gameDate);
+            SetNextGame(gameDate);
 
-            JobManager.AddJob(() => Task.Run(() => Initialize(context)),
-                s => s.WithName("nextGame")
+            JobManager.AddJob(() => Initialize(context),
+                s => s.WithName(NEXT_GAME.ToLongDateString())
                 .ToRunOnceAt(NEXT_GAME));
 
             DateTime nextRun = NEXT_LAST_GAME;
             if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
                 nextRun = PREVIOUS_LAST_GAME;
 
-            JobManager.AddJob(() => Task.Run(() => StatsSeed.Initialize(context)),
-                s => s.WithName("statsSeed")
+            JobManager.AddJob(() => StatsSeed.Initialize(context),
+                s => s.WithName("statsSeed_"+nextRun.ToLongDateString())
                 .ToRunOnceAt(nextRun.AddHours(5)));
 
-            JobManager.AddJob(() => Task.Run(() => NewsSeed.Initialize(context)),
-                s => s.WithName("news")
+            JobManager.AddJob(() => NewsSeed.Initialize(context),
+                s => s.WithName("news_"+nextRun.ToLongDateString())
                 .ToRunOnceAt(nextRun.AddHours(8)));
 
-            await PlayerSeed.Initialize(context);
+            JobManager.AddJob(() => PlayerSeed.Initialize(context),
+                s => s.WithName("playerSeed_"+nextRun.ToLongDateString())
+                .ToRunNow());
         }
 
         private static string GetDate()

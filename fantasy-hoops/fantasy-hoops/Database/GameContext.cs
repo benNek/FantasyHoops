@@ -1,4 +1,5 @@
 ﻿using fantasy_hoops.Models;
+using fantasy_hoops.Models.Notifications;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,10 @@ namespace fantasy_hoops.Database
         public DbSet<News> News { get; set; }
         public DbSet<Lineup> Lineups { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<GameScoreNotification> GameScoreNotifications { get; set; }
+        public DbSet<InjuryNotification> InjuryNotifications { get; set; }
+        public DbSet<FriendRequestNotification> FriendRequestNotifications { get; set; }
 
         private static string connectionString = "Server=localhost;Database=fantasyhoops;Trusted_Connection=Yes;";
 
