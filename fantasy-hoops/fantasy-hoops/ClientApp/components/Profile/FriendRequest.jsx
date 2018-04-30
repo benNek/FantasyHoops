@@ -49,7 +49,6 @@ export class FriendRequest extends Component {
 
   render() {
     let btn;
-    //console.log(this.state.status);
     switch (this.state.status) {
       case '-2':
         btn = '';
@@ -57,15 +56,22 @@ export class FriendRequest extends Component {
       case '0':
         btn = <button
           type="button"
-          onMouseEnter={e => this.onPendingMouseEnter(e)}
-          onMouseLeave={e => this.onPendingMouseLeave(e)}
+          onMouseEnter={e => this.changeButton(e, 'btn-danger', 'Cancel Request')}
+          onMouseLeave={e => this.changeButton(e, 'btn-warning', 'Pending Request')}
           onClick={e => this.cancelFriendRequest(this.props.user)}
           className="btn btn-warning mx-auto">
           Pending Request
           </button>;
         break;
       case '1':
-        btn = <button type="button" onClick={e => this.acceptFriendRequest(this.props.user)} className="btn btn-success mx-auto">Friends</button>;
+        btn = <button
+          type="button"
+          onMouseEnter={e => this.changeButton(e, 'btn-danger', 'Remove Friend')}
+          onMouseLeave={e => this.changeButton(e, 'btn-success', 'Friends')}
+          onClick={e => this.removeFriend(this.props.user)}
+          className="btn btn-success mx-auto">
+          Friends
+          </button>;
         break;
       case '200':
         btn = <button type="button" onClick={e => this.acceptFriendRequest(this.props.user)} className="btn btn-outline-success mx-auto">Accept Request</button>;
@@ -125,7 +131,7 @@ export class FriendRequest extends Component {
     })
       .then(res => {
         this.setState({
-          status: '2'
+          status: '1'
         });
       });
   }
@@ -154,13 +160,33 @@ export class FriendRequest extends Component {
       });
   }
 
-  onPendingMouseEnter(e) {
-    e.target.className = 'btn btn-danger mx-auto';
-    e.target.innerText = 'Cancel Request'
+  removeFriend(receiver) {
+    const sender = parse();
+    if (!sender)
+      return;
+
+    const model = {
+      senderID: sender.id,
+      receiverID: receiver.id
+    }
+
+    fetch('/api/friendrequest/remove', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(model)
+    })
+      .then(res => {
+        this.setState({
+          status: '3'
+        });
+      });
   }
 
-  onPendingMouseLeave(e) {
-    e.target.className = 'btn btn-warning mx-auto';
-    e.target.innerText = 'Pending Request'
+  changeButton(e, className, text) {
+    e.target.className = 'btn mx-auto ' + className;
+    e.target.innerText = text;
   }
+
 }

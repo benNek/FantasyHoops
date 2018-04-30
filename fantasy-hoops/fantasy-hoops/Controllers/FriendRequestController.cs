@@ -105,5 +105,30 @@ namespace fantasy_hoops.Controllers
             return Ok("Friend request has been sent canceled.");
         }
 
+        [HttpPost("remove")]
+        public async Task<IActionResult> Remove([FromBody] FriendRequestViewModel model)
+        {
+            var request = _context.FriendRequests
+                .Where(x => x.SenderID.Equals(model.SenderID) && x.ReceiverID.Equals(model.ReceiverID))
+                .FirstOrDefault();
+
+            if (request == null)
+            {
+                request = _context.FriendRequests
+                    .Where(x => x.SenderID.Equals(model.ReceiverID) && x.ReceiverID.Equals(model.SenderID))
+                    .FirstOrDefault();
+            }
+
+            if(request == null)
+            {
+                return NotFound("Specified users are not friends!");
+            }
+
+            request.Date = DateTime.UtcNow;
+            request.Status = RequestStatus.CANCELED;
+            await _context.SaveChangesAsync();
+            return Ok("Friend has been removed successfully.");
+        }
+
     }
 }
