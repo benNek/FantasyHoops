@@ -3,6 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using fantasy_hoops.Helpers;
+using System;
+using FluentScheduler;
+using System.Threading;
 
 namespace fantasy_hoops.Database
 {
@@ -11,13 +14,17 @@ namespace fantasy_hoops.Database
         const string photosDir = "./ClientApp/content/images/players/";
         const string logosDir = "./ClientApp/content/images/logos/";
 
-        public async static Task Initialize(GameContext context)
+        public static void Initialize(GameContext context)
         {
-            await ExtractLogos(context);
-            await ExtractPlayerPhotos(context);
+            while (JobManager.RunningSchedules.Any(s => !s.Name.Equals("photos")))
+                Thread.Sleep(15000);
+
+            ExtractLogos(context);
+            ExtractPlayerPhotos(context);
+            DeleteNotifications(context);
         }
 
-        private async static Task ExtractLogos(GameContext context)
+        private static void ExtractLogos(GameContext context)
         {
             if (!Directory.Exists(logosDir))
                 Directory.CreateDirectory(logosDir);
@@ -28,11 +35,11 @@ namespace fantasy_hoops.Database
                 string remoteFileUrl =
                     "http://i.cdn.turner.com/nba/nba/assets/logos/teams/secondary/web/" + teamAbbr + ".svg";
                 string localFileName = "./ClientApp/content/images/logos/" + teamAbbr + ".svg";
-                await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
+                SavePhoto(localFileName, remoteFileUrl);
             }
         }
 
-        private async static Task ExtractPlayerPhotos(GameContext context)
+        private static void ExtractPlayerPhotos(GameContext context)
         {
             if (!Directory.Exists(photosDir))
                 Directory.CreateDirectory(photosDir);
@@ -43,7 +50,7 @@ namespace fantasy_hoops.Database
                 string remoteFileUrl =
                     "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + personId + ".png";
                 string localFileName = "./ClientApp/content/images/players/" + personId + ".png";
-                await Task.Run(() => SavePhoto(localFileName, remoteFileUrl));
+                SavePhoto(localFileName, remoteFileUrl);
             }
         }
 
@@ -90,6 +97,15 @@ namespace fantasy_hoops.Database
                 return false;
 
             return false;
+        }
+
+        private static void DeleteNotifications(GameContext context)
+        {
+            context.Notifications
+                .Where(n => n.DateCreated < DateTime.Today.ToUniversalTime().AddDays(-7))
+                .ToList()
+                .ForEach(notification => context.Notifications.Remove(notification));
+            context.SaveChanges();
         }
     }
 }
