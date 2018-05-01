@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Controllers
 {
@@ -283,6 +284,13 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(404, "Your avatar is already cleared!");
             }
             return StatusCode(404, "Your avatar is already cleared!");
+        }
+
+        [HttpGet("users")]
+        public IActionResult GetUserPool()
+        {
+            return Ok(context.Users.Include(x => x.Team).Select(x => new {x.UserName, x.Id, x.Team.Color})
+                .ToList());
         }
     }
 }

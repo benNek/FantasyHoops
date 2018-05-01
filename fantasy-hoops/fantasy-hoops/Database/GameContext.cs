@@ -1,6 +1,8 @@
-﻿using fantasy_hoops.Models;
+﻿using System;
+using fantasy_hoops.Models;
 using fantasy_hoops.Models.Notifications;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -36,6 +38,11 @@ namespace fantasy_hoops.Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        internal IActionResult Select(Func<object, object> p)
+        {
+            throw new NotImplementedException();
         }
     }
 }
