@@ -25,6 +25,7 @@ namespace fantasy_hoops.Models
         public int Price { get; set; }
         public int TeamID { get; set; }
         public bool IsPlaying { get; set; }
+        public DateTime? StatusDate { get; set; }
         [Required, DefaultValue("Active")]
         public string Status { get; set; }
 
