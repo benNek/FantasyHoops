@@ -81,6 +81,8 @@ export class PlayerModal extends Component {
       teamLogo = this.getLogo(stats.team.abbreviation);
       rows = _.map(stats.games, (s) => {
         let score = '';
+        if(!s.score)
+          return;
         var str = s.score.split('-');
         if (parseInt(str[0]) > parseInt(str[1]))
           score = <span className="text-success">W</span>;
