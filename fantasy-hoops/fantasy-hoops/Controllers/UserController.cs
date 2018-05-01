@@ -303,6 +303,7 @@ namespace fantasy_hoops.Controllers
                         .Select(t => t.Color)
                         .FirstOrDefault()
                 })
+                .OrderBy(u => u.UserName)
                 .ToList());
         }
     }
