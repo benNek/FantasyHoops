@@ -42,8 +42,8 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var userNotifications = context.Notifications.OfType<GameScoreNotification>()
-                    .Where(y => y.UserID == id)
+            var userNotifications = context.Notifications
+                    .OfType<GameScoreNotification>()
                     .Include(gs => gs.User)
                     .AsEnumerable()
                     .OfType<Notification>()
@@ -54,6 +54,7 @@ namespace fantasy_hoops.Controllers
                         .OfType<InjuryNotification>()
                         .Include(inj => inj.Player)
                         .ThenInclude(p => p.Team))
+                    .Where(y => y.UserID.Equals(id))
                     .OrderByDescending(y => y.DateCreated)
                     .ToList();
 

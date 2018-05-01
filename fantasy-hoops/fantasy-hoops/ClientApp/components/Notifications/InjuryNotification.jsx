@@ -5,13 +5,11 @@ export class InjuryNotification extends Component {
   constructor(props) {
     super(props);
     this.select = this.select.bind(this);
-
-    this.state = {
-    }
   }
 
-  select() {
-    this.props.toggleNotification(this.props.notification);
+  async select() {
+    await this.props.toggleNotification(this.props.notification);
+    window.location.href = '/lineup';
   }
 
   getDate() {
@@ -26,21 +24,39 @@ export class InjuryNotification extends Component {
     if (this.props.notification.readStatus)
       read = "card-body text-muted";
 
+    let photo = '';
+    try {
+      photo = require(`../../content/images/players/${this.props.notification.player.nbaID}.png`)
+    }
+    catch (err) {
+      photo = require(`../../content/images/positions/${this.props.notification.player.position.toLowerCase()}.png`)
+    }
     return (
-      <a onClick={this.select} className="dropdown-item cursor-default card cursor-pointer link" style={{ width: '24rem', height: '6.7rem' }}>
-        <div className={read} style={{ margin: '-0.6rem', marginLeft: '-0.8rem' }}>
+      <a onClick={this.select} className="card cursor-pointer link" style={{ width: '25rem' }}>
+        <div className={read} style={{ margin: '-0.6rem' }}>
           <div className="row">
-            <div className="card-circle position-absolute" style={{ marginLeft: '0.3rem', backgroundColor: this.props.notification.player.team.color, marginTop: '0.5rem' }}>
-              <img className="" style={{ paddingRight: '3rem', marginLeft: '-0.6rem', marginTop: '0.3rem' }} src={require(`../../content/images/players/${this.props.notification.player.nbaID}.png`)}
-                width="125rem" />
+            <div className="col-1 mr-3">
+              <div
+                className="notification-circle position-absolute"
+                style={{ backgroundColor: this.props.notification.player.team.color }}>
+                <img
+                  className="notification-card-player"
+                  src={photo}
+                />
+              </div>
             </div>
-            <div className="text" style={{ marginLeft: '3.4rem' }}>
-              <h5 className="card-text ml-4 mb-1">{this.props.notification.player.firstName[0]}. {this.props.notification.player.lastName} is {this.props.notification.injuryStatus.toLowerCase()}</h5>
+            <div className="col ml-1 mr-4" style={{ overflow: 'hidden' }}>
+              <h5
+                className="card-title text-nowrap"
+              >
+                {this.props.notification.player.firstName[0]}.
+                {' ' + this.props.notification.player.lastName} is {this.props.notification.injuryStatus.toLowerCase()}
+              </h5>
               <p className="card-text"
-                style={{ marginTop: '0.3rem', fontWeight: '400', marginLeft: 23 }}
-              ><span className="text">{this.props.notification.injuryDescription}</span>
+                style={{ marginTop: '-0.5rem', fontWeight: '400' }}
+              >{this.props.notification.injuryDescription}
               </p>
-              <p style={{ margin: '-0.8rem 0 0 0', marginLeft: 23, marginTop: -13 }}>
+              <p style={{ margin: '-1rem 0 0 0' }}>
                 {moment(this.getDate()).fromNow()}
               </p>
             </div>
