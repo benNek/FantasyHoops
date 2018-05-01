@@ -34,7 +34,7 @@ export class GameScoreNotification extends Component {
             <div className="col ml-1"> 
               <h5 className="card-title">The game has finished!</h5>
               <p className="card-text"
-                style={{ marginTop: '-0.5rem', fontWeight: '400' }}
+                style={{ marginTop: '-0.7rem', fontWeight: '400' }}
               >Your lineup scored <span className="text-dark font-weight-bold">{this.props.notification.score} FP</span>
               </p>
               <p style={{ margin: '-1rem 0 0 0' }}> 

@@ -38,9 +38,9 @@ export class FriendRequestNotification extends Component {
               <img className="mt-2" src={avatar} width="40rem" height="40rem" />
             </div>
             <div className="col ml-1">
-              <h5 className="card-title">User {this.props.notification.friend.userName}</h5>
+              <h5 className="card-title">{this.props.notification.friend.userName}</h5>
               <p className="card-text"
-                style={{ marginTop: '-0.5rem', fontWeight: '400' }}
+                style={{ marginTop: '-0.7rem', fontWeight: '400' }}
               >{this.props.notification.requestMessage}
               </p>
               <p style={{ margin: '-1rem 0 0 0' }}>

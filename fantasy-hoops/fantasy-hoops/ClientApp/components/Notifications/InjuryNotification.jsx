@@ -53,7 +53,7 @@ export class InjuryNotification extends Component {
                 {' ' + this.props.notification.player.lastName} is {this.props.notification.injuryStatus.toLowerCase()}
               </h5>
               <p className="card-text"
-                style={{ marginTop: '-0.5rem', fontWeight: '400' }}
+                style={{ marginTop: '-0.7rem', fontWeight: '400' }}
               >{this.props.notification.injuryDescription}
               </p>
               <p style={{ margin: '-1rem 0 0 0' }}>
