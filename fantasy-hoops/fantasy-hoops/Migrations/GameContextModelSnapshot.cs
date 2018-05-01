@@ -457,6 +457,8 @@ namespace fantasy_hoops.Migrations
                     b.HasOne("fantasy_hoops.Models.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID");
+                });
+
             modelBuilder.Entity("fantasy_hoops.Models.GameScoreNotification", b =>
                 {
                     b.HasBaseType("fantasy_hoops.Models.Notification");
