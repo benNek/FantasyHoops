@@ -28,12 +28,12 @@ namespace fantasy_hoops
                 .AndEvery(30)
                 .Minutes());
 
-            JobManager.AddJob(async () => await PhotosSeed.Initialize(_context),
+            JobManager.AddJob(() => PhotosSeed.Initialize(_context),
                 s => s.WithName("photos")
                 .ToRunOnceAt(DateTime.UtcNow.AddMinutes(5))
                 .AndEvery(1)
                 .Days()
-                .At(16, 00));   // 12p.m. Eastern Time
+                .At(00, 00));   // 20p.m. Eastern Time
         }
     }
 }

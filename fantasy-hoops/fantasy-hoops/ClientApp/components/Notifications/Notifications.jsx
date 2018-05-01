@@ -39,10 +39,6 @@ export class Notifications extends Component {
           unreadCount: res.filter(n => n.readStatus == false).length
         });
       })
-    await fetch(`http://localhost:51407/api/notification/`)
-      .then(res => {
-        return res.json()
-      });
   }
 
   async toggleNotification(notification) {
@@ -131,7 +127,12 @@ export class Notifications extends Component {
 
   render() {
     const badge = this.state.unreadCount > 0
-      ? <span className="badge badge-danger" style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}>{this.state.unreadCount}</span>
+      ? <span
+        className="badge badge-danger"
+        style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}
+      >
+        {this.state.unreadCount}
+      </span>
       : '';
     const notifications = this.getNotifications();
     return (
@@ -145,7 +146,7 @@ export class Notifications extends Component {
           style={{ fontSize: '2rem' }}
         >{badge}
         </a>
-        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '22rem' }}>
+        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '25.1rem' }}>
           <h6 className="dropdown-header">Notifications
           <a
               onClick={this.readAll}
@@ -159,6 +160,14 @@ export class Notifications extends Component {
           <div style={{ marginBottom: '-0.5rem' }}>
             {notifications}
           </div>
+          <h6 className="dropdown-header text-center mt-2" style={{ height: '1.5rem' }}>
+            <a
+              className="btn-no-outline"
+              href="/notifications"
+            >
+              See all
+            </a>
+          </h6>
         </div>
       </li>
     );

@@ -12,9 +12,11 @@ import { NewsFeed } from './components/News/NewsFeed';
 import { UserLeaderboard } from './components/Leaderboard/UserLeaderboard';
 import { PlayerLeaderboard } from './components/Leaderboard/PlayerLeaderboard';
 import { UserPool } from './components/UserPool';
+import { Main } from './components/Main';
 
 export const routes = <div>
   <Route path='/' component={Header} />
+  <Route exact path='/' component={Main} />
   <Route exact path='/login' component={Login} />
   <Route exact path='/register' component={Registration} />
   <PrivateRoute path='/profile/:name?/:edit?' component={UserProfile} />
