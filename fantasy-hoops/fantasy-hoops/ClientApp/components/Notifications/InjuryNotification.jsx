@@ -27,35 +27,25 @@ export class InjuryNotification extends Component {
       read = "card-body text-muted";
 
     return (
-      <a onClick={this.select} className="card cursor-pointer link" style={{ width: '24rem', height: '6.7rem' }}>
-
-        {/* <a onClick={this.select} className="dropdown-item cursor-default text-center"> */}
-        <div className={read} style={{ margin: '-0.4rem', marginLeft: -6 }}>
-
+      <a onClick={this.select} className="dropdown-item cursor-default card cursor-pointer link" style={{ width: '24rem', height: '6.7rem' }}>
+        <div className={read} style={{ margin: '-0.6rem', marginLeft: '-0.8rem' }}>
           <div className="row">
-
-            <div className="card-circle position-absolute"style={{ backgroundColor: this.props.notification.player.team.color, marginTop: '0.5rem' }}>
-              <img className="a" style={{ paddingRight: '3rem', marginLeft: '-0.6rem', marginTop: '4' }} src={require(`../../content/images/players/${this.props.notification.player.nbaID}.png`)}
-                width="125rem" alt="10" left="10" />
+            <div className="card-circle position-absolute" style={{ marginLeft: '0.3rem', backgroundColor: this.props.notification.player.team.color, marginTop: '0.5rem' }}>
+              <img className="" style={{ paddingRight: '3rem', marginLeft: '-0.6rem', marginTop: '0.3rem' }} src={require(`../../content/images/players/${this.props.notification.player.nbaID}.png`)}
+                width="125rem" />
             </div>
-          <p classname="text" style={{marginLeft: 60}}>
-          <div className="col ml-2">
-               <h5 className="card-text" style={{}}>{this.props.notification.player.firstName[0]}. {this.props.notification.player.lastName} is {this.props.notification.injuryStatus.toLowerCase()}!</h5>
-          
-          </div>
-          <p className="card-text"
+            <div className="text" style={{ marginLeft: '3.4rem' }}>
+              <h5 className="card-text ml-4 mb-1">{this.props.notification.player.firstName[0]}. {this.props.notification.player.lastName} is {this.props.notification.injuryStatus.toLowerCase()}</h5>
+              <p className="card-text"
                 style={{ marginTop: '0.3rem', fontWeight: '400', marginLeft: 23 }}
               ><span className="text">{this.props.notification.injuryDescription}</span>
-             </p> 
-
-         
-          <p style={{ margin: '-0.8rem 0 0 0', marginLeft: 23, marginTop: -13 }}> 
-            {moment(this.getDate()).fromNow()}
-          </p>
-        </p> 
-        </div>  
+              </p>
+              <p style={{ margin: '-0.8rem 0 0 0', marginLeft: 23, marginTop: -13 }}>
+                {moment(this.getDate()).fromNow()}
+              </p>
+            </div>
           </div>
-        
+        </div>
       </a>
     );
   }
