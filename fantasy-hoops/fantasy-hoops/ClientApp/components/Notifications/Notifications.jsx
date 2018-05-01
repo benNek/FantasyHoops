@@ -160,6 +160,14 @@ export class Notifications extends Component {
           <div style={{ marginBottom: '-0.5rem' }}>
             {notifications}
           </div>
+          <h6 className="dropdown-header text-center mt-2" style={{ height: '1.5rem' }}>
+            <a
+              className="btn-no-outline"
+              href="/notifications"
+            >
+              See all
+            </a>
+          </h6>
         </div>
       </li>
     );
