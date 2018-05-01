@@ -29,6 +29,7 @@ namespace fantasy_hoops
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            
 
             services.AddDbContext<GameContext>();
             services.AddScoped<GameContext>(); // 'scoped' in ASP.NET means "per HTTP request"
@@ -71,7 +72,10 @@ namespace fantasy_hoops
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
                 configureOptions.SaveToken = true;
             });
-
+             services.AddMvc()
+              .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling
+                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore );
             _context = new GameContext();
             _context.Database.Migrate();
 
