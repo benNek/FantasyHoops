@@ -63,7 +63,8 @@ namespace fantasy_hoops.Database
             // Don't show players out for more that 5 days
             if (player.StatusDate.HasValue
                 && (player.StatusDate.Value.AddDays(5) < NextGame.NEXT_GAME)
-                && player.Status.ToLower().Contains("out"))
+                && (player.Status.ToLower().Contains("out")
+                 || player.Status.ToLower().Contains("injured")))
                 return false;
 
             foreach (JObject game in games)
