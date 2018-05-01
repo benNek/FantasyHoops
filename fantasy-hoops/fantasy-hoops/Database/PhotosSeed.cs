@@ -102,8 +102,9 @@ namespace fantasy_hoops.Database
         private static void DeleteNotifications(GameContext context)
         {
             context.Notifications
+                .Where(n => n.DateCreated < DateTime.Today.ToUniversalTime().AddDays(-7))
                 .ToList()
-                .RemoveAll(n => n.DateCreated < DateTime.Today.ToUniversalTime().AddDays(-7));
+                .ForEach(notification => context.Notifications.Remove(notification));
             context.SaveChanges();
         }
     }
