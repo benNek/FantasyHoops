@@ -219,7 +219,7 @@ namespace fantasy_hoops.Controllers
                     id = x.SenderID,
                     x.Sender.UserName,
                     Color = context.Teams
-                        .Where(t => t.TeamID == x.Receiver.FavoriteTeamId)
+                        .Where(t => t.TeamID == x.Sender.FavoriteTeamId)
                         .Select(t => t.Color)
                         .FirstOrDefault()
                 })
@@ -232,7 +232,7 @@ namespace fantasy_hoops.Controllers
                     id = x.ReceiverID,
                     x.Receiver.UserName,
                     Color = context.Teams
-                        .Where(t => t.TeamID == x.Sender.FavoriteTeamId)
+                        .Where(t => t.TeamID == x.Receiver.FavoriteTeamId)
                         .Select(t => t.Color)
                         .FirstOrDefault()
                 })
