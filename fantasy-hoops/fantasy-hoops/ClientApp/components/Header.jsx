@@ -63,7 +63,7 @@ export class Header extends Component {
                       <a className="btn-no-outline text-dark" href='/profile'><h4 className="text-left"><strong>{user.username}</strong></h4></a>
                       <p className="text-left small">{user.email}</p>
                       <p className="text-left">
-                        <a type="button" href={`/profile/${user.username}/edit`} className="btn btn-outline-primary btn-block btn-sm">Edit profile</a>
+                        <a role="button" href={`/profile/${user.username}/edit`} className="btn btn-outline-primary btn-block btn-sm">Edit profile</a>
                       </p>
                     </div>
                   </div>
