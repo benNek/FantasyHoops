@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace fantasy_hoops.Models
 {
@@ -23,6 +25,9 @@ namespace fantasy_hoops.Models
         public int Price { get; set; }
         public int TeamID { get; set; }
         public bool IsPlaying { get; set; }
+        public DateTime? StatusDate { get; set; }
+        [Required, DefaultValue("Active")]
+        public string Status { get; set; }
 
         public virtual Team Team { get; set; }
         public virtual ICollection<Stats> Stats { get; set; }

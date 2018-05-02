@@ -60,11 +60,18 @@ namespace fantasy_hoops.Database
 
         private static bool IsPlaying(Player player, JArray games)
         {
+            // Don't show players out for more that 5 days
+            if (player.StatusDate.HasValue
+                && (player.StatusDate.Value.AddDays(5) < NextGame.NEXT_GAME)
+                && (player.Status.ToLower().Contains("out")
+                 || player.Status.ToLower().Contains("injured")))
+                return false;
+
             foreach (JObject game in games)
             {
                 int hTeam = (int)game["hTeam"]["teamId"];
                 int vTeam = (int)game["vTeam"]["teamId"];
-                if (player.Team.NbaID == hTeam || player.Team.NbaID == vTeam)
+                if ((player.Team.NbaID == hTeam || player.Team.NbaID == vTeam))
                     return true;
             }
             return false;

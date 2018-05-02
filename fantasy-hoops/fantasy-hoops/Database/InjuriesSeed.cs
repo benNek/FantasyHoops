@@ -62,6 +62,14 @@ namespace fantasy_hoops.Database
             if (injuryObj.Player == null)
                 return;
             context.Injuries.Add(injuryObj);
+            context.Players
+                .Where(p => p.NbaID == injuryObj.Player.NbaID)
+                .FirstOrDefault()
+                .Status = injuryObj.Status;
+            context.Players
+                .Where(p => p.NbaID == injuryObj.Player.NbaID)
+                .FirstOrDefault()
+                .StatusDate = DateTime.Parse(injury["CreatedDate"].ToString()).ToUniversalTime();
             UpdateNotifications(context, injuryObj);
         }
 
