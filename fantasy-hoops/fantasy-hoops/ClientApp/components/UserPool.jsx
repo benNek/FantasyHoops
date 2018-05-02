@@ -7,25 +7,38 @@ import defaultPhoto from '../content/images/default.png';
 export class UserPool extends Component {
   constructor(props) {
     super(props);
+    this.filterList= this.filterList.bind(this);
     this.state = {
       users: '',
       userIMG: this.getUserImages()
+
     }
+
+  }
+  filterList(event) {
+    if (this.state.initialUsers) {
+      var updatedList = this.state.initialUsers;
+      updatedList = updatedList.filter(item => { return item.toLowerCase().search(this.initialUsers.value.toLowerCase() !== -1) });
+      this.setState({ initialUsers: updatedList });
+    }
+
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     await fetch(`http://localhost:51407/api/user`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
+          initialUsers: res,
           users: res,
         });
       })
   }
 
   render() {
+    console.log(this.state.initialUsers);
     const users = _.map(
       this.state.users,
       (user) => {
@@ -39,9 +52,11 @@ export class UserPool extends Component {
         }
       }
     );
+
     return (
       <div className="container bg-light pt-4 pb-2">
-        <input className="form-control m-3 mb-4" type="search" placeholder="Search" aria-label="Search" style={{ width: '20rem' }} />
+        <input className="form-control m-3 mb-4" type="search" placeholder="Search" aria-label="Search"
+          onChange={this.filterList} style={{ width: '20rem' }} />
         <div className="center col">
           <div className="row">
             {users}
