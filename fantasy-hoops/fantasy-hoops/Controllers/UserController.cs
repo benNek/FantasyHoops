@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Controllers
 {
@@ -109,6 +110,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(String id)
         {
+            // FOR THE MOTHER OF GOD PLEASE FIX THIS WTF
             var team = context.Teams
                 .Where(x => x.TeamID == context.Users
                     .Where(y => y.Id.Equals(id))
@@ -129,7 +131,8 @@ namespace fantasy_hoops.Controllers
             var players = context.Lineups
                 .Where(x => x.UserID.Equals(id) && x.Date < NextGame.NEXT_GAME)
                 .OrderByDescending(x => x.Date)
-                .Select(x => new {
+                .Select(x => new
+                {
                     x.Player.NbaID,
                     x.Player.LastName,
                     x.Player.Position,
@@ -147,7 +150,8 @@ namespace fantasy_hoops.Controllers
             var activity = context.Lineups
                 .Where(x => x.Calculated && x.UserID.Equals(id))
                 .OrderByDescending(x => x.Date)
-                .Select(x => new {
+                .Select(x => new
+                {
                     x.Date,
                     Score = Math.Round(context.Lineups.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(), 1),
                     players = players.Where(y => y.Date.Equals(x.Date)).ToList()
@@ -160,7 +164,7 @@ namespace fantasy_hoops.Controllers
             // Streak
             int streak = 0;
             DateTime date = NextGame.NEXT_GAME.AddDays(-1);
-            while(context.Lineups.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
+            while (context.Lineups.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
             {
                 streak++;
                 date = date.AddDays(-1);
@@ -283,6 +287,24 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(404, "Your avatar is already cleared!");
             }
             return StatusCode(404, "Your avatar is already cleared!");
+        }
+
+        [HttpGet]
+        public IActionResult GetUserPool()
+        {
+            // NOT MY FAULT USING THIS LIKE THAT
+            return Ok(context.Users
+                .Select(u => new
+                {
+                    u.UserName,
+                    u.Id,
+                    color = context.Teams
+                        .Where(t => t.TeamID == u.FavoriteTeamId)
+                        .Select(t => t.Color)
+                        .FirstOrDefault()
+                })
+                .OrderBy(u => u.UserName)
+                .ToList());
         }
     }
 }
