@@ -3,7 +3,7 @@ import { parse } from '../../utils/auth';
 import { Avatar } from './Avatar';
 import { EditProfile } from './EditProfile';
 import { InfoPanel } from './InfoPanel';
-import { Friends } from './Friends';
+import { Friends } from './Friends/Friends';
 import { Error } from '../Error';
 import { handleErrors } from '../../utils/errors'
 
@@ -85,7 +85,7 @@ export class UserProfile extends Component {
             </ul>
             <div className="tab-content py-4">
               <InfoPanel user={this.state.user} />
-              <Friends />
+              <Friends user={this.state.user} />
               <EditProfile user={this.state.user} />
             </div>
           </div>

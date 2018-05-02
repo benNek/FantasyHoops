@@ -1,0 +1,51 @@
+import React, { Component } from 'react';
+import { FriendList } from './FriendList';
+
+export class Friends extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userIMG: this.getUserImages()
+    }
+  }
+
+  render() {
+    return (
+      <div className="tab-pane" id="friends">
+        <div className="container">
+          <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li className="nav-item">
+              <a className="nav-link active" id="pills-friends-tab" data-toggle="pill" href="#pills-friends" role="tab" aria-controls="pills-friends" aria-selected="true">Current friends</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" id="pills-pending-tab" data-toggle="pill" href="#pills-pending" role="tab" aria-controls="pills-pending" aria-selected="false">Pending requests</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Your requests</a>
+            </li>
+          </ul>
+          <div className="tab-content" id="pills-tabContent">
+            <div className="tab-pane fade show active" id="pills-friends" role="tabpanel" aria-labelledby="pills-friends-tab">
+              <FriendList user={this.props.user} images={this.state.userIMG} />
+            </div>
+            <div className="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab">
+              b...
+            </div>
+            <div className="tab-pane fade" id="pills-requests" role="tabpanel" aria-labelledby="pills-requests-tab">
+              c...
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  getUserImages() {
+    try {
+      return this.importAll(require.context('../../../content/images/avatars', false, /\.(png|jpe?g|svg)$/))
+    }
+    catch (err) {
+      return ''
+    }
+  }
+}
