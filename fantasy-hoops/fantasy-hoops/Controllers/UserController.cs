@@ -222,6 +222,38 @@ namespace fantasy_hoops.Controllers
             return Get(userId);
         }
 
+        [HttpGet("friends/{id}")]
+        public IActionResult GetFriends(String id)
+        {
+            // Using it this way because of nigel
+            var friends = context.FriendRequests
+                .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.ACCEPTED))
+                .Select(x => new
+                {
+                    id = x.SenderID,
+                    x.Sender.UserName,
+                    Color = context.Teams
+                        .Where(t => t.TeamID == x.Sender.FavoriteTeamId)
+                        .Select(t => t.Color)
+                        .FirstOrDefault()
+                })
+                .ToList();
+
+            friends.AddRange(context.FriendRequests
+                .Where(x => x.SenderID.Equals(id) && x.Status.Equals(RequestStatus.ACCEPTED))
+                .Select(x => new
+                {
+                    id = x.ReceiverID,
+                    x.Receiver.UserName,
+                    Color = context.Teams
+                        .Where(t => t.TeamID == x.Receiver.FavoriteTeamId)
+                        .Select(t => t.Color)
+                        .FirstOrDefault()
+                })
+                .ToList());
+            return Ok(friends);
+        }
+
         [HttpPut("editprofile")]
         public async Task<IActionResult> EditProfile([FromBody]EditProfileView model)
         {
@@ -320,6 +352,7 @@ namespace fantasy_hoops.Controllers
         public IActionResult GetUserPool()
         {
             // NOT MY FAULT USING THIS LIKE THAT
+            // TAKE RESPONSIBILITY, NIGEL
             return Ok(context.Users
                 .Select(u => new
                 {

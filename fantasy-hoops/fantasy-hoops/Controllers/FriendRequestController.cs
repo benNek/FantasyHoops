@@ -187,5 +187,33 @@ namespace fantasy_hoops.Controllers
             return Ok("Friend has been removed successfully.");
         }
 
+        [HttpGet("pending/{id}")]
+        public IActionResult GetPendingRequests(String id)
+        {
+            var requests = _context.FriendRequests
+                .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
+                .Select(x => new
+                {
+                    x.Sender.UserName,
+                    x.Sender.Id
+                })
+                .ToList();
+            return Ok(requests);
+        }
+
+        [HttpGet("requests/{id}")]
+        public IActionResult GetRequests(String id)
+        {
+            var requests = _context.FriendRequests
+                .Where(x => x.SenderID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
+                .Select(x => new
+                {
+                    x.Receiver.UserName,
+                    x.Receiver.Id
+                })
+                .ToList();
+            return Ok(requests);
+        }
+
     }
 }
