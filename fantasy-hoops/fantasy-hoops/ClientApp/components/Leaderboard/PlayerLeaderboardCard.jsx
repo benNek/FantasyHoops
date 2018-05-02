@@ -11,16 +11,16 @@ export class PlayerLeaderboardCard extends Component {
         <div className="card-body">
           <div className="row">
             <div className="align-middle ml-3">
-              <h4>1</h4>
+              <h4>{this.props.index + 1}</h4>
             </div>
             <div className="pl-1">
               <div className="bg-success card-circle position-absolute" style={{ top: '0.45rem' }}>
-                <img className="user-card-player" src={require(`../../content/images/players/${203507}.png`)} />
+                <img className="user-card-player" src={this.props.avatar} />
               </div>
             </div>
-            <p className="player-name pt-1" style={{ paddingLeft: '5rem' }}>Giannis Antetokounmpo</p>
+            <p className="player-name pt-1" style={{ paddingLeft: '5rem' }}>{this.props.firstName} {this.props.lastName}</p>
             <div className="mt-0 position-absolute  " style={{ right: '0rem', width: '8rem' }}>
-              <h4 className="text-center">78.5 FP</h4>
+              <h4 className="text-center">{this.props.fp} FP</h4>
             </div>
           </div>
         </div>

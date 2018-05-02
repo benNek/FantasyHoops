@@ -16,41 +16,63 @@ namespace fantasy_hoops.Controllers
             context = new GameContext();
         }
 
-        [HttpGet("user")]
-        public IEnumerable<Object> GetUserLeaderboard(int from = 0, int limit = 10)
+        [HttpGet("player")]
+        public IEnumerable<Object> GetPlayerLeaderboard(int from = 0, int limit = 10, string type = "weekly")
         {
-            return context.Lineups
-                .Where(x => x.Date.Equals(NextGame.NEXT_GAME))
-                .Select(x => new {
-                    x.UserID,
-                    x.Date,
-                    Score = context.Lineups.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(),
-                    x.User.UserName
+            DateTime date = NextGame.PREVIOUS_LAST_GAME.AddDays(-7);
+            if (type.Equals("daily"))
+            {
+                date = NextGame.PREVIOUS_LAST_GAME;
+            }
+            else if (type.Equals("monthly"))
+            {
+                date = NextGame.PREVIOUS_LAST_GAME.AddDays(-30);
+            }
+
+            return context.Players
+                .Select(x => new
+                {
+                    x.PlayerID,
+                    x.FirstName,
+                    x.LastName,
+                    x.Position,
+                    FP = Math.Round(context.Stats
+                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date >= date)
+                        .Select(y => y.FP).Sum(), 1)
                 })
-                .Distinct()
-                .OrderByDescending(x => x.Score)
+                .Where(x => x.FP > 0)
+                .OrderByDescending(x => x.FP)
                 .Skip(from)
                 .Take(limit)
                 .ToList();
         }
 
-        [HttpGet("player")]
-        public IEnumerable<Object> GetPlayerLeaderboard(int from = 0, int limit = 10)
+
+        [HttpGet("user")]
+        public IEnumerable<Object> GetMonthlyUserLeaderboard(int from = 0, int limit = 10, string type = "weekly")
         {
-            return context.Stats
-                .Where(x => x.Date.Equals(NextGame.NEXT_GAME))
-                .Select(x => new
-                {
-                    x.PlayerID,
-                    x.Player.FirstName,
-                    x.Player.LastName,
-                    x.Player.Position,
-                    x.FP
-                })
-                .OrderByDescending(x => x.FP)
-                .Skip(from)
-                .Take(limit)
-                .ToList();
+            
+            DateTime date = NextGame.PREVIOUS_LAST_GAME.AddDays(-7);
+            if (type.Equals("daily"))
+            {
+                date = NextGame.PREVIOUS_LAST_GAME;
+            }
+            else if (type.Equals("monthly"))
+            {
+                date = NextGame.PREVIOUS_LAST_GAME.AddDays(-30);
+            }
+            return context.Users.Select(x => new {
+                x.Id,
+                x.UserName,
+                Score = context.Lineups
+                    .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
+                    .Select(y => y.FP).Sum()
+            })
+            .Where(y => y.Score > 0)
+            .OrderByDescending(x => x.Score)
+            .Skip(from)
+            .Take(limit)
+            .ToList();
         }
     }
 }
