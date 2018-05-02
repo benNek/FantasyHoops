@@ -17,7 +17,7 @@ namespace fantasy_hoops.Database
         public static void Initialize(GameContext context)
         {
             // Gets each day's stats the number of days before today
-            int daysFromToday = 30;
+            int daysFromToday = 5;
             Calculate(context, daysFromToday);
 
             JobManager.AddJob(() => UserScoreSeed.Initialize(context),
@@ -39,7 +39,6 @@ namespace fantasy_hoops.Database
             {
                 string gameDate = NextGame.NEXT_GAME.AddDays(-days).ToString("yyyyMMdd");
                 JArray games = CommonFunctions.GetGames(gameDate);
-                DateTime date = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture);
 
                 foreach (JObject game in games)
                 {
@@ -50,6 +49,7 @@ namespace fantasy_hoops.Database
                     int hTeam = (int)boxscore["basicGameData"]["hTeam"]["teamId"];
                     int vTeam = (int)boxscore["basicGameData"]["vTeam"]["teamId"];
                     var stats = boxscore["stats"]["activePlayers"];
+                    DateTime date = DateTime.Parse((string)boxscore["basicGameData"]["startTimeUTC"]);
                     JArray players = (JArray)stats;
                     foreach (var player in players)
                     {
