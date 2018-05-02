@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { FriendList } from './FriendList';
+import { PendingList } from './PendingList';
+import { RequestList } from './RequestList';
 
 export class Friends extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userIMG: this.getUserImages()
+      userImages: this.getUserImages()
     }
   }
 
@@ -26,13 +28,13 @@ export class Friends extends Component {
           </ul>
           <div className="tab-content" id="pills-tabContent">
             <div className="tab-pane fade show active" id="pills-friends" role="tabpanel" aria-labelledby="pills-friends-tab">
-              <FriendList user={this.props.user} images={this.state.userIMG} />
+              <FriendList user={this.props.user} images={this.state.userImages} />
             </div>
             <div className="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab">
-              b...
+              <PendingList user={this.props.user} images={this.state.userImages} />
             </div>
             <div className="tab-pane fade" id="pills-requests" role="tabpanel" aria-labelledby="pills-requests-tab">
-              c...
+              <RequestList user={this.props.user} images={this.state.userImages} />
             </div>
           </div>
         </div>

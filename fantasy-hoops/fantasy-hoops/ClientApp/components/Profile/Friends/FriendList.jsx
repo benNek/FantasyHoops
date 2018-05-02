@@ -41,7 +41,9 @@ export class FriendList extends Component {
     );
     return (
       <div className="row">
-        {friends}
+        <div className="row">
+          {friends.length > 0 ? friends : "User doesn't have any friends!"}
+        </div>
       </div>
     );
   }
