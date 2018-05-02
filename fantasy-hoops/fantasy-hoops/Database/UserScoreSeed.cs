@@ -20,7 +20,9 @@ namespace fantasy_hoops.Database
                 .ToList();
             foreach (var player in allPlayers)
             {
-                player.FP = player.Player.Stats.OrderByDescending(x => x.Date).Select(x => x.FP).FirstOrDefault();
+                player.FP = player.Player.Stats
+                    .Where(s => s.Date >= NextGame.PREVIOUS_GAME && s.Date <= NextGame.PREVIOUS_LAST_GAME)
+                    .Select(x => x.FP).FirstOrDefault();
                 player.Calculated = true;
             }
 

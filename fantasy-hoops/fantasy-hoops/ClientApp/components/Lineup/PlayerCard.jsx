@@ -28,6 +28,18 @@ export class PlayerCard extends Component {
           </button>
         </div>
         : '';
+
+      let injuryStatus = '';
+      if (this.props.player.injuryStatus.toLowerCase().includes("out")
+        || this.props.player.injuryStatus.toLowerCase().includes("injured"))
+        injuryStatus = 'injury-out';
+      else
+        injuryStatus = 'injury-questionable';
+
+      let injuryBadge = '';
+      if (!this.props.player.injuryStatus.toLowerCase().includes("active"))
+        injuryBadge = <div className={"player-injury-badge " + injuryStatus}>{this.props.player.injuryStatus}</div>
+
       return (
         <div>
           <div className="player-card card">
@@ -45,6 +57,7 @@ export class PlayerCard extends Component {
               src={this.props.image}
               alt={this.getDisplayName(this.props.player)}>
             </img>
+            {injuryBadge}
             <div className="card-block" >
               <a
                 data-toggle="tooltip"

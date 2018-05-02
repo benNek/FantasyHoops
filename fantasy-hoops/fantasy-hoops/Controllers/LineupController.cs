@@ -45,6 +45,17 @@ namespace fantasy_hoops.Controllers
                         && x.Date == Database.NextGame.NEXT_GAME)
                 .Any();
 
+            // Checking if price sum is not higher than 300K
+            int priceSum = context.Players.Where(pg => pg.PlayerID == model.PgID).Select(p => p.Price)
+                .Union(context.Players.Where(sg => sg.PlayerID == model.SgID).Select(p => p.Price))
+                .Union(context.Players.Where(sf => sf.PlayerID == model.SfID).Select(p => p.Price))
+                .Union(context.Players.Where(pf => pf.PlayerID == model.PfID).Select(p => p.Price))
+                .Union(context.Players.Where(c => c.PlayerID == model.CID).Select(p => p.Price))
+                .Sum();
+
+            if (priceSum > 300)
+                return StatusCode(422, "Lineup price exceeds the budget! Lineup was not submitted.");
+
             if (!updating)
             {
                 Add(model.UserID, "PG", model.PgID);

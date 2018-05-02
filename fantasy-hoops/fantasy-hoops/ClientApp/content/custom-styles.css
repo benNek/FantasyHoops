@@ -537,10 +537,21 @@ input[type=search]:focus {
 }
 
 .search { position: relative; }
-.search input { text-indent: 1rem;}
+.search input { text-indent: 1rem; }
 .search .fa-search { 
   position: absolute;
   top: 0.7rem;
   left: 0.5rem;
   font-size: 1rem;
+}
+
+.player-injury-badge {
+  position: absolute;
+  top: 7.8rem;
+  font-size: 0.75rem;
+  padding: 0.3rem;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
 }
