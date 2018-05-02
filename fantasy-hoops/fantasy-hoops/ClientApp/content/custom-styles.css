@@ -524,3 +524,14 @@ margin-bottom: 1.5rem;
   letter-spacing: 10px;
   text-shadow: 4px 4px 0 black , 6px 6px 0 #007BFF ;
 }
+
+.player-injury-badge {
+  position: absolute;
+  top: 7.8rem;
+  font-size: 0.75rem;
+  padding: 0.3rem;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+}
