@@ -3,30 +3,42 @@ import { UserCard } from './Profile/UserCard';
 import shortid from 'shortid';
 import _ from 'lodash';
 import defaultPhoto from '../content/images/default.png';
+import { DebounceInput } from 'react-debounce-input';
 
 export class UserPool extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: '',
       userIMG: this.getUserImages()
+    }
+    this.filterList = this.filterList.bind(this);
+  }
+
+  filterList(e) {
+    if (this.state.initialUsers) {
+      let updatedList = this.state.initialUsers;
+      updatedList = _.filter(updatedList, user => {
+        return user.userName.toLowerCase().search(e.target.value.toLowerCase()) !== -1
+      });
+      this.setState({ users: updatedList });
     }
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     await fetch(`http://localhost:51407/api/user`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          users: res,
+          initialUsers: res,
+          users: res
         });
       })
   }
 
   render() {
-    const users = _.map(
+    let users = _.map(
       this.state.users,
       (user) => {
         {
@@ -39,9 +51,18 @@ export class UserPool extends Component {
         }
       }
     );
+    if (users.length < 1)
+      users = <div className="m-2 mx-auto">No users</div>;
     return (
       <div className="container bg-light pt-4 pb-2">
-        <input className="form-control m-3 mb-4" type="search" placeholder="Search" aria-label="Search" style={{ width: '20rem' }} />
+        <div className="search m-3 mb-4">
+          <span className="fa fa-search"></span>
+          <DebounceInput
+            className="form-control" type="search" name="search" placeholder="Search..."
+            minLength={2}
+            debounceTimeout={600}
+            onChange={this.filterList} />
+        </div>
         <div className="center col">
           <div className="row">
             {users}
