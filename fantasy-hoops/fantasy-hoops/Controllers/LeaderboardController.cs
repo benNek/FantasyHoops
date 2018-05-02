@@ -17,18 +17,30 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpGet("player")]
-        public IEnumerable<Object> GetPlayerLeaderboard(int from = 0, int limit = 10)
+        public IEnumerable<Object> GetPlayerLeaderboard(int from = 0, int limit = 10, string type = "weekly")
         {
-            return context.Stats
-                .Where(x => x.Date.Equals(NextGame.NEXT_GAME))
+            DateTime date = NextGame.PREVIOUS_LAST_GAME.AddDays(-7);
+            if (type.Equals("daily"))
+            {
+                date = NextGame.PREVIOUS_LAST_GAME;
+            }
+            else if (type.Equals("monthly"))
+            {
+                date = NextGame.PREVIOUS_LAST_GAME.AddDays(-30);
+            }
+
+            return context.Players
                 .Select(x => new
                 {
                     x.PlayerID,
-                    x.Player.FirstName,
-                    x.Player.LastName,
-                    x.Player.Position,
-                    x.FP
+                    x.FirstName,
+                    x.LastName,
+                    x.Position,
+                    FP = Math.Round(context.Stats
+                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date >= date)
+                        .Select(y => y.FP).Sum(), 1)
                 })
+                .Where(x => x.FP > 0)
                 .OrderByDescending(x => x.FP)
                 .Skip(from)
                 .Take(limit)
@@ -39,6 +51,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("user")]
         public IEnumerable<Object> GetMonthlyUserLeaderboard(int from = 0, int limit = 10, string type = "weekly")
         {
+            
             DateTime date = NextGame.PREVIOUS_LAST_GAME.AddDays(-7);
             if (type.Equals("daily"))
             {
@@ -55,6 +68,7 @@ namespace fantasy_hoops.Controllers
                     .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
                     .Select(y => y.FP).Sum()
             })
+            .Where(y => y.Score > 0)
             .OrderByDescending(x => x.Score)
             .Skip(from)
             .Take(limit)
