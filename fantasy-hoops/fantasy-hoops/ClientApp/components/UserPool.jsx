@@ -3,25 +3,25 @@ import { UserCard } from './Profile/UserCard';
 import shortid from 'shortid';
 import _ from 'lodash';
 import defaultPhoto from '../content/images/default.png';
+import { DebounceInput } from 'react-debounce-input';
 
 export class UserPool extends Component {
   constructor(props) {
     super(props);
-    this.filterList= this.filterList.bind(this);
     this.state = {
-      users: '',
       userIMG: this.getUserImages()
-
     }
-
+    this.filterList = this.filterList.bind(this);
   }
-  filterList(event) {
-    if (this.state.initialUsers) {
-      var updatedList = this.state.initialUsers;
-      updatedList = updatedList.filter(item => { return item.toLowerCase().search(this.initialUsers.value.toLowerCase() !== -1) });
-      this.setState({ initialUsers: updatedList });
-    }
 
+  filterList(e) {
+    if (this.state.initialUsers) {
+      let updatedList = this.state.initialUsers;
+      updatedList = _.filter(updatedList, user => {
+        return user.userName.toLowerCase().search(e.target.value.toLowerCase()) !== -1
+      });
+      this.setState({ users: updatedList });
+    }
   }
 
   async componentWillMount() {
@@ -32,14 +32,13 @@ export class UserPool extends Component {
       .then(res => {
         this.setState({
           initialUsers: res,
-          users: res,
+          users: res
         });
       })
   }
 
   render() {
-    console.log(this.state.initialUsers);
-    const users = _.map(
+    let users = _.map(
       this.state.users,
       (user) => {
         {
@@ -52,11 +51,18 @@ export class UserPool extends Component {
         }
       }
     );
-
+    if (users.length < 1)
+      users = <div className="m-2 mx-auto">No users</div>;
     return (
       <div className="container bg-light pt-4 pb-2">
-        <input className="form-control m-3 mb-4" type="search" placeholder="Search" aria-label="Search"
-          onChange={this.filterList} style={{ width: '20rem' }} />
+        <div className="search m-3 mb-4">
+          <span className="fa fa-search"></span>
+          <DebounceInput
+            className="form-control" type="search" name="search" placeholder="Search..."
+            minLength={2}
+            debounceTimeout={600}
+            onChange={this.filterList} />
+        </div>
         <div className="center col">
           <div className="row">
             {users}
