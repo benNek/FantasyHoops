@@ -32,7 +32,7 @@ namespace fantasy_hoops.Controllers
                     x.Position,
                     TeamColor = x.Team.Color,
                     x.FPPG,
-                    x.Status
+                    injuryStatus = x.Status
                 })
                 .OrderByDescending(p => p.Price)
                 .ToList();
@@ -58,7 +58,7 @@ namespace fantasy_hoops.Controllers
                     x.TOV,
                     x.FPPG,
                     x.Price,
-                    x.Status,
+                    injuryStatus = x.Status,
                     Team = new
                     {
                         x.TeamID,
