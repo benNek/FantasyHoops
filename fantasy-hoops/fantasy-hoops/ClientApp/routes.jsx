@@ -11,9 +11,12 @@ import { Login } from './components/Authentication/Login'
 import { NewsFeed } from './components/News/NewsFeed';
 import { UserLeaderboard } from './components/Leaderboard/UserLeaderboard';
 import { PlayerLeaderboard } from './components/Leaderboard/PlayerLeaderboard';
+import { UserPool } from './components/UserPool';
+import { Main } from './components/Main';
 
 export const routes = <div>
   <Route path='/' component={Header} />
+  <Route exact path='/' component={Main} />
   <Route exact path='/login' component={Login} />
   <Route exact path='/register' component={Registration} />
   <PrivateRoute path='/profile/:name?/:edit?' component={UserProfile} />
@@ -23,4 +26,5 @@ export const routes = <div>
   <Route path='/news' component={NewsFeed} />
   <Route exact path='/leaderboard/users' component={UserLeaderboard} />
   <Route exact path='/leaderboard/players' component={PlayerLeaderboard} />
+  <PrivateRoute path='/users' component={UserPool} />
 </div>;

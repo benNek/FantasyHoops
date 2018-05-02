@@ -35,7 +35,7 @@ export class Header extends Component {
       }
       catch (err) {
       }
-
+      
       profile = (
         <ul className="nav navbar-nav ml-auto">
           <Notifications />
@@ -63,7 +63,7 @@ export class Header extends Component {
                       <a className="btn-no-outline text-dark" href='/profile'><h4 className="text-left"><strong>{user.username}</strong></h4></a>
                       <p className="text-left small">{user.email}</p>
                       <p className="text-left">
-                        <button type="button" href={`/profile/${user.username}/edit`} className="btn btn-outline-primary btn-block btn-sm">Edit profile</button>
+                        <a role="button" href={`/profile/${user.username}/edit`} className="btn btn-outline-primary btn-block btn-sm">Edit profile</a>
                       </p>
                     </div>
                   </div>
@@ -109,6 +109,9 @@ export class Header extends Component {
               </li>
               <li className="nav-item">
                 <a className="nav-link btn-no-outline" href="/injuries">Injuries feed</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link btn-no-outline" href="/users">Users</a>
               </li>
               <li className="nav-item dropdown">
                 <a

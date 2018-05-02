@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Controllers
 {
@@ -59,9 +61,22 @@ namespace fantasy_hoops.Controllers
             if (context.Users.Where(x => x.UserName.ToLower().Equals(user.UserName.ToLower())).Any())
                 return StatusCode(422, "Username is already taken!");
 
+            // Check for username length
+            if (!Regex.IsMatch(model.UserName, @"^.{4,11}$"))
+                return StatusCode(422, "Username must be between 4 and 11 symbols long!");
+
+            // Password validation
+            if (!Regex.IsMatch(model.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$"))
+                return StatusCode(422, "Password must contain: 8-20 characters. At least one uppercase letter. At least one number.");
+
             // Checking for duplicate email addresses
             if (context.Users.Where(x => x.Email.ToLower().Equals(user.Email.ToLower())).Any())
                 return StatusCode(422, "Email already has an user associated to it!");
+
+            // Check if email is valid
+            if (!Regex.IsMatch(model.Email, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"))
+                return StatusCode(422, "Entered email is invalid!");
+
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -109,6 +124,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(String id)
         {
+            // FOR THE MOTHER OF GOD PLEASE FIX THIS WTF
             var team = context.Teams
                 .Where(x => x.TeamID == context.Users
                     .Where(y => y.Id.Equals(id))
@@ -129,7 +145,8 @@ namespace fantasy_hoops.Controllers
             var players = context.Lineups
                 .Where(x => x.UserID.Equals(id) && x.Date < NextGame.NEXT_GAME)
                 .OrderByDescending(x => x.Date)
-                .Select(x => new {
+                .Select(x => new
+                {
                     x.Player.NbaID,
                     x.Player.LastName,
                     x.Player.Position,
@@ -147,7 +164,8 @@ namespace fantasy_hoops.Controllers
             var activity = context.Lineups
                 .Where(x => x.Calculated && x.UserID.Equals(id))
                 .OrderByDescending(x => x.Date)
-                .Select(x => new {
+                .Select(x => new
+                {
                     x.Date,
                     Score = Math.Round(context.Lineups.Where(y => y.Date.Equals(x.Date) && y.UserID.Equals(x.UserID)).Select(y => y.FP).Sum(), 1),
                     players = players.Where(y => y.Date.Equals(x.Date)).ToList()
@@ -160,7 +178,7 @@ namespace fantasy_hoops.Controllers
             // Streak
             int streak = 0;
             DateTime date = NextGame.NEXT_GAME.AddDays(-1);
-            while(context.Lineups.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
+            while (context.Lineups.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
             {
                 streak++;
                 date = date.AddDays(-1);
@@ -210,9 +228,18 @@ namespace fantasy_hoops.Controllers
             // No duplicate usernames
             if (context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower()) && !x.Id.Equals(model.Id)).Any())
                 return StatusCode(409, "Username is already taken!");
+
+            // Check for username length
+            if (!Regex.IsMatch(model.UserName, @"^.{4,11}$"))
+                return StatusCode(422, "Username must be between 4 and 11 symbols long!");
+
             // No duplicate emails
             if (context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.Equals(model.Id)).Any())
                 return StatusCode(409, "Email already has an user associated to it!");
+
+            // Check if email is valid
+            if (!Regex.IsMatch(model.Email, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"))
+                return StatusCode(422, "Entered email is invalid!");
 
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
@@ -228,6 +255,10 @@ namespace fantasy_hoops.Controllers
             await _userManager.UpdateAsync(user);
             if (model.CurrentPassword.Length > 0 && model.NewPassword.Length > 0)
             {
+                // Password validation
+                if (!Regex.IsMatch(model.NewPassword, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$"))
+                    return StatusCode(422, "Password must contain: 8-20 characters. At least one uppercase letter. At least one number.");
+
                 var result = _userManager.CheckPasswordAsync(user, model.CurrentPassword);
                 if (!result.Result)
                     return StatusCode(401, "Wrong current password!");
@@ -283,6 +314,24 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(404, "Your avatar is already cleared!");
             }
             return StatusCode(404, "Your avatar is already cleared!");
+        }
+
+        [HttpGet]
+        public IActionResult GetUserPool()
+        {
+            // NOT MY FAULT USING THIS LIKE THAT
+            return Ok(context.Users
+                .Select(u => new
+                {
+                    u.UserName,
+                    u.Id,
+                    color = context.Teams
+                        .Where(t => t.TeamID == u.FavoriteTeamId)
+                        .Select(t => t.Color)
+                        .FirstOrDefault()
+                })
+                .OrderBy(u => u.UserName)
+                .ToList());
         }
     }
 }
