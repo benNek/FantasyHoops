@@ -187,6 +187,29 @@ namespace fantasy_hoops.Controllers
             // Weekly score
             var totalScore = Math.Round(activity.Where(x => x.Date >= DateTime.Today.AddDays(-7)).Select(x => x.Score).Sum(), 1);
 
+            // Weekly ranking (HACKERMAN EDITION)
+            var ranking = context.Users.Select(x => new {
+                x.Id,
+                Score = context.Lineups
+                    .Where(y => y.UserID.Equals(x.Id) && y.Date >= NextGame.PREVIOUS_LAST_GAME.AddDays(-7))
+                    .Select(y => y.FP).Sum(),
+                      Ranking = 0
+            })
+            .Where(x => x.Score > 0)
+            .OrderByDescending(x => x.Score)
+            .ToList();
+
+            int position = 0;
+            int rank = 1;
+            ranking.ForEach(x =>
+            {
+                if(x.Id.Equals(id))
+                {
+                    position = rank;
+                }
+                rank++;
+            });
+
             var user = context.Users.Where(x => x.Id.Equals(id)).Select(x => new
             {
                 x.Id,
@@ -203,6 +226,7 @@ namespace fantasy_hoops.Controllers
                 },
                 RecentActivity = activity,
                 streak,
+                position,
                 TotalScore = totalScore
             })
             .FirstOrDefault();

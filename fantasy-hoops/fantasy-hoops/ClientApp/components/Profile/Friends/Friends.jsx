@@ -46,6 +46,12 @@ export class Friends extends Component {
     );
   }
 
+  importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+  }
+
   getUserImages() {
     try {
       return this.importAll(require.context('../../../content/images/avatars', false, /\.(png|jpe?g|svg)$/))

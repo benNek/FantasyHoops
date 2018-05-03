@@ -65,7 +65,7 @@ export class InfoPanel extends Component {
             <hr />
             <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak: {user.streak}</span>
             <span className="badge badge-success"><i className="fa fa-cog"></i> Weekly Score: {user.totalScore}</span>
-            <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking</span>
+            <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking: {user.position}</span>
           </div>
           <div className="col-md-12">
             <h5 className="mt-2"><span className="fa fa-clock-o ion-clock"></span> Recent Activity</h5>

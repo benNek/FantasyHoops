@@ -64,9 +64,9 @@ namespace fantasy_hoops.Controllers
             return context.Users.Select(x => new {
                 x.Id,
                 x.UserName,
-                Score = context.Lineups
+                Score = Math.Round(context.Lineups
                     .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
-                    .Select(y => y.FP).Sum()
+                    .Select(y => y.FP).Sum(), 1)
             })
             .Where(y => y.Score > 0)
             .OrderByDescending(x => x.Score)
