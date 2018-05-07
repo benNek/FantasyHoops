@@ -10,6 +10,7 @@ import moment from 'moment';
 import Countdown from 'react-countdown-now';
 import { InfoModal } from './InfoModal';
 import { Loader } from '../Loader';
+import { importAll } from '../../utils/reusableFunctions';
 
 const budget = 300; // thousands
 
@@ -104,12 +105,6 @@ export class Lineup extends Component {
       btn.disabled = true;
       btn.className = 'btn btn-outline-primary btn-lg btn-block';
     }
-  }
-
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
   }
 
   getDate() {
@@ -289,7 +284,7 @@ export class Lineup extends Component {
 
   getPosImages() {
     try {
-      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
@@ -298,7 +293,7 @@ export class Lineup extends Component {
 
   getPlayerImages() {
     try {
-      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''

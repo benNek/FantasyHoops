@@ -4,6 +4,7 @@ import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
 import _ from 'lodash';
 import defaultPhoto from '../../content/images/default.png';
+import { importAll } from '../../utils/reusableFunctions';
 
 export class UserLeaderboard extends Component {
   constructor(props) {
@@ -84,15 +85,9 @@ export class UserLeaderboard extends Component {
     );
   }
 
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
-  }
-
   getUserImages() {
     try {
-      return this.importAll(require.context('../../content/images/avatars', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/avatars', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''

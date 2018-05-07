@@ -3,6 +3,7 @@ import { InjuryCard } from './InjuryCard';
 import _ from 'lodash';
 import shortid from 'shortid';
 import { Loader } from '../Loader';
+import { importAll } from '../../utils/reusableFunctions';
 
 export class InjuriesFeed extends Component {
   constructor(props) {
@@ -70,15 +71,9 @@ export class InjuriesFeed extends Component {
     );
   }
 
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
-  }
-
   getPosImages() {
     try {
-      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
@@ -87,7 +82,7 @@ export class InjuriesFeed extends Component {
 
   getPlayerImages() {
     try {
-      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''

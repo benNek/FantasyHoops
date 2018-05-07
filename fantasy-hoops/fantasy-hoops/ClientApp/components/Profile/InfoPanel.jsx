@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { UserScore } from './UserScore';
 import { PlayerModal } from '../PlayerModal';
 import shortid from 'shortid';
+import { importAll } from '../../utils/reusableFunctions';
 
 export class InfoPanel extends Component {
   constructor(props) {
@@ -90,7 +91,7 @@ export class InfoPanel extends Component {
 
   getPosImages() {
     try {
-      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
@@ -99,7 +100,7 @@ export class InfoPanel extends Component {
 
   getPlayerImages() {
     try {
-      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''

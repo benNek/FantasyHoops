@@ -14,7 +14,7 @@ export class PlayerLeaderboardCard extends Component {
               <h4>{this.props.index + 1}</h4>
             </div>
             <div className="pl-1">
-              <div className="bg-success card-circle position-absolute" style={{ top: '0.45rem' }}>
+              <div className="card-circle position-absolute" style={{ top: '0.45rem', backgroundColor: `${this.props.teamColor}` }}>
                 <img className="user-card-player" src={this.props.avatar} />
               </div>
             </div>

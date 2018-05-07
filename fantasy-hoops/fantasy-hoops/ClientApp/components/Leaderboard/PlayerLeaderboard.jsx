@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PlayerLeaderboardCard as Card } from './PlayerLeaderboardCard';
 import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
+import { importAll } from '../../utils/reusableFunctions';
 
 export class PlayerLeaderboard extends Component {
   constructor(props) {
@@ -88,11 +89,11 @@ export class PlayerLeaderboard extends Component {
       players,
       (player, index) => {
         {
-
           return <Card
             index={index}
             key={shortid()}
-            avatar={this.state.playerIMG[`${player.id}.png`] || this.state.posIMG[`${player.position}.png`]}
+            avatar={this.state.playerIMG[`${player.nbaID}.png`] || this.state.posIMG[`${player.position.toLowerCase()}.png`]}
+            teamColor={player.teamColor}
             firstName={player.firstName}
             lastName={player.lastName}
             fp={player.fp}
@@ -104,7 +105,7 @@ export class PlayerLeaderboard extends Component {
 
   getPlayerImages() {
     try {
-      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
@@ -113,7 +114,7 @@ export class PlayerLeaderboard extends Component {
 
   getPosImages() {
     try {
-      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
