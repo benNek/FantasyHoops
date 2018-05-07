@@ -19,14 +19,14 @@ namespace fantasy_hoops.Controllers
         [HttpGet("player")]
         public IEnumerable<Object> GetPlayerLeaderboard(int from = 0, int limit = 10, string type = "weekly")
         {
-            DateTime date = NextGame.PREVIOUS_LAST_GAME.AddDays(-7);
+            DateTime date = NextGame.PREVIOUS_GAME.AddDays(-7);
             if (type.Equals("daily"))
             {
-                date = NextGame.PREVIOUS_LAST_GAME;
+                date = NextGame.PREVIOUS_GAME;
             }
             else if (type.Equals("monthly"))
             {
-                date = NextGame.PREVIOUS_LAST_GAME.AddDays(-30);
+                date = NextGame.PREVIOUS_GAME.AddDays(-30);
             }
 
             return context.Players
@@ -52,14 +52,14 @@ namespace fantasy_hoops.Controllers
         public IEnumerable<Object> GetMonthlyUserLeaderboard(int from = 0, int limit = 10, string type = "weekly")
         {
             
-            DateTime date = NextGame.PREVIOUS_LAST_GAME.AddDays(-7);
+            DateTime date = NextGame.PREVIOUS_GAME.AddDays(-7);
             if (type.Equals("daily"))
             {
-                date = NextGame.PREVIOUS_LAST_GAME;
+                date = NextGame.PREVIOUS_GAME;
             }
             else if (type.Equals("monthly"))
             {
-                date = NextGame.PREVIOUS_LAST_GAME.AddDays(-30);
+                date = NextGame.PREVIOUS_GAME.AddDays(-30);
             }
             return context.Users.Select(x => new {
                 x.Id,
