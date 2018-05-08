@@ -5,6 +5,7 @@ import shortid from 'shortid';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Loader } from '../Loader';
 import defaultLogo from '../../content/images/defaultLogo.png';
+import { importAll } from '../../utils/reusableFunctions';
 
 export class NewsFeed extends Component {
   constructor(props) {
@@ -53,17 +54,11 @@ export class NewsFeed extends Component {
 
   getImages() {
     try {
-      return this.importAll(require.context('../../content/images/logos', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/logos', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
     }
-  }
-
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
   }
 
   render() {

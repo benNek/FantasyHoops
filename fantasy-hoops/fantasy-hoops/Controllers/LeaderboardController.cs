@@ -33,9 +33,11 @@ namespace fantasy_hoops.Controllers
                 .Select(x => new
                 {
                     x.PlayerID,
+                    x.NbaID,
                     x.FirstName,
                     x.LastName,
                     x.Position,
+                    teamColor = x.Team.Color,
                     FP = Math.Round(context.Stats
                         .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date >= date)
                         .Select(y => y.FP).Sum(), 1)

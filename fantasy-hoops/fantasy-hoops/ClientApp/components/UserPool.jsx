@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import _ from 'lodash';
 import defaultPhoto from '../content/images/default.png';
 import { DebounceInput } from 'react-debounce-input';
+import { importAll } from '../utils/reusableFunctions';
 
 export class UserPool extends Component {
   constructor(props) {
@@ -72,15 +73,9 @@ export class UserPool extends Component {
     );
   }
 
-  importAll(r) {
-    let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-    return images;
-  }
-
   getUserImages() {
     try {
-      return this.importAll(require.context('../content/images/avatars', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../content/images/avatars', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''

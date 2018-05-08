@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { PlayerLeaderboardCard as Card } from './PlayerLeaderboardCard';
 import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
+import { importAll } from '../../utils/reusableFunctions';
+import { PlayerModal } from '../PlayerModal';
 
 export class PlayerLeaderboard extends Component {
   constructor(props) {
@@ -12,7 +14,10 @@ export class PlayerLeaderboard extends Component {
       monthlyPlayers: '',
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
+      stats: ''
     }
+    
+    this.showModal = this.showModal.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +48,16 @@ export class PlayerLeaderboard extends Component {
           monthlyPlayers: res,
         });
       })
+  }
+
+  showModal(player) {
+    fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          stats: res
+        });
+      });
   }
 
   render() {
@@ -79,6 +94,12 @@ export class PlayerLeaderboard extends Component {
             {monthlyPlayers.length > 0 ? monthlyPlayers : "No players to display."}
           </div>
         </div>
+        <PlayerModal
+          stats={this.state.stats}
+          image={this.state.stats
+            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+            : ''}
+        />
       </div>
     );
   }
@@ -88,14 +109,12 @@ export class PlayerLeaderboard extends Component {
       players,
       (player, index) => {
         {
-
           return <Card
             index={index}
             key={shortid()}
-            avatar={this.state.playerIMG[`${player.id}.png`] || this.state.posIMG[`${player.position}.png`]}
-            firstName={player.firstName}
-            lastName={player.lastName}
-            fp={player.fp}
+            player={player}
+            avatar={this.state.playerIMG[`${player.nbaID}.png`] || this.state.posIMG[`${player.position.toLowerCase()}.png`]}
+            showModal={this.showModal}
           />
         }
       }
@@ -104,7 +123,7 @@ export class PlayerLeaderboard extends Component {
 
   getPlayerImages() {
     try {
-      return this.importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/players', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
@@ -113,7 +132,7 @@ export class PlayerLeaderboard extends Component {
 
   getPosImages() {
     try {
-      return this.importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
+      return importAll(require.context('../../content/images/positions', false, /\.(png|jpe?g|svg)$/))
     }
     catch (err) {
       return ''
