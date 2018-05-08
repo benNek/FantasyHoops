@@ -19,7 +19,7 @@ export class PlayerLeaderboardCard extends Component {
       <div className="card bg-white rounded mt-1 mx-auto" style={{ width: '40%', height: '4.5rem' }}>
         <div className="card-body">
           <div className="row">
-            <div className="align-middle ml-3 text-right" style={{ width: '1.5rem' }}>
+            <div className="align-middle text-right" style={{ width: '2rem' }}>
               <h4>{this.props.index + 1}</h4>
             </div>
             <a
