@@ -38,7 +38,8 @@ export class Lineup extends Component {
       playerIMG: this.getPlayerImages(),
       nextGame: '',
       serverTime: '',
-      playerLoader: false
+      playerLoader: false,
+      submit: true
     };
   }
 
@@ -65,7 +66,8 @@ export class Lineup extends Component {
       .then(res => {
         this.setState({
           nextGame: res.nextGame,
-          serverTime: res.serverTime
+          serverTime: res.serverTime,
+          playerPoolDate: res.playerPoolDate
         });
       });
   }
@@ -95,7 +97,9 @@ export class Lineup extends Component {
 
     if (this.state.pg.props.player && this.state.sg.props.player
       && this.state.sf.props.player && this.state.pf.props.player
-      && this.state.c.props.player && this.calculateRemaining() >= 0) {
+      && this.state.c.props.player && this.calculateRemaining() >= 0
+      && this.state.playerPoolDate === this.state.nextGame
+      && this.state.submit) {
       const btn = document.getElementById('submit');
       btn.disabled = false;
       btn.className = 'btn btn-primary btn-lg btn-block';
@@ -119,11 +123,12 @@ export class Lineup extends Component {
     const Completionist = () => <span>The game already started. Come back soon!</span>;
     const renderer = ({ days, hours, minutes, seconds, completed }) => {
       if (completed) {
-        const btn = document.getElementById('submit');
-        btn.disabled = true;
-        btn.className = 'btn btn-outline-primary btn-lg btn-block';
+        this.state.submit = false;
         return <Completionist />;
       } else {
+        if (this.state.playerPoolDate !== this.state.nextGame)
+          return <span>Please wait a moment until player pool is updated!</span>;
+        this.state.submit = true;
         return <span>Game starts in {days}:{hours}:{minutes}:{seconds}</span>;
       }
     };
@@ -175,7 +180,7 @@ export class Lineup extends Component {
             ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
             : ''}
         />
-        <Loader show={this.state.playerLoader}/>
+        <Loader show={this.state.playerLoader} />
         <PlayerPool
           playerIMG={this.state.playerIMG}
           posIMG={this.state.posIMG}
