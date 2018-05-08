@@ -254,7 +254,12 @@ export class Lineup extends Component {
       SgID: this.state.sg.props.player.playerId,
       SfID: this.state.sf.props.player.playerId,
       PfID: this.state.pf.props.player.playerId,
-      CID: this.state.c.props.player.playerId
+      CID: this.state.c.props.player.playerId,
+      PgPrice: this.state.pg.props.player.price,
+      SgPrice: this.state.sg.props.player.price,
+      SfPrice: this.state.sf.props.player.price,
+      PfPrice: this.state.pf.props.player.price,
+      CPrice: this.state.c.props.player.price
     };
 
     fetch('/api/lineup/submit', {
