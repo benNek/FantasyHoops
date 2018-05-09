@@ -63,6 +63,8 @@ namespace fantasy_hoops.Controllers
                 || context.Players.Where(pf => pf.PlayerID == model.PfID).Select(p => p.Price).FirstOrDefault() != model.PfPrice
                 || context.Players.Where(c => c.PlayerID == model.CID).Select(p => p.Price).FirstOrDefault() != model.CPrice)
                 return StatusCode(422, "Wrong player prices! Lineup was not submitted.");
+            if (!PlayerSeed.PLAYER_POOL_DATE.Equals(Database.NextGame.NEXT_GAME))
+                return StatusCode(422, "Player pool not updated! Try again in a moment.");
 
             if (!updating)
             {
@@ -92,7 +94,8 @@ namespace fantasy_hoops.Controllers
             return Ok(new
             {
                 nextGame = Database.NextGame.NEXT_GAME_CLIENT,
-                serverTime = DateTime.Now
+                serverTime = DateTime.Now,
+                playerPoolDate = PlayerSeed.PLAYER_POOL_DATE
             });
         }
 
