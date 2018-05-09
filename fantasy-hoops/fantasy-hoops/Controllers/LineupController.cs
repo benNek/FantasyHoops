@@ -56,6 +56,13 @@ namespace fantasy_hoops.Controllers
             if (priceSum > 300)
                 return StatusCode(422, "Lineup price exceeds the budget! Lineup was not submitted.");
 
+            // Checking if players' prices are correct
+            if (context.Players.Where(pg => pg.PlayerID == model.PgID).Select(p => p.Price).FirstOrDefault() != model.PgPrice
+                || context.Players.Where(sg => sg.PlayerID == model.SgID).Select(p => p.Price).FirstOrDefault() != model.SgPrice
+                || context.Players.Where(sf => sf.PlayerID == model.SfID).Select(p => p.Price).FirstOrDefault() != model.SfPrice
+                || context.Players.Where(pf => pf.PlayerID == model.PfID).Select(p => p.Price).FirstOrDefault() != model.PfPrice
+                || context.Players.Where(c => c.PlayerID == model.CID).Select(p => p.Price).FirstOrDefault() != model.CPrice)
+                return StatusCode(422, "Wrong player prices! Lineup was not submitted.");
             if (!PlayerSeed.PLAYER_POOL_DATE.Equals(Database.NextGame.NEXT_GAME))
                 return StatusCode(422, "Player pool not updated! Try again in a moment.");
 

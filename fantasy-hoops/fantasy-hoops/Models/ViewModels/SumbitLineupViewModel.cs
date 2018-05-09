@@ -13,5 +13,10 @@ namespace fantasy_hoops.Models.ViewModels
         public int SfID { get; set; }
         public int PfID { get; set; }
         public int CID { get; set; }
+        public int PgPrice { get; set; }
+        public int SgPrice { get; set; }
+        public int SfPrice { get; set; }
+        public int PfPrice { get; set; }
+        public int CPrice { get; set; }
     }
 }
