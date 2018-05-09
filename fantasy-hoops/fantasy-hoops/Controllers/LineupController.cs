@@ -56,6 +56,9 @@ namespace fantasy_hoops.Controllers
             if (priceSum > 300)
                 return StatusCode(422, "Lineup price exceeds the budget! Lineup was not submitted.");
 
+            if (!PlayerSeed.PLAYER_POOL_DATE.Equals(Database.NextGame.NEXT_GAME))
+                return StatusCode(422, "Player pool not updated! Try again in a moment.");
+
             if (!updating)
             {
                 Add(model.UserID, "PG", model.PgID);
@@ -84,7 +87,8 @@ namespace fantasy_hoops.Controllers
             return Ok(new
             {
                 nextGame = Database.NextGame.NEXT_GAME_CLIENT,
-                serverTime = DateTime.Now
+                serverTime = DateTime.Now,
+                playerPoolDate = PlayerSeed.PLAYER_POOL_DATE
             });
         }
 

@@ -123,7 +123,7 @@ namespace fantasy_hoops.Database
         }
         private static string GetDate()
         {
-            return NextGame.NEXT_GAME.AddDays(-1).ToString("yyyyMMdd");
+            return NextGame.PREVIOUS_GAME.ToString("yyyyMMdd");
         }
     }
 }

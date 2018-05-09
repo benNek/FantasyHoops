@@ -10,12 +10,12 @@ namespace fantasy_hoops.Database
 {
     public class PlayerSeed
     {
+        public static DateTime PLAYER_POOL_DATE = DateTime.UtcNow;
         public static int PRICE_FLOOR = 10;
 
         public static void Initialize(GameContext context)
         {
             Calculate(context);
-            NextGame.NEXT_GAME_CLIENT = NextGame.NEXT_GAME;
         }
 
         private static JObject GetPlayer(int id)
@@ -56,6 +56,8 @@ namespace fantasy_hoops.Database
                 player.IsPlaying = IsPlaying(player, games);
             }
             context.SaveChanges();
+            NextGame.NEXT_GAME_CLIENT = NextGame.NEXT_GAME;
+            PLAYER_POOL_DATE = NextGame.NEXT_GAME;
         }
 
         private static bool IsPlaying(Player player, JArray games)
