@@ -6,6 +6,7 @@ import _ from 'lodash';
 import defaultPhoto from '../../content/images/default.png';
 import { importAll } from '../../utils/reusableFunctions';
 import { Loader } from '../Loader';
+import { EmptyJordan } from '../EmptyJordan';
 
 export class UserLeaderboard extends Component {
   constructor(props) {
@@ -82,21 +83,21 @@ export class UserLeaderboard extends Component {
             {!this.state.dailyLoader
               ? dailyUsers.length > 0
                 ? dailyUsers
-                : <div className="text-center">No users to display</div>
+                : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.dailyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="weekly" role="tabpanel">
             {!this.state.weeklyLoader
               ? weeklyUsers.length > 0
                 ? weeklyUsers
-                : <div className="text-center">No users to display</div>
+                : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.weeklyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="monthly" role="tabpanel">
             {!this.state.monthlyLoader
               ? monthlyUsers.length > 0
                 ? monthlyUsers
-                : <div className="text-center">No users to display</div>
+                : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.monthlyLoader} />}
           </div>
         </div>

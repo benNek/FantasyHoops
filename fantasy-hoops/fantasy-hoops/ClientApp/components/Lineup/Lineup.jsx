@@ -133,7 +133,9 @@ export class Lineup extends Component {
   render() {
     if (!this.state.isGame)
       return (
-        <EmptyJordan message="The game hasn't started yet..." />
+        <div className="p-5">
+          <EmptyJordan message="No injuries report today..." />
+        </div>
       );
 
     const remaining = this.calculateRemaining();

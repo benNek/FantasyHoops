@@ -96,7 +96,9 @@ export class AllNotifications extends Component {
   getNotifications() {
     if (this.state.userNotifications.length < 1 && !this.state.loader)
       return (
-        <EmptyJordan message="Such empty..." />
+        <div className="p-5">
+          <EmptyJordan message="No injuries report today..." />
+        </div>
       );
     const cardWidth = 60;
     return _.slice(this.state.userNotifications)

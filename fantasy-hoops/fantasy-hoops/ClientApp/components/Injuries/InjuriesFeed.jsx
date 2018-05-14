@@ -52,7 +52,9 @@ export class InjuriesFeed extends Component {
   render() {
     if (this.state.injuries.length == 0)
       return (
-        <EmptyJordan message="No injuries report today..." />
+        <div className="p-5">
+          <EmptyJordan message="No injuries report today..." />
+        </div>
       );
 
     let injuries = _.map(this.state.injuries,

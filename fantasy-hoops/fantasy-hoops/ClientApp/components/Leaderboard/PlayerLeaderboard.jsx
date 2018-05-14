@@ -5,6 +5,7 @@ import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
 import { PlayerModal } from '../PlayerModal';
 import { Loader } from '../Loader';
+import { EmptyJordan } from '../EmptyJordan';
 
 export class PlayerLeaderboard extends Component {
   constructor(props) {
@@ -95,21 +96,21 @@ export class PlayerLeaderboard extends Component {
             {!this.state.dailyLoader
               ? dailyPlayers.length > 0
                 ? dailyPlayers
-                : <div className="text-center">No players to display</div>
+                : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.dailyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="weekly" role="tabpanel">
             {!this.state.weeklyLoader
               ? weeklyPlayers.length > 0
                 ? weeklyPlayers
-                : <div className="text-center">No players to display</div>
+                : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.weeklyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="monthly" role="tabpanel">
             {!this.state.monthlyLoader
               ? monthlyPlayers.length > 0
                 ? monthlyPlayers
-                : <div className="text-center">No players to display</div>
+                : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.monthlyLoader} />}
           </div>
         </div>
