@@ -11,7 +11,7 @@ import Countdown from 'react-countdown-now';
 import { InfoModal } from './InfoModal';
 import { Loader } from '../Loader';
 import { importAll } from '../../utils/reusableFunctions';
-
+import { EmptyJordan } from '../EmptyJordan'
 const budget = 300; // thousands
 
 export class Lineup extends Component {
@@ -39,16 +39,36 @@ export class Lineup extends Component {
       nextGame: '',
       serverTime: '',
       playerLoader: false,
-      submit: true
+      submit: true,
+      isGame: true
     };
   }
 
-  componentDidMount() {
+  async componentWillMount() {
     this.setState({
       playerLoader: true
     });
+    await fetch(`http://localhost:51407/api/lineup/nextGame`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        if (new Date(res.nextGame).getFullYear() != 1) {
+          this.setState({
+            nextGame: res.nextGame,
+            serverTime: res.serverTime,
+            playerPoolDate: res.playerPoolDate
+          });
+        }
+        else {
+          this.setState({ isGame: false })
+        }
+      });
 
-    fetch(`http://localhost:51407/api/player`)
+    if (!this.state.isGame)
+      return;
+
+    await fetch(`http://localhost:51407/api/player`)
       .then(res => {
         return res.json()
       })
@@ -59,23 +79,15 @@ export class Lineup extends Component {
         });
       });
     this.filter('PG');
-    fetch(`http://localhost:51407/api/lineup/nextGame`)
-      .then(res => {
-        return res.json()
-      })
-      .then(res => {
-        this.setState({
-          nextGame: res.nextGame,
-          serverTime: res.serverTime,
-          playerPoolDate: res.playerPoolDate
-        });
-      });
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
+    if (!this.state.isGame)
+      return;
+
     if (!this.state.loadedPlayers && this.state.players) {
       const user = parse();
-      fetch(`http://localhost:51407/api/lineup/${user.id}`)
+      await fetch(`http://localhost:51407/api/lineup/${user.id}`)
         .then(res => {
           return res.json()
         })
@@ -119,6 +131,11 @@ export class Lineup extends Component {
   }
 
   render() {
+    if (!this.state.isGame)
+      return (
+        <EmptyJordan message="The game hasn't started yet..." />
+      );
+
     const remaining = this.calculateRemaining();
     const Completionist = () => <span>The game already started. Come back soon!</span>;
     const renderer = ({ days, hours, minutes, seconds, completed }) => {

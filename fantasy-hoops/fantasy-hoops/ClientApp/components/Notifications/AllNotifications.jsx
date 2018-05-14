@@ -4,6 +4,7 @@ import { GameScoreNotification } from './GameScoreNotification';
 import { InjuryNotification } from './InjuryNotification';
 import { FriendRequestNotification } from './FriendRequestNotification';
 import { Loader } from '../Loader';
+import { EmptyJordan } from '../EmptyJordan';
 import shortid from 'shortid';
 
 const user = parse();
@@ -95,10 +96,7 @@ export class AllNotifications extends Component {
   getNotifications() {
     if (this.state.userNotifications.length < 1 && !this.state.loader)
       return (
-        <div className="text-center">
-          <img className="text-center" src={require('../../content/images/jordan-crying.png')} style={{ height: '200px' }} />
-          <h6>Such empty...</h6>
-        </div>
+        <EmptyJordan message="Such empty..." />
       );
     const cardWidth = 60;
     return _.slice(this.state.userNotifications)

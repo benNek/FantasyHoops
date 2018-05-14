@@ -18,10 +18,6 @@ namespace fantasy_hoops
                 s => s.WithName("nextGame")
                 .ToRunOnceAt(DateTime.UtcNow.AddSeconds(5)));
 
-            JobManager.AddJob(() => NextGame.SetClientTime(),
-                s => s.WithName("setTime")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(8)));
-
             JobManager.AddJob(() => InjuriesSeed.Initialize(_context),
                 s => s.WithName("injuries")
                 .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10))

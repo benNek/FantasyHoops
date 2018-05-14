@@ -5,7 +5,7 @@ import { EditProfile } from './EditProfile';
 import { InfoPanel } from './InfoPanel';
 import { Friends } from './Friends/Friends';
 import { Error } from '../Error';
-import { handleErrors } from '../../utils/errors'
+import { handleErrors } from '../../utils/errors';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -20,12 +20,12 @@ export class UserProfile extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentWillMount() {
     const loggedInAsSameUser = (this.props.match.params.name != null && parse().username.toLowerCase() == this.props.match.params.name.toLowerCase());
     if (this.props.match.params.name == null || loggedInAsSameUser) {
       this.editProfile();
       const user = parse();
-      fetch(`http://localhost:51407/api/user/${user.id}`)
+      await fetch(`http://localhost:51407/api/user/${user.id}`)
         .then(res => res.json())
         .then(res => {
           this.setState({
@@ -38,7 +38,7 @@ export class UserProfile extends Component {
       this.setState({
         readOnly: true
       });
-      fetch(`http://localhost:51407/api/user/name/${userName}`)
+      await fetch(`http://localhost:51407/api/user/name/${userName}`)
         .then(res => handleErrors(res))
         .then(res => res.json())
         .then(res => {
@@ -62,7 +62,7 @@ export class UserProfile extends Component {
   render() {
     if (this.state.error) {
       return (
-        <Error status={this.state.errorStatus} message={this.state.errorMessage}/>
+        <Error status={this.state.errorStatus} message={this.state.errorMessage} />
       );
     }
     return (

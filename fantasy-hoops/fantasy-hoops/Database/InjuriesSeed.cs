@@ -14,8 +14,8 @@ namespace fantasy_hoops.Database
 {
     public class InjuriesSeed
     {
-        const int DAYS_TO_SAVE = 1;
-        static DateTime dayFrom = NextGame.NEXT_GAME.AddDays(-DAYS_TO_SAVE - 1);
+        const int DAYS_TO_SAVE = 2;
+        static DateTime dayFrom = DateTime.UtcNow.AddDays(-DAYS_TO_SAVE);
 
         public static void Initialize(GameContext context)
         {
