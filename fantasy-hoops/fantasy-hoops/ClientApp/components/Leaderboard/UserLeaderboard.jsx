@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { parse } from '../../utils/auth';
 import { UserLeaderboardCard as Card } from './UserLeaderboardCard';
 import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
@@ -7,18 +8,25 @@ import defaultPhoto from '../../content/images/default.png';
 import { importAll } from '../../utils/reusableFunctions';
 import { Loader } from '../Loader';
 import { EmptyJordan } from '../EmptyJordan';
+const user = parse();
 
 export class UserLeaderboard extends Component {
   constructor(props) {
     super(props);
+    this.toggleFriendsOnly = this.toggleFriendsOnly.bind(this);
+
     this.state = {
-      dailyUsers: '',
-      weeklyUsers: '',
-      monthlyUsers: '',
+      dailyUsers: [],
+      weeklyUsers: [],
+      monthlyUsers: [],
+      friendsDailyUsers: [],
+      friendsWeeklyUsers: [],
+      friendsMonthlyUsers: [],
       userIMG: this.getUserImages(),
       dailyLoader: true,
       weeklyLoader: true,
-      monthlyLoader: true
+      monthlyLoader: true,
+      friendsOnly: true
     }
   }
 
@@ -53,14 +61,65 @@ export class UserLeaderboard extends Component {
           monthlyLoader: false
         });
       })
+
+    await fetch(`http://localhost:51407/api/leaderboard/user/${user.id}?type=daily`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          friendsDailyUsers: res,
+          dailyLoader: false
+        });
+      })
+    await fetch(`http://localhost:51407/api/leaderboard/user/${user.id}?type=weekly`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          friendsWeeklyUsers: res,
+          weeklyLoader: false
+        });
+      })
+    await fetch(`http://localhost:51407/api/leaderboard/user/${user.id}?type=monthly`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          friendsMonthlyUsers: res,
+          monthlyLoader: false
+        });
+      })
+  }
+
+  toggleFriendsOnly() {
+    this.setState({ friendsOnly: !this.state.friendsOnly });
   }
 
   render() {
-    const dailyUsers = this.createUsers(this.state.dailyUsers)
-    const weeklyUsers = this.createUsers(this.state.weeklyUsers)
-    const monthlyUsers = this.createUsers(this.state.monthlyUsers)
+    let dailyUsers = [];
+    let weeklyUsers = [];
+    let monthlyUsers = [];
+    if (this.state.friendsOnly) {
+      dailyUsers = this.createUsers(this.state.friendsDailyUsers)
+      weeklyUsers = this.createUsers(this.state.friendsWeeklyUsers)
+      monthlyUsers = this.createUsers(this.state.friendsMonthlyUsers)
+    }
+    else {
+      dailyUsers = this.createUsers(this.state.dailyUsers)
+      weeklyUsers = this.createUsers(this.state.weeklyUsers)
+      monthlyUsers = this.createUsers(this.state.monthlyUsers)
+    }
+
     return (
       <div className="container bg-light pt-2 pb-3">
+        <div className="position-absolute m-5">
+          <input type="checkbox" id="switch" checked={this.state.friendsOnly} onChange={this.toggleFriendsOnly} />
+          <label htmlFor="switch">Toggle</label>
+        </div>
+        <h5 className="position-absolute" style={{ margin: '4.5rem 0 0 7.5rem' }}>Friends only</h5>
         <div className="text-center pb-3">
           <img src={leaderboardLogo}
             alt=""
