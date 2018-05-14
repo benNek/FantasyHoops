@@ -40,8 +40,10 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(string id, int start = 0, int count = 0)
         {
+            if (count == 0)
+                count = context.Notifications.Where(y => y.UserID.Equals(id)).Count();
             var userNotifications = context.Notifications
                     .OfType<GameScoreNotification>()
                     .Include(gs => gs.User)
@@ -56,6 +58,8 @@ namespace fantasy_hoops.Controllers
                         .ThenInclude(p => p.Team))
                     .Where(y => y.UserID.Equals(id))
                     .OrderByDescending(y => y.DateCreated)
+                    .Skip(start)
+                    .Take(count)
                     .ToList();
 
             if (userNotifications == null)

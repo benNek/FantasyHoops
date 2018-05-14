@@ -3,23 +3,26 @@ import { isAuth, parse, logout } from '../../utils/auth';
 import { GameScoreNotification } from './GameScoreNotification';
 import { InjuryNotification } from './InjuryNotification';
 import { FriendRequestNotification } from './FriendRequestNotification';
+import { Loader } from '../Loader';
 import shortid from 'shortid';
+
 const user = parse();
 
-export class Notifications extends Component {
+export class AllNotifications extends Component {
   constructor(props) {
     super(props);
     this.toggleNotification = this.toggleNotification.bind(this);
-    this.readAll = this.readAll.bind(this);
+    this.loadMore = this.loadMore.bind(this);
 
     this.state = {
       serverTime: '',
-      userNotifications: '',
-      unreadCount: 0
+      allNotifications: [],
+      userNotifications: [],
+      loader: true
     };
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     await fetch(`http://localhost:51407/api/lineup/nextGame`)
       .then(res => {
         return res.json()
@@ -35,8 +38,9 @@ export class Notifications extends Component {
       })
       .then(res => {
         this.setState({
-          userNotifications: res,
-          unreadCount: res.filter(n => n.readStatus == false).length
+          allNotifications: res,
+          userNotifications: res.slice(0, 10),
+          loader: false
         });
       })
   }
@@ -66,46 +70,43 @@ export class Notifications extends Component {
       })
       .then(res => {
         this.setState({
-          userNotifications: res,
-          unreadCount: res.filter(n => n.readStatus == false).length
+          allNotifications: res,
+          userNotifications: res.slice(0, this.state.userNotifications.length)
         });
       });
   }
 
-  async readAll() {
-    await fetch(`http://localhost:51407/api/notification/readall/${user.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-      .then(res => handleErrors(res))
-      .then(res => res.text())
-      .catch(err => {
-      });
-
-    fetch(`http://localhost:51407/api/notification/${user.id}`)
+  async loadMore() {
+    this.setState({
+      loader: true
+    });
+    await fetch(`http://localhost:51407/api/notification/${user.id}?start=${this.state.userNotifications.length}&count=5`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          userNotifications: res,
-          unreadCount: res.filter(n => n.readStatus == false).length
+          userNotifications: this.state.userNotifications.concat(res),
+          loader: false
         });
-      })
+      });
   }
 
   getNotifications() {
-    if (this.state.userNotifications.length < 1)
-      return <a className="dropdown-item cursor-default text-center">No notifications</a>;
-    const cardWidth = 25;
-    return _.slice(this.state.userNotifications, 0, 5)
+    if (this.state.userNotifications.length < 1 && !this.state.loader)
+      return (
+        <div className="text-center">
+          <img className="text-center" src={require('../../content/images/jordan-crying.png')} style={{ height: '200px' }} />
+          <h6>Such empty...</h6>
+        </div>
+      );
+    const cardWidth = 60;
+    return _.slice(this.state.userNotifications)
       .map(notification => {
         if (notification.score)
           return <GameScoreNotification
             key={shortid()}
-            width={`${cardWidth}rem`}
+            width={`${cardWidth}%`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -113,7 +114,7 @@ export class Notifications extends Component {
         if (notification.friend)
           return <FriendRequestNotification
             key={shortid()}
-            width={`${cardWidth}rem`}
+            width={`${cardWidth}%`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -121,7 +122,7 @@ export class Notifications extends Component {
         if (notification.player)
           return <InjuryNotification
             key={shortid()}
-            width={`${cardWidth}rem`}
+            width={`${cardWidth}%`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -130,50 +131,21 @@ export class Notifications extends Component {
   }
 
   render() {
-    const badge = this.state.unreadCount > 0
-      ? <span
-        className="badge badge-danger"
-        style={{ fontSize: '0.8rem', position: 'absolute', marginLeft: '-0.6rem' }}
-      >
-        {this.state.unreadCount}
-      </span>
-      : '';
     const notifications = this.getNotifications();
+    const btn = !this.state.loader && notifications.length != this.state.allNotifications.length && this.state.userNotifications.length > 0
+      ? <button className="btn btn-primary mt-2" onClick={this.loadMore}>See more</button>
+      : '';
     return (
-      <li className="dropdown">
-        <a
-          className="fa fa-bell text-light mt-1 mr-1 ml-3 nav-link dropdown-toggle no-arrow btn-no-outline"
-          id="navbarDropdownMenuLink"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-          style={{ fontSize: '2rem' }}
-        >{badge}
-        </a>
-        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '25.1rem' }}>
-          <h6 className="dropdown-header">Notifications
-          <a
-              onClick={this.readAll}
-              className="position-absolute btn-no-outline"
-              style={{ right: '1rem' }}
-              href="javascript:void(0);"
-            >
-              Mark All as Read
-            </a>
-          </h6>
-          <div style={{ marginBottom: '-0.5rem' }}>
-            {notifications}
-          </div>
-          <h6 className="dropdown-header text-center mt-2" style={{ height: '1.5rem' }}>
-            <a
-              className="btn-no-outline"
-              href="/notifications"
-            >
-              See all
-            </a>
-          </h6>
+      <div className="container bg-light p-4">
+        <h3 className="text-center"><i className="fa fa-bell"></i> User notifications</h3>
+        <div className="m-3">
+          {notifications}
         </div>
-      </li>
+        <div className="text-center">
+          {btn}
+        </div>
+        <Loader show={this.state.loader} />
+      </div>
     );
   }
 }
