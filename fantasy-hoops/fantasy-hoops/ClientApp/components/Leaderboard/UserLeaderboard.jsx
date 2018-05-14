@@ -5,6 +5,7 @@ import shortid from 'shortid';
 import _ from 'lodash';
 import defaultPhoto from '../../content/images/default.png';
 import { importAll } from '../../utils/reusableFunctions';
+import { Loader } from '../Loader';
 
 export class UserLeaderboard extends Component {
   constructor(props) {
@@ -13,36 +14,42 @@ export class UserLeaderboard extends Component {
       dailyUsers: '',
       weeklyUsers: '',
       monthlyUsers: '',
-      userIMG: this.getUserImages()
+      userIMG: this.getUserImages(),
+      dailyLoader: true,
+      weeklyLoader: true,
+      monthlyLoader: true
     }
   }
 
-  componentDidMount() {
-    fetch(`http://localhost:51407/api/leaderboard/user?type=daily`)
+  async componentWillMount() {
+    await fetch(`http://localhost:51407/api/leaderboard/user?type=daily`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           dailyUsers: res,
+          dailyLoader: false
         });
       })
-    fetch(`http://localhost:51407/api/leaderboard/user?type=weekly`)
+    await fetch(`http://localhost:51407/api/leaderboard/user?type=weekly`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           weeklyUsers: res,
+          weeklyLoader: false
         });
       })
-    fetch(`http://localhost:51407/api/leaderboard/user?type=monthly`)
+    await fetch(`http://localhost:51407/api/leaderboard/user?type=monthly`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           monthlyUsers: res,
+          monthlyLoader: false
         });
       })
   }
@@ -72,13 +79,25 @@ export class UserLeaderboard extends Component {
         </ul>
         <div className="tab-content" id="myTabContent">
           <div className="pt-4 pb-1 tab-pane fade show active" id="daily" role="tabpanel">
-            {dailyUsers}
+            {!this.state.dailyLoader
+              ? dailyUsers.length > 0
+                ? dailyUsers
+                : <div className="text-center">No users to display</div>
+              : <Loader show={this.state.dailyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="weekly" role="tabpanel">
-            {weeklyUsers}
+            {!this.state.weeklyLoader
+              ? weeklyUsers.length > 0
+                ? weeklyUsers
+                : <div className="text-center">No users to display</div>
+              : <Loader show={this.state.weeklyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="monthly" role="tabpanel">
-            {monthlyUsers}
+            {!this.state.monthlyLoader
+              ? monthlyUsers.length > 0
+                ? monthlyUsers
+                : <div className="text-center">No users to display</div>
+              : <Loader show={this.state.monthlyLoader} />}
           </div>
         </div>
       </div>

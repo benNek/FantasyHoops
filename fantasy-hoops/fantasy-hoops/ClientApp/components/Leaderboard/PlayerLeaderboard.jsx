@@ -4,6 +4,7 @@ import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
 import { PlayerModal } from '../PlayerModal';
+import { Loader } from '../Loader';
 
 export class PlayerLeaderboard extends Component {
   constructor(props) {
@@ -14,44 +15,50 @@ export class PlayerLeaderboard extends Component {
       monthlyPlayers: '',
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
-      stats: ''
+      stats: '',
+      dailyLoader: true,
+      weeklyLoader: true,
+      monthlyLoader: true
     }
-    
+
     this.showModal = this.showModal.bind(this);
   }
 
-  componentDidMount() {
-    fetch(`http://localhost:51407/api/leaderboard/player?type=daily`)
+  async componentWillMount() {
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=daily`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           dailyPlayers: res,
+          dailyLoader: false
         });
       })
-    fetch(`http://localhost:51407/api/leaderboard/player?type=weekly`)
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=weekly`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           weeklyPlayers: res,
+          weeklyLoader: false
         });
       })
-    fetch(`http://localhost:51407/api/leaderboard/player?type=monthly`)
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=monthly`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           monthlyPlayers: res,
+          monthlyLoader: false
         });
       })
   }
 
-  showModal(player) {
-    fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+  async showModal(player) {
+    await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
       .then(res => res.json())
       .then(res => {
         this.setState({
@@ -85,13 +92,25 @@ export class PlayerLeaderboard extends Component {
         </ul>
         <div className="tab-content" id="myTabContent">
           <div className="pt-4 pb-1 tab-pane fade show active" id="daily" role="tabpanel">
-            {dailyPlayers.length > 0 ? dailyPlayers : "No players to display."}
+            {!this.state.dailyLoader
+              ? dailyPlayers.length > 0
+                ? dailyPlayers
+                : <div className="text-center">No players to display</div>
+              : <Loader show={this.state.dailyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="weekly" role="tabpanel">
-            {weeklyPlayers.length > 0 ? weeklyPlayers : "No players to display."}
+            {!this.state.weeklyLoader
+              ? weeklyPlayers.length > 0
+                ? weeklyPlayers
+                : <div className="text-center">No players to display</div>
+              : <Loader show={this.state.weeklyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="monthly" role="tabpanel">
-            {monthlyPlayers.length > 0 ? monthlyPlayers : "No players to display."}
+            {!this.state.monthlyLoader
+              ? monthlyPlayers.length > 0
+                ? monthlyPlayers
+                : <div className="text-center">No players to display</div>
+              : <Loader show={this.state.monthlyLoader} />}
           </div>
         </div>
         <PlayerModal
