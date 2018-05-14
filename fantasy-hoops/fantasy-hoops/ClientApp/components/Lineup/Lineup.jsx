@@ -150,62 +150,64 @@ export class Lineup extends Component {
       }
     };
     return (
-      <div className="container bg-light" style={{ padding: '0' }}>
+      <div className="container bg-light pb-5" style={{ width: '100%' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem', width: '100%' }}>
           <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
           </div>
-          <div className="text-center mb-3">
-            <Countdown date={this.getDate()} renderer={renderer} />
-          </div>
-          <button
-            type="button"
-            className="btn btn-info mr-3 absolute btn-circle btn-lg"
-            data-toggle="modal" data-target="#infoModal"
-            style={{ position: 'absolute', right: '1rem' }}>
-            <i className="fa fa-info" aria-hidden="true"></i>
-          </button>
-          <div className="mx-auto" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
-            <div className="row justify-content-center">
-              {this.state.pg}
-              {this.state.sg}
-              {this.state.sf}
-              {this.state.pf}
-              {this.state.c}
+          <div style={{ width: '100%' }}>
+            <div className="text-center mb-3">
+              <Countdown date={this.getDate()} renderer={renderer} />
+            </div>
+            <button
+              type="button"
+              className="btn btn-info mr-3 absolute btn-circle btn-lg"
+              data-toggle="modal" data-target="#infoModal"
+              style={{ position: 'absolute', right: '1rem' }}>
+              <i className="fa fa-info" aria-hidden="true"></i>
+            </button>
+            <div className="mx-auto" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
+              <div className="row justify-content-center">
+                {this.state.pg}
+                {this.state.sg}
+                {this.state.sf}
+                {this.state.pf}
+                {this.state.c}
+              </div>
+            </div>
+            <div className="row"
+              style={{
+                fontSize: '1.2rem',
+                color: remaining < 0 ? 'red' : 'black',
+                marginTop: '-1rem'
+              }}>
+              <div className="col text-center">
+                <div> Remaining {remaining}K</div>
+              </div>
+            </div>
+            <ProgressBar players={this.state} />
+            <div className="text-center mt-3 pb-3 mx-auto" style={{ width: "50%" }}>
+              <form onSubmit={this.handleSubmit}>
+                <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
+              </form>
             </div>
           </div>
-          <div className="row"
-            style={{
-              fontSize: '1.2rem',
-              color: remaining < 0 ? 'red' : 'black',
-              marginTop: '-1rem'
-            }}>
-            <div className="col text-center">
-              <div> Remaining {remaining}K</div>
-            </div>
-          </div>
-          <ProgressBar players={this.state} />
-          <div className="text-center mt-3 pb-3 mx-auto" style={{ width: "50%" }}>
-            <form onSubmit={this.handleSubmit}>
-              <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
-            </form>
-          </div>
+          <PlayerModal
+            stats={this.state.stats}
+            image={this.state.stats
+              ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+              : ''}
+          />
+          <Loader show={this.state.playerLoader} />
+          <PlayerPool
+            playerIMG={this.state.playerIMG}
+            posIMG={this.state.posIMG}
+            position={this.state.position}
+            players={this.state.players}
+            selectPlayer={this.selectPlayer}
+            showModal={this.showModal}
+          />
         </div>
-        <PlayerModal
-          stats={this.state.stats}
-          image={this.state.stats
-            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
-            : ''}
-        />
-        <Loader show={this.state.playerLoader} />
-        <PlayerPool
-          playerIMG={this.state.playerIMG}
-          posIMG={this.state.posIMG}
-          position={this.state.position}
-          players={this.state.players}
-          selectPlayer={this.selectPlayer}
-          showModal={this.showModal}
-        />
         <InfoModal />
       </div>
     );
