@@ -3,7 +3,7 @@ import { isAuth, parse, logout } from '../../utils/auth';
 import { GameScoreNotification } from './GameScoreNotification';
 import { InjuryNotification } from './InjuryNotification';
 import { FriendRequestNotification } from './FriendRequestNotification';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { Loader } from '../Loader';
 import shortid from 'shortid';
 
 const user = parse();
@@ -12,16 +12,17 @@ export class AllNotifications extends Component {
   constructor(props) {
     super(props);
     this.toggleNotification = this.toggleNotification.bind(this);
-    this.readAll = this.readAll.bind(this);
+    this.loadMore = this.loadMore.bind(this);
 
     this.state = {
       serverTime: '',
-      userNotifications: '',
-      unreadCount: 0
+      allNotifications: [],
+      userNotifications: [],
+      loader: true
     };
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     await fetch(`http://localhost:51407/api/lineup/nextGame`)
       .then(res => {
         return res.json()
@@ -37,8 +38,9 @@ export class AllNotifications extends Component {
       })
       .then(res => {
         this.setState({
-          userNotifications: res,
-          unreadCount: res.filter(n => n.readStatus == false).length
+          allNotifications: res,
+          userNotifications: res.slice(0, 10),
+          loader: false
         });
       })
   }
@@ -68,44 +70,43 @@ export class AllNotifications extends Component {
       })
       .then(res => {
         this.setState({
-          userNotifications: res,
-          unreadCount: res.filter(n => n.readStatus == false).length
+          allNotifications: res,
+          userNotifications: res.slice(0, this.state.userNotifications.length)
         });
       });
   }
 
-  async readAll() {
-    await fetch(`http://localhost:51407/api/notification/readall/${user.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-      .then(res => handleErrors(res))
-      .then(res => res.text())
-      .catch(err => {
-      });
-
-    fetch(`http://localhost:51407/api/notification/${user.id}`)
+  async loadMore() {
+    this.setState({
+      loader: true
+    });
+    await fetch(`http://localhost:51407/api/notification/${user.id}?start=${this.state.userNotifications.length}&count=5`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          userNotifications: res,
-          unreadCount: res.filter(n => n.readStatus == false).length
+          userNotifications: this.state.userNotifications.concat(res),
+          loader: false
         });
-      })
+      });
   }
 
   getNotifications() {
-    if (this.state.userNotifications.length < 1)
-      return <a className="text-center">No notifications</a>;
+    if (this.state.userNotifications.length < 1 && !this.state.loader)
+      return (
+        <div className="text-center">
+          <img className="text-center" src={require('../../content/images/jordan-crying.png')} style={{ height: '200px' }} />
+          <h6>Such empty...</h6>
+        </div>
+      );
+    const cardWidth = 60;
     return _.slice(this.state.userNotifications)
       .map(notification => {
         if (notification.score)
           return <GameScoreNotification
             key={shortid()}
+            width={`${cardWidth}%`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -113,6 +114,7 @@ export class AllNotifications extends Component {
         if (notification.friend)
           return <FriendRequestNotification
             key={shortid()}
+            width={`${cardWidth}%`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -120,6 +122,7 @@ export class AllNotifications extends Component {
         if (notification.player)
           return <InjuryNotification
             key={shortid()}
+            width={`${cardWidth}%`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -127,32 +130,22 @@ export class AllNotifications extends Component {
       });
   }
 
-
   render() {
-    
     const notifications = this.getNotifications();
+    const btn = !this.state.loader && notifications.length != this.state.allNotifications.length && this.state.userNotifications.length > 0
+      ? <button className="btn btn-primary mt-2" onClick={this.loadMore}>See more</button>
+      : '';
     return (
-     <a  className="right">
-     <div className="container right bg-light">
-      <InfiniteScroll >
-      <a
-              onClick={this.readAll}
-              className="center btn-no-outline"
-              style={{}}
-              href="javascript:void(0);"
-            >
-              Mark All as Read
-            </a>
-       <div className="" style={{paddingLeft: "22rem", paddingTop: "2rem"}}>
-       <h12 className="" style={{fontSize: '40', paddingLeft: '3.5rem', marginTop: -50}}>All notifications</h12>
-      <div className="" style={{ marginBottom: '2rem', marginTop: '2rem'}}>
-          {notifications}  
-          </div>
-          </div> 
-          
-        </InfiniteScroll>
+      <div className="container bg-light p-4">
+        <h3 className="text-center"><i className="fa fa-bell"></i> User notifications</h3>
+        <div className="m-3">
+          {notifications}
         </div>
-       </a>
+        <div className="text-center">
+          {btn}
+        </div>
+        <Loader show={this.state.loader} />
+      </div>
     );
   }
 }

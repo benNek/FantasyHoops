@@ -99,11 +99,13 @@ export class Notifications extends Component {
   getNotifications() {
     if (this.state.userNotifications.length < 1)
       return <a className="dropdown-item cursor-default text-center">No notifications</a>;
+    const cardWidth = 25;
     return _.slice(this.state.userNotifications, 0, 5)
       .map(notification => {
         if (notification.score)
           return <GameScoreNotification
             key={shortid()}
+            width={`${cardWidth}rem`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -111,6 +113,7 @@ export class Notifications extends Component {
         if (notification.friend)
           return <FriendRequestNotification
             key={shortid()}
+            width={`${cardWidth}rem`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}
@@ -118,6 +121,7 @@ export class Notifications extends Component {
         if (notification.player)
           return <InjuryNotification
             key={shortid()}
+            width={`${cardWidth}rem`}
             serverTime={this.state.serverTime}
             toggleNotification={this.toggleNotification}
             notification={notification}

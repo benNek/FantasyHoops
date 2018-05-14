@@ -32,7 +32,7 @@ export class InjuryNotification extends Component {
       photo = require(`../../content/images/positions/${this.props.notification.player.position.toLowerCase()}.png`)
     }
     return (
-      <a onClick={this.select} className="card cursor-pointer link" style={{ width: '25rem' }}>
+      <a onClick={this.select} className="card cursor-pointer link mx-auto" style={{ maxWidth: `${this.props.width}` }}>
         <div className={read} style={{ margin: '-0.6rem' }}>
           <div className="row">
             <div className="col-1 mr-3">
