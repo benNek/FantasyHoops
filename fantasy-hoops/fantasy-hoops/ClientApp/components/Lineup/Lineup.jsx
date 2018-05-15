@@ -151,39 +151,23 @@ export class Lineup extends Component {
         return <span>Game starts in <strong>{days}:{hours}:{minutes}:{seconds}</strong></span>;
       }
     };
-    let playerPool = '';
-    if (this.state.playerPoolDate !== this.state.nextGame && !this.state.playerLoader) {
-      playerPool = <div className="p-5">
-        <EmptyJordan message="Player pool is empty..." />
-      </div>
-    } else {
-      playerPool = <PlayerPool
-        playerIMG={this.state.playerIMG}
-        posIMG={this.state.posIMG}
-        position={this.state.position}
-        players={this.state.players}
-        selectPlayer={this.selectPlayer}
-        showModal={this.showModal}
-      />
-    }
-
     return (
       <div className="container bg-light pb-5" style={{ width: '100%' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem', width: '100%' }}>
           <div className="pt-3 text-center mx-auto" style={{ width: "50%" }}>
             <Alert type={this.state.alertType} text={this.state.alertText} show={this.state.showAlert} />
           </div>
+          <button
+            type="button"
+            className="btn btn-info absolute btn-circle btn-lg m-3"
+            data-toggle="modal" data-target="#infoModal"
+            style={{ position: 'absolute', right: '0', fontSize: '1.2rem' }}>
+            <i className="fa fa-info mx-auto" aria-hidden="true"></i>
+          </button>
           <div style={{ width: '100%' }}>
             <div className="text-center mb-3">
               <Countdown date={this.getDate()} renderer={renderer} />
             </div>
-            <button
-              type="button"
-              className="btn btn-info mr-3 absolute btn-circle btn-lg"
-              data-toggle="modal" data-target="#infoModal"
-              style={{ position: 'absolute', right: '1rem' }}>
-              <i className="fa fa-info" aria-hidden="true"></i>
-            </button>
             <div className="mx-auto" style={{ transform: 'scale(0.7, 0.7)', marginTop: '-2rem' }}>
               <div className="row justify-content-center">
                 {this.state.pg}
@@ -210,6 +194,15 @@ export class Lineup extends Component {
               </form>
             </div>
           </div>
+          <Loader show={this.state.playerLoader} />
+          <PlayerPool
+            playerIMG={this.state.playerIMG}
+            posIMG={this.state.posIMG}
+            position={this.state.position}
+            players={this.state.players}
+            selectPlayer={this.selectPlayer}
+            showModal={this.showModal}
+          />
         </div>
         <PlayerModal
           stats={this.state.stats}
@@ -217,8 +210,6 @@ export class Lineup extends Component {
             ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
             : ''}
         />
-        <Loader show={this.state.playerLoader} />
-        {playerPool}
         <InfoModal />
       </div>
     );
