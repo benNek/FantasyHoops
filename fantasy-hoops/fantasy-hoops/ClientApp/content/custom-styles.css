@@ -556,6 +556,10 @@ input[type=search]:focus {
   text-transform: uppercase;
 }
 
+.modal-lg {
+  max-width: 90% !important;
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
@@ -565,7 +569,9 @@ input[type=search]:focus {
 }
 
 /* Hide default HTML checkbox */
-.switch input {display:none;}
+.switch input {
+  display:none;
+}
 
 /* The slider */
 .slider {

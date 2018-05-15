@@ -81,16 +81,16 @@ export class PlayerModal extends Component {
       teamLogo = this.getLogo(stats.team.abbreviation);
       rows = _.map(stats.games, (s) => {
         let score = '';
-        if(!s.score)
+        if (!s.score)
           return;
         var str = s.score.split('-');
         if (parseInt(str[0]) > parseInt(str[1]))
           score = <span className="text-success">W</span>;
         else score = <span className="text-danger">L</span>;
         return <tr key={shortid()} >
-          <td>{moment(s.date).format("ddd MM/DD")}</td>
+          <td style={{ minWidth: '6rem' }}>{moment(s.date).format("ddd MM/DD")}</td>
           <td><img src={this.getLogo(s.opponent.abbreviation)} alt={s.opponent.abbreviation} width='40rem' style={{ right: '0' }} /></td>
-          <td>{score} {s.score}</td>
+          <td style={{ minWidth: '6rem' }}>{score} {s.score}</td>
           <td>{s.min}</td>
           <td>{s.fgm}</td>
           <td>{s.fga}</td>
@@ -117,7 +117,7 @@ export class PlayerModal extends Component {
     }
     return (
       <div className="modal fade" id="playerModal" tabIndex="-1" role="dialog" aria-labelledby="playerModalLabel" aria-hidden="true">
-        <div style={{ minWidth: '75rem' }} className="modal-dialog modal-lg" role="document">
+        <div className="modal-dialog modal-lg mx-auto" role="document">
           <div className="modal-content">
             <div className="modal-body">
               <div className="text-right mr-2">
@@ -130,6 +130,8 @@ export class PlayerModal extends Component {
                 <img className="img-modal" src={teamLogo} />
                 <img className="ml-3 img-modal" src={this.props.image} style={{ zIndex: '1' }} />
                 <div className="col">
+                  <br />
+                  <br />
                   <h1 className="">{stats ? stats.firstName : ''} {stats ? stats.lastName : ''}</h1>
                   <h5>{stats.position} | {stats ? stats.team.city + " " + stats.team.name : ''}</h5>
                   <h5>#{stats.number}</h5>
@@ -144,65 +146,69 @@ export class PlayerModal extends Component {
               </nav>
               <div className="tab-content" id="nav-tabContent">
                 <div className="tab-pane fade show active" id="nav-stats" role="tabpanel" aria-labelledby="nav-stats-tab">
-                  <table className="table table-sm table-hover table-bordered text-right">
-                    <thead>
-                      <tr>
-                        <th scope="col">PTS</th>
-                        <th scope="col">REB</th>
-                        <th scope="col">AST</th>
-                        <th scope="col">STL</th>
-                        <th scope="col">BLK</th>
-                        <th scope="col">TOV</th>
-                        <th scope="col">FPPG</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{stats ? stats.pts : ''}</td>
-                        <td>{stats ? stats.reb : ''}</td>
-                        <td>{stats ? stats.ast : ''}</td>
-                        <td>{stats ? stats.stl : ''}</td>
-                        <td>{stats ? stats.blk : ''}</td>
-                        <td>{stats ? stats.tov : ''}</td>
-                        <td>{stats ? stats.fppg.toFixed(1) : ''}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="table-responsive">
+                    <table className="table table-sm table-hover table-bordered text-right">
+                      <thead>
+                        <tr>
+                          <th scope="col">PTS</th>
+                          <th scope="col">REB</th>
+                          <th scope="col">AST</th>
+                          <th scope="col">STL</th>
+                          <th scope="col">BLK</th>
+                          <th scope="col">TOV</th>
+                          <th scope="col">FPPG</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{stats ? stats.pts : ''}</td>
+                          <td>{stats ? stats.reb : ''}</td>
+                          <td>{stats ? stats.ast : ''}</td>
+                          <td>{stats ? stats.stl : ''}</td>
+                          <td>{stats ? stats.blk : ''}</td>
+                          <td>{stats ? stats.tov : ''}</td>
+                          <td>{stats ? stats.fppg.toFixed(1) : ''}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className="tab-pane fade" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
-                  <table className="table table-sm table-hover table-bordered text-right">
-                    <thead>
-                      <tr>
-                        <th scope="col">DATE</th>
-                        <th scope="col">OPP</th>
-                        <th scope="col">SCORE</th>
-                        <th scope="col">MIN</th>
-                        <th scope="col">FGM</th>
-                        <th scope="col">FGA</th>
-                        <th scope="col">FG%</th>
-                        <th scope="col">3PM</th>
-                        <th scope="col">3PA</th>
-                        <th scope="col">3P%</th>
-                        <th scope="col">FTM</th>
-                        <th scope="col">FTA</th>
-                        <th scope="col">FT%</th>
-                        <th scope="col">DREB</th>
-                        <th scope="col">OREB</th>
-                        <th scope="col">TREB</th>
-                        <th scope="col">AST</th>
-                        <th scope="col">BLK</th>
-                        <th scope="col">STL</th>
-                        <th scope="col">FLS</th>
-                        <th scope="col">TOV</th>
-                        <th scope="col">PTS</th>
-                        <th scope="col">GS</th>
-                        <th scope="col">FP</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows}
-                    </tbody>
-                  </table>
+                  <div className="table-responsive">
+                    <table className="table table-sm table-hover table-bordered text-right">
+                      <thead>
+                        <tr>
+                          <th scope="col" style={{ minWidth: '6rem' }}>DATE</th>
+                          <th scope="col">OPP</th>
+                          <th scope="col" style={{ minWidth: '6rem' }}>SCORE</th>
+                          <th scope="col">MIN</th>
+                          <th scope="col">FGM</th>
+                          <th scope="col">FGA</th>
+                          <th scope="col">FG%</th>
+                          <th scope="col">3PM</th>
+                          <th scope="col">3PA</th>
+                          <th scope="col">3P%</th>
+                          <th scope="col">FTM</th>
+                          <th scope="col">FTA</th>
+                          <th scope="col">FT%</th>
+                          <th scope="col">DREB</th>
+                          <th scope="col">OREB</th>
+                          <th scope="col">TREB</th>
+                          <th scope="col">AST</th>
+                          <th scope="col">BLK</th>
+                          <th scope="col">STL</th>
+                          <th scope="col">FLS</th>
+                          <th scope="col">TOV</th>
+                          <th scope="col">PTS</th>
+                          <th scope="col">GS</th>
+                          <th scope="col">FP</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
 
@@ -213,12 +219,11 @@ export class PlayerModal extends Component {
                     defaultValue="Choose a category"
                     onChange={this.handleChange}
                   />
-                  <div className='mt-3'>
+                  <div className='mt-3 mx-auto' style={{ maxWidth: '50rem', width: '100%' }} >
                     {
-                      this.state.criteria == 'ovr' ?
-                        <Radar data={this.getRadarData()} options={this.getRadarOptions()} />
-                        :
-                        <Line data={this.getChartData()} options={this.getChartOptions()} />
+                      this.state.criteria == 'ovr'
+                        ? <div style={{ overflow: 'auto' }}><Radar data={this.getRadarData()} options={this.getRadarOptions()} /></div>
+                        : <div style={{ overflow: 'auto' }}><Line data={this.getChartData()} options={this.getChartOptions()} /></div>
                     }
                   </div>
                 </div>

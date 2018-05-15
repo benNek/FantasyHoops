@@ -61,6 +61,8 @@ namespace fantasy_hoops.Database
                     .ToRunOnceIn(1)
                     .Hours());
                 offset = 0;
+                context.Players.ToList().ForEach(p => p.IsPlaying = false);
+                context.SaveChanges();
             }
         }
 
