@@ -5,11 +5,13 @@ import _ from 'lodash';
 import defaultPhoto from '../content/images/default.png';
 import { DebounceInput } from 'react-debounce-input';
 import { importAll } from '../utils/reusableFunctions';
+import { Loader } from './Loader';
 
 export class UserPool extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loader: true,
       userIMG: this.getUserImages()
     }
     this.filterList = this.filterList.bind(this);
@@ -33,13 +35,17 @@ export class UserPool extends Component {
       .then(res => {
         this.setState({
           initialUsers: res,
-          users: res
+          users: res,
+          loader: false
         });
       })
   }
 
   render() {
-    let users = _.map(
+    if (this.state.loader)
+      return <div className="m-5"><Loader show={this.state.loader} /></div>;
+
+    const users = _.map(
       this.state.users,
       (user) => {
         {
@@ -52,8 +58,7 @@ export class UserPool extends Component {
         }
       }
     );
-    if (users.length < 1)
-      users = <div className="m-2 mx-auto">No users</div>;
+
     return (
       <div className="container bg-light pt-4 pb-2">
         <div className="search m-3 mb-4">
