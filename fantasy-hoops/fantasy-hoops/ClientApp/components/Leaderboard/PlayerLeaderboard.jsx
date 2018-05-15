@@ -4,6 +4,8 @@ import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
 import { PlayerModal } from '../PlayerModal';
+import { Loader } from '../Loader';
+import { EmptyJordan } from '../EmptyJordan';
 
 export class PlayerLeaderboard extends Component {
   constructor(props) {
@@ -14,44 +16,50 @@ export class PlayerLeaderboard extends Component {
       monthlyPlayers: '',
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
-      stats: ''
+      stats: '',
+      dailyLoader: true,
+      weeklyLoader: true,
+      monthlyLoader: true
     }
-    
+
     this.showModal = this.showModal.bind(this);
   }
 
-  componentDidMount() {
-    fetch(`http://localhost:51407/api/leaderboard/player?type=daily`)
+  async componentWillMount() {
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=daily`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           dailyPlayers: res,
+          dailyLoader: false
         });
       })
-    fetch(`http://localhost:51407/api/leaderboard/player?type=weekly`)
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=weekly`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           weeklyPlayers: res,
+          weeklyLoader: false
         });
       })
-    fetch(`http://localhost:51407/api/leaderboard/player?type=monthly`)
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=monthly`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
           monthlyPlayers: res,
+          monthlyLoader: false
         });
       })
   }
 
-  showModal(player) {
-    fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+  async showModal(player) {
+    await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
       .then(res => res.json())
       .then(res => {
         this.setState({
@@ -75,23 +83,35 @@ export class PlayerLeaderboard extends Component {
         </div>
         <ul className="nav nav-tabs justify-content-center mx-auto" id="myTab" role="tablist" style={{ width: '40%' }}>
           <li className="nav-item">
-            <a className="nav-link active" id="daily-tab" data-toggle="tab" href="#daily" role="tab">Daily</a>
+            <a className="nav-link active tab-no-outline" id="daily-tab" data-toggle="tab" href="#daily" role="tab">Daily</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">Weekly</a>
+            <a className="nav-link tab-no-outline" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">Weekly</a>
           </li><li className="nav-item">
-            <a className="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">Monthly</a>
+            <a className="nav-link tab-no-outline" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">Monthly</a>
           </li>
         </ul>
         <div className="tab-content" id="myTabContent">
           <div className="pt-4 pb-1 tab-pane fade show active" id="daily" role="tabpanel">
-            {dailyPlayers.length > 0 ? dailyPlayers : "No players to display."}
+            {!this.state.dailyLoader
+              ? dailyPlayers.length > 0
+                ? dailyPlayers
+                : <EmptyJordan message="Such empty..." />
+              : <Loader show={this.state.dailyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="weekly" role="tabpanel">
-            {weeklyPlayers.length > 0 ? weeklyPlayers : "No players to display."}
+            {!this.state.weeklyLoader
+              ? weeklyPlayers.length > 0
+                ? weeklyPlayers
+                : <EmptyJordan message="Such empty..." />
+              : <Loader show={this.state.weeklyLoader} />}
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="monthly" role="tabpanel">
-            {monthlyPlayers.length > 0 ? monthlyPlayers : "No players to display."}
+            {!this.state.monthlyLoader
+              ? monthlyPlayers.length > 0
+                ? monthlyPlayers
+                : <EmptyJordan message="Such empty..." />
+              : <Loader show={this.state.monthlyLoader} />}
           </div>
         </div>
         <PlayerModal
