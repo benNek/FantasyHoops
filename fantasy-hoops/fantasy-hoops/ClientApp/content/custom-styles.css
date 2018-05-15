@@ -555,3 +555,7 @@ input[type=search]:focus {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+.modal-lg {
+  max-width: 90% !important;
+}

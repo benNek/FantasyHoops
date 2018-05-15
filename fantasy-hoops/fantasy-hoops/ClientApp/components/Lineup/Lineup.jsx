@@ -192,12 +192,6 @@ export class Lineup extends Component {
               </form>
             </div>
           </div>
-          <PlayerModal
-            stats={this.state.stats}
-            image={this.state.stats
-              ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
-              : ''}
-          />
           <Loader show={this.state.playerLoader} />
           <PlayerPool
             playerIMG={this.state.playerIMG}
@@ -208,6 +202,12 @@ export class Lineup extends Component {
             showModal={this.showModal}
           />
         </div>
+        <PlayerModal
+          stats={this.state.stats}
+          image={this.state.stats
+            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+            : ''}
+        />
         <InfoModal />
       </div>
     );
