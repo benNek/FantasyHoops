@@ -134,7 +134,7 @@ export class Lineup extends Component {
     if (!this.state.isGame)
       return (
         <div className="p-5">
-          <EmptyJordan message="No injuries report today..." />
+          <EmptyJordan message="The game hasn't started yet..." />
         </div>
       );
 
