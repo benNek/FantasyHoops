@@ -126,58 +126,42 @@ export class PlayerModal extends Component {
                 </a>
               </div>
               <div className="row">
-                <div style={{ width: '16.25rem', height: '9.35rem' }}></div>
-                <img className="img-modal" src={teamLogo} />
-                <img className="ml-3 img-modal" src={this.props.image} style={{ zIndex: '1' }} />
+                <div style={{ width: '16.25rem', height: '13.05rem' }}></div>
+                <img className="img-modal pt-4 mb-2" src={teamLogo} />
+                <img className="ml-3 img-modal mb-2" src={this.props.image} style={{ zIndex: '1', paddingTop: '1.2rem' }} />
                 <div className="col">
-                  <br />
-                  <br />
                   <h1 className="">{stats ? stats.firstName : ''} {stats ? stats.lastName : ''}</h1>
                   <h5>{stats.position} | {stats ? stats.team.city + " " + stats.team.name : ''}</h5>
                   <h5>#{stats.number}</h5>
                 </div>
+                <div className="table-responsive">
+                  <table className="table text-right" style={{ maxWidth: '50%' }}>
+                    <thead>
+                      <tr>
+                        <th scope="col"><h6>PTS</h6><h2>{stats ? stats.pts : ''}</h2></th>
+                        <th scope="col"><h6>REB</h6><h2>{stats ? stats.reb : ''}</h2></th>
+                        <th scope="col"><h6>AST</h6><h2>{stats ? stats.ast : ''}</h2></th>
+                        <th scope="col"><h6>STL</h6><h2>{stats ? stats.stl : ''}</h2></th>
+                        <th scope="col"><h6>BLK</h6><h2>{stats ? stats.blk : ''}</h2></th>
+                        <th scope="col"><h6>TOV</h6><h2>{stats ? stats.tov : ''}</h2></th>
+                        <th scope="col"><h6>FPPG</h6><h2>{stats ? stats.fppg.toFixed(1) : ''}</h2></th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
               </div>
               <nav>
-                <div className="nav nav-tabs justify-content-end" id="nav-tab" role="tablist" style={{ position: 'static' }}>
-                  <a className="nav-item nav-link active tab-no-outline" id="nav-stats-tab" data-toggle="tab" href="#nav-stats" role="tab" aria-controls="nav-stats" aria-selected="true">Season stats</a>
-                  <a className="nav-item nav-link tab-no-outline" id="nav-gamelog-tab" data-toggle="tab" href="#nav-gamelog" role="tab" aria-controls="nav-gamelog" aria-selected="false">Gamelog</a>
+                <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                  <a className="nav-item nav-link active tab-no-outline" id="nav-gamelog-tab" data-toggle="tab" href="#nav-gamelog" role="tab" aria-controls="nav-gamelog" aria-selected="false">Gamelog</a>
                   <a className="nav-item nav-link tab-no-outline" id="nav-charts-tab" data-toggle="tab" href="#nav-charts" role="tab" aria-controls="nav-charts" aria-selected="false">Charts</a>
                 </div>
               </nav>
               <div className="tab-content" id="nav-tabContent">
-                <div className="tab-pane fade show active" id="nav-stats" role="tabpanel" aria-labelledby="nav-stats-tab">
+                <div className="tab-pane fade show active" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
                   <div className="table-responsive">
                     <table className="table table-sm table-hover table-bordered text-right">
                       <thead>
-                        <tr>
-                          <th scope="col">PTS</th>
-                          <th scope="col">REB</th>
-                          <th scope="col">AST</th>
-                          <th scope="col">STL</th>
-                          <th scope="col">BLK</th>
-                          <th scope="col">TOV</th>
-                          <th scope="col">FPPG</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{stats ? stats.pts : ''}</td>
-                          <td>{stats ? stats.reb : ''}</td>
-                          <td>{stats ? stats.ast : ''}</td>
-                          <td>{stats ? stats.stl : ''}</td>
-                          <td>{stats ? stats.blk : ''}</td>
-                          <td>{stats ? stats.tov : ''}</td>
-                          <td>{stats ? stats.fppg.toFixed(1) : ''}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className="tab-pane fade" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
-                  <div className="table-responsive">
-                    <table className="table table-sm table-hover table-bordered text-right">
-                      <thead>
-                        <tr>
+                        <tr className="bg-dark text-light">
                           <th scope="col" style={{ minWidth: '6rem' }}>DATE</th>
                           <th scope="col">OPP</th>
                           <th scope="col" style={{ minWidth: '6rem' }}>SCORE</th>
