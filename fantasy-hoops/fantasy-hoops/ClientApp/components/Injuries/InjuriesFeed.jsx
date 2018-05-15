@@ -14,7 +14,7 @@ export class InjuriesFeed extends Component {
       injuries: [],
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
-      injuryLoader: false,
+      injuryLoader: true,
     }
   }
 
@@ -50,6 +50,9 @@ export class InjuriesFeed extends Component {
   }
 
   render() {
+    if (this.state.injuryLoader)
+      return <div className="m-5"><Loader show={this.state.injuryLoader} /></div>;
+
     if (this.state.injuries.length == 0)
       return (
         <div className="p-5">
@@ -57,7 +60,7 @@ export class InjuriesFeed extends Component {
         </div>
       );
 
-    let injuries = _.map(this.state.injuries,
+    const injuries = _.map(this.state.injuries,
       (injury) => {
         const pos = injury.player.position.toLowerCase();
         return <InjuryCard
@@ -71,9 +74,7 @@ export class InjuriesFeed extends Component {
     return (
       <div className="container bg-light">
         <div className="row">
-          <Loader show={this.state.injuryLoader} />
           {injuries}
-          {this.state.noInjuries ? <div className="m-5 mx-auto">No injuries report today</div> : ''}
         </div>
       </div>
     );

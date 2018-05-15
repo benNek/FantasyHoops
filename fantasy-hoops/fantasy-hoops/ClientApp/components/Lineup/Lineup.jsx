@@ -210,15 +210,6 @@ export class Lineup extends Component {
               </form>
             </div>
           </div>
-          <Loader show={this.state.playerLoader} />
-          <PlayerPool
-            playerIMG={this.state.playerIMG}
-            posIMG={this.state.posIMG}
-            position={this.state.position}
-            players={this.state.players}
-            selectPlayer={this.selectPlayer}
-            showModal={this.showModal}
-          />
         </div>
         <PlayerModal
           stats={this.state.stats}

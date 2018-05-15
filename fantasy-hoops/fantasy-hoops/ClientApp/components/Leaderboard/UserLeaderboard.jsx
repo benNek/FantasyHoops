@@ -37,8 +37,7 @@ export class UserLeaderboard extends Component {
       })
       .then(res => {
         this.setState({
-          dailyUsers: res,
-          dailyLoader: false
+          dailyUsers: res
         });
       })
     await fetch(`http://localhost:51407/api/leaderboard/user?type=weekly`)
@@ -47,8 +46,7 @@ export class UserLeaderboard extends Component {
       })
       .then(res => {
         this.setState({
-          weeklyUsers: res,
-          weeklyLoader: false
+          weeklyUsers: res
         });
       })
     await fetch(`http://localhost:51407/api/leaderboard/user?type=monthly`)
@@ -57,8 +55,7 @@ export class UserLeaderboard extends Component {
       })
       .then(res => {
         this.setState({
-          monthlyUsers: res,
-          monthlyLoader: false
+          monthlyUsers: res
         });
       })
 
