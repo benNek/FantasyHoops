@@ -6,6 +6,7 @@ import { InfoPanel } from './InfoPanel';
 import { Friends } from './Friends/Friends';
 import { Error } from '../Error';
 import { handleErrors } from '../../utils/errors';
+import { Loader } from '../Loader';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ export class UserProfile extends Component {
     this.state = {
       edit: this.props.match.params.edit || '',
       user: '',
-      readOnly: false,
+      readOnly: true,
       error: false,
       errorStatus: '200',
       errorMessage: '',
@@ -34,7 +35,8 @@ export class UserProfile extends Component {
         .then(res => {
           this.setState({
             user: res,
-            loader: false
+            loader: false,
+            readOnly: false
           });
         });
     }
@@ -49,7 +51,8 @@ export class UserProfile extends Component {
         .then(res => {
           this.setState({
             user: res,
-            loader: false
+            loader: false,
+            readOnly: true
           });
         })
         .catch(err => {
@@ -71,6 +74,29 @@ export class UserProfile extends Component {
         <Error status={this.state.errorStatus} message={this.state.errorMessage} />
       );
     }
+
+    const content = () => {
+      if (this.state.loader)
+        return '';
+      else return (
+        <div className="tab-content py-4">
+          <InfoPanel user={this.state.user} />
+          <Friends user={this.state.user} />
+          <EditProfile user={this.state.user} />
+        </div>
+      );
+    }
+
+    const seeMore = () => {
+      if (this.state.readOnly)
+        return '';
+      else return (
+        <div className="text-center" style={{ paddingRight: '10rem' }}>
+          <a className="btn btn-outline-info" href="/history" role="button">History</a>
+        </div>
+      );
+    }
+
     return (
       <div className="container bg-light pt-1">
         <div className="row p-4">
@@ -89,11 +115,11 @@ export class UserProfile extends Component {
                 </li>
               }
             </ul>
-            <div className="tab-content py-4">
-              <InfoPanel user={this.state.user} loader={this.state.loader} />
-              <Friends user={this.state.user} />
-              <EditProfile user={this.state.user} />
+            <div className="mx-auto mt-5">
+              <Loader show={this.state.loader} />
             </div>
+            {content()}
+            {seeMore()}
           </div>
         </div>
       </div >

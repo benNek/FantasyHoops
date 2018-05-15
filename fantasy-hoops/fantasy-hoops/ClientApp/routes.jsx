@@ -13,7 +13,8 @@ import { UserLeaderboard } from './components/Leaderboard/UserLeaderboard';
 import { PlayerLeaderboard } from './components/Leaderboard/PlayerLeaderboard';
 import { UserPool } from './components/UserPool';
 import { Main } from './components/Main';
-import { AllNotifications} from './components/Notifications/AllNotifications';
+import { AllNotifications } from './components/Notifications/AllNotifications';
+import { LineupHistory } from './components/Profile/LineupHistory';
 
 export const routes = <div>
   <Route path='/' component={Header} />
@@ -29,4 +30,5 @@ export const routes = <div>
   <PrivateRoute exact path='/leaderboard/players' component={PlayerLeaderboard} />
   <PrivateRoute path='/users' component={UserPool} />
   <PrivateRoute path='/notifications' component={AllNotifications} />
+  <PrivateRoute path='/history' component={LineupHistory} />
 </div>;
