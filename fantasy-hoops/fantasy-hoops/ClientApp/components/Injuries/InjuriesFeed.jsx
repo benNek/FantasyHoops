@@ -4,21 +4,22 @@ import _ from 'lodash';
 import shortid from 'shortid';
 import { Loader } from '../Loader';
 import { importAll } from '../../utils/reusableFunctions';
+import { EmptyJordan } from '../EmptyJordan';
 
 export class InjuriesFeed extends Component {
   constructor(props) {
     super(props);
     this.state = {
       noInjuries: false,
-      injuries: '',
+      injuries: [],
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
       injuryLoader: false,
     }
   }
 
-  componentDidMount() {
-    fetch(`http://localhost:51407/api/lineup/nextGame`)
+  async componentWillMount() {
+    await fetch(`http://localhost:51407/api/lineup/nextGame`)
       .then(res => {
         return res.json()
       })
@@ -27,7 +28,7 @@ export class InjuriesFeed extends Component {
           serverTime: res.serverTime
         });
       })
-    fetch(`http://localhost:51407/api/injuries`)
+    await fetch(`http://localhost:51407/api/injuries`)
       .then(res => {
         return res.json()
       })
@@ -49,6 +50,13 @@ export class InjuriesFeed extends Component {
   }
 
   render() {
+    if (this.state.injuries.length == 0)
+      return (
+        <div className="p-5">
+          <EmptyJordan message="No injuries report today..." />
+        </div>
+      );
+
     let injuries = _.map(this.state.injuries,
       (injury) => {
         const pos = injury.player.position.toLowerCase();
@@ -63,7 +71,7 @@ export class InjuriesFeed extends Component {
     return (
       <div className="container bg-light">
         <div className="row">
-          <Loader show={this.state.injuryLoader}/>
+          <Loader show={this.state.injuryLoader} />
           {injuries}
           {this.state.noInjuries ? <div className="m-5 mx-auto">No injuries report today</div> : ''}
         </div>

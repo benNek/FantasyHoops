@@ -61,7 +61,7 @@ export class PlayerCard extends Component {
             <div className="card-block" >
               <a
                 data-toggle="tooltip"
-                data-placement="auto"
+                data-placement="top"
                 title="Click for stats"
               >
                 <h2

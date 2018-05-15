@@ -17,6 +17,7 @@ namespace fantasy_hoops.Database
         public static DateTime NEXT_LAST_GAME = DateTime.UtcNow;
         public static DateTime PREVIOUS_GAME = DateTime.UtcNow;
         public static DateTime PREVIOUS_LAST_GAME = DateTime.UtcNow;
+        private static int offset = 0;
 
         public static void SetClientTime()
         {
@@ -29,26 +30,38 @@ namespace fantasy_hoops.Database
 
             SetLastGame(gameDate);
             SetNextGame(gameDate);
+            SetClientTime();
 
-            JobManager.AddJob(() => Initialize(context),
-                s => s.WithName(NEXT_GAME.ToLongDateString())
-                .ToRunOnceAt(NEXT_GAME));
+            if (offset < 3)
+            {
+                JobManager.AddJob(() => Initialize(context),
+                    s => s.WithName(NEXT_GAME.ToLongDateString())
+                    .ToRunOnceAt(NEXT_GAME));
 
-            DateTime nextRun = NEXT_LAST_GAME;
-            if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
-                nextRun = PREVIOUS_LAST_GAME;
+                DateTime nextRun = NEXT_LAST_GAME;
+                if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
+                    nextRun = PREVIOUS_LAST_GAME;
 
-            JobManager.AddJob(() => StatsSeed.Initialize(context),
-                s => s.WithName("statsSeed_"+nextRun.ToLongDateString())
-                .ToRunOnceAt(nextRun.AddHours(5)));
+                JobManager.AddJob(() => StatsSeed.Initialize(context),
+                    s => s.WithName("statsSeed_" + nextRun.ToLongDateString())
+                    .ToRunOnceAt(nextRun.AddHours(5)));
 
-            JobManager.AddJob(() => NewsSeed.Initialize(context),
-                s => s.WithName("news_"+nextRun.ToLongDateString())
-                .ToRunOnceAt(nextRun.AddHours(8)));
+                JobManager.AddJob(() => NewsSeed.Initialize(context),
+                    s => s.WithName("news_" + nextRun.ToLongDateString())
+                    .ToRunOnceAt(nextRun.AddHours(9)));
 
-            JobManager.AddJob(() => PlayerSeed.Initialize(context),
-                s => s.WithName("playerSeed_"+nextRun.ToLongDateString())
-                .ToRunNow());
+                JobManager.AddJob(() => PlayerSeed.Initialize(context),
+                    s => s.WithName("playerSeed_" + nextRun.ToLongDateString())
+                    .ToRunNow());
+            }
+            else
+            {
+                JobManager.AddJob(() => Initialize(context),
+                    s => s.WithName("nextGame")
+                    .ToRunOnceIn(1)
+                    .Hours());
+                offset = 0;
+            }
         }
 
         private static string GetDate()
@@ -64,26 +77,36 @@ namespace fantasy_hoops.Database
 
         private static void SetNextGame(string gameDate)
         {
+            if(offset > 2)
+            {
+                NEXT_GAME = new DateTime();
+                NEXT_LAST_GAME = new DateTime();
+                return;
+            }
+
             JArray games = CommonFunctions.GetGames(gameDate);
             if (games.Count > 0)
             {
                 DateTime timeUTC = DateTime.Parse((string)games[0]["startTimeUTC"]);
                 if (timeUTC > DateTime.UtcNow)
                 {
+                    offset = 0;
                     NEXT_GAME = timeUTC;
                     NEXT_LAST_GAME = DateTime.Parse((string)games[games.Count - 1]["startTimeUTC"]);
                 }
                 else
                 {
+                    offset++;
                     gameDate = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture)
-                        .AddDays(1).ToString("yyyyMMdd");
+                        .AddDays(offset).ToString("yyyyMMdd");
                     SetNextGame(gameDate);
                 }
             }
             else
             {
+                offset++;
                 gameDate = DateTime.ParseExact(gameDate, "yyyyMMdd", CultureInfo.InvariantCulture)
-                    .AddDays(1).ToString("yyyyMMdd");
+                    .AddDays(offset).ToString("yyyyMMdd");
                 SetNextGame(gameDate);
             }
         }

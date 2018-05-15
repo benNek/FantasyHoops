@@ -12,12 +12,12 @@ export class InfoPanel extends Component {
     this.state = {
       stats: '',
       posIMG: this.getPosImages(),
-      playerIMG: this.getPlayerImages(),
+      playerIMG: this.getPlayerImages()
     }
   }
 
-  showModal(player) {
-    fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+  async showModal(player) {
+    await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
       .then(res => res.json())
       .then(res => {
         this.setState({
