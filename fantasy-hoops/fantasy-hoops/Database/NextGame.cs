@@ -50,7 +50,7 @@ namespace fantasy_hoops.Database
                     s => s.WithName("news_" + nextRun.ToLongDateString())
                     .ToRunOnceAt(nextRun.AddHours(9)));
 
-                JobManager.AddJob(() => StatsSeed.Initialize(context),
+                JobManager.AddJob(() => PlayerSeed.Initialize(context),
                     s => s.WithName("playerSeed_" + nextRun.ToLongDateString())
                     .ToRunNow());
             }
