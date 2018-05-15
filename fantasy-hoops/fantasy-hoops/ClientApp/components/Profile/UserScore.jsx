@@ -26,7 +26,7 @@ export class UserScore extends Component {
     }
 
     return (
-      <div className="card bg-white rounded mt-2" style={{ width: '35rem' }}>
+      <div className="card bg-white rounded mt-2 mx-auto" style={{ width: '35rem' }}>
         <div className="card-body" style={{ height: '6.8rem' }}>
           <div className="row" style={{ marginTop: '-0.5rem' }}>
             {players}

@@ -92,7 +92,7 @@ export class UserProfile extends Component {
       if (this.state.readOnly)
         return '';
       else return (
-        <div className="text-center" style={{ paddingRight: '10rem' }}>
+        <div className="text-center">
           <a className="btn btn-outline-info" href="/history" role="button">History</a>
         </div>
       );
