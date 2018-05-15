@@ -18,9 +18,8 @@ namespace fantasy_hoops.Database
 
         private static void Extract(GameContext context)
         {
-            string today = GetDate();
-            string yesterday = DateTime.ParseExact(today, "yyyyMMdd", CultureInfo.InvariantCulture)
-                .AddDays(-1).ToString("yyyyMMdd");
+            string today = Today();
+            string yesterday = Yesterday();
             JArray tGames = CommonFunctions.GetGames(today);
             JArray yGames = CommonFunctions.GetGames(yesterday);
             JArray news = new JArray();
@@ -121,9 +120,15 @@ namespace fantasy_hoops.Database
             }
             context.SaveChanges();
         }
-        private static string GetDate()
+
+        private static string Today()
         {
-            return NextGame.PREVIOUS_GAME.ToString("yyyyMMdd");
+            return CommonFunctions.UTCToEastern(NextGame.NEXT_GAME).ToString("yyyyMMdd");
+        }
+
+        private static string Yesterday()
+        {
+            return CommonFunctions.UTCToEastern(NextGame.PREVIOUS_GAME).ToString("yyyyMMdd");
         }
     }
 }
