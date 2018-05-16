@@ -3,6 +3,7 @@ import { UserScore } from './UserScore';
 import { PlayerModal } from '../PlayerModal';
 import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
+import { Loader } from '../Loader';
 
 export class InfoPanel extends Component {
   constructor(props) {
@@ -12,8 +13,17 @@ export class InfoPanel extends Component {
     this.state = {
       stats: '',
       posIMG: this.getPosImages(),
-      playerIMG: this.getPlayerImages()
+      playerIMG: this.getPlayerImages(),
+      modalLoader: true
     }
+  }
+
+  componentDidMount() {
+    $("#playerModal").on("hidden.bs.modal", () => {
+      this.setState({
+        modalLoader: true
+      });
+    });
   }
 
   async showModal(player) {
@@ -21,29 +31,40 @@ export class InfoPanel extends Component {
       .then(res => res.json())
       .then(res => {
         this.setState({
-          stats: res
+          stats: res,
+          modalLoader: false
         });
       });
   }
 
   render() {
     const user = this.props.user;
-    let recentActivity = '';
-    if (user.recentActivity != null) {
-      recentActivity = _.map(
-        user.recentActivity,
-        (activity) => {
-          return (
-            <UserScore
-              key={shortid()}
-              posIMG={this.state.posIMG}
-              playerIMG={this.state.playerIMG}
-              activity={activity}
-              showModal={this.showModal}
-            />
-          )
-        });
+    const recentActivity = () => {
+      if (!this.props.loader) {
+        const recentActivity = _.map(
+          user.recentActivity,
+          (activity) => {
+            return (
+              <UserScore
+                key={shortid()}
+                posIMG={this.state.posIMG}
+                playerIMG={this.state.playerIMG}
+                activity={activity}
+                showModal={this.showModal}
+              />
+            )
+          });
+        return <div>{recentActivity}</div>
+      }
+      else {
+        return (
+          <div className="p-5">
+            <Loader show={this.props.loader} />
+          </div>
+        )
+      };
     }
+
 
     return (
       <div className="tab-pane active" id="profile">
@@ -70,10 +91,11 @@ export class InfoPanel extends Component {
           </div>
           <div className="col-md-12">
             <h5 className="mt-2"><span className="fa fa-clock-o ion-clock"></span> Recent Activity</h5>
-            {recentActivity}
+            {recentActivity()}
           </div>
         </div>
         <PlayerModal
+          loader={this.state.modalLoader}
           stats={this.state.stats}
           image={this.state.stats
             ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]

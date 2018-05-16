@@ -40,7 +40,8 @@ export class Lineup extends Component {
       serverTime: '',
       playerLoader: false,
       submit: true,
-      isGame: true
+      isGame: true,
+      modalLoader: true
     };
   }
 
@@ -219,6 +220,7 @@ export class Lineup extends Component {
           {playerPool()}
         </div>
         <PlayerModal
+          loader={this.state.modalLoader}
           stats={this.state.stats}
           image={this.state.stats
             ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
@@ -258,12 +260,13 @@ export class Lineup extends Component {
     });
   }
 
-  showModal(player) {
-    fetch(`http://localhost:51407/api/stats/${player.id}`)
+  async showModal(player) {
+    await fetch(`http://localhost:51407/api/stats/${player.id}`)
       .then(res => res.json())
       .then(res => {
         this.setState({
-          stats: res
+          stats: res,
+          modalLoader: false
         });
       });
   }

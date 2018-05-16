@@ -112,8 +112,8 @@ export class PlayerCard extends Component {
     this.handleSelect();
   }
 
-  showModal() {
-    this.props.showModal(this.props.player);
+  async showModal() {
+    await this.props.showModal(this.props.player);
   }
 
   filter() {

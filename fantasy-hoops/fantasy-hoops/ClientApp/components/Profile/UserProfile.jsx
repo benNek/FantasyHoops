@@ -16,20 +16,25 @@ export class UserProfile extends Component {
       readOnly: false,
       error: false,
       errorStatus: '200',
-      errorMessage: ''
+      errorMessage: '',
+      loader: true
     }
+  }
+
+  componentDidMount() {
+    this.editProfile();
   }
 
   async componentWillMount() {
     const loggedInAsSameUser = (this.props.match.params.name != null && parse().username.toLowerCase() == this.props.match.params.name.toLowerCase());
     if (this.props.match.params.name == null || loggedInAsSameUser) {
-      this.editProfile();
       const user = parse();
       await fetch(`http://localhost:51407/api/user/${user.id}`)
         .then(res => res.json())
         .then(res => {
           this.setState({
-            user: res
+            user: res,
+            loader: false
           });
         });
     }
@@ -43,7 +48,8 @@ export class UserProfile extends Component {
         .then(res => res.json())
         .then(res => {
           this.setState({
-            user: res
+            user: res,
+            loader: false
           });
         })
         .catch(err => {
@@ -84,7 +90,7 @@ export class UserProfile extends Component {
               }
             </ul>
             <div className="tab-content py-4">
-              <InfoPanel user={this.state.user} />
+              <InfoPanel user={this.state.user} loader={this.state.loader} />
               <Friends user={this.state.user} />
               <EditProfile user={this.state.user} />
             </div>
