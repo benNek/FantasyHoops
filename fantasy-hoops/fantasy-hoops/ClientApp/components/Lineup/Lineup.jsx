@@ -151,6 +151,27 @@ export class Lineup extends Component {
         return <span>Game starts in <strong>{days}:{hours}:{minutes}:{seconds}</strong></span>;
       }
     };
+    const playerPool = () => {
+      if (this.state.playerPoolDate !== this.state.nextGame && !this.state.playerLoader) {
+        return (
+          <div className="p-5">
+            <EmptyJordan message="Player pool is empty..." />
+          </div>
+        );
+      } else {
+        return (
+          <PlayerPool
+            playerIMG={this.state.playerIMG}
+            posIMG={this.state.posIMG}
+            position={this.state.position}
+            players={this.state.players}
+            selectPlayer={this.selectPlayer}
+            showModal={this.showModal}
+          />
+        );
+      }
+    };
+
     return (
       <div className="container bg-light pb-5" style={{ width: '100%' }}>
         <div className="bg-light sticky-top" style={{ top: '4rem', width: '100%' }}>
@@ -195,14 +216,7 @@ export class Lineup extends Component {
             </div>
           </div>
           <Loader show={this.state.playerLoader} />
-          <PlayerPool
-            playerIMG={this.state.playerIMG}
-            posIMG={this.state.posIMG}
-            position={this.state.position}
-            players={this.state.players}
-            selectPlayer={this.selectPlayer}
-            showModal={this.showModal}
-          />
+          {playerPool()}
         </div>
         <PlayerModal
           stats={this.state.stats}
