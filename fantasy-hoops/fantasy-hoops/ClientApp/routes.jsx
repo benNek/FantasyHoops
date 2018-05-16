@@ -25,8 +25,8 @@ export const routes = <div>
   <Route path='/injuries' component={InjuriesFeed} />
   <Route path='/rules' component={Rules} />
   <Route path='/news' component={NewsFeed} />
-  <Route exact path='/leaderboard/users' component={UserLeaderboard} />
-  <Route exact path='/leaderboard/players' component={PlayerLeaderboard} />
+  <PrivateRoute exact path='/leaderboard/users' component={UserLeaderboard} />
+  <PrivateRoute exact path='/leaderboard/players' component={PlayerLeaderboard} />
   <PrivateRoute path='/users' component={UserPool} />
   <PrivateRoute path='/notifications' component={AllNotifications} />
 </div>;
