@@ -19,10 +19,19 @@ export class PlayerLeaderboard extends Component {
       stats: '',
       dailyLoader: true,
       weeklyLoader: true,
-      monthlyLoader: true
+      monthlyLoader: true,
+      modalLoader: true
     }
 
     this.showModal = this.showModal.bind(this);
+  }
+
+  componentDidMount() {
+    $("#playerModal").on("hidden.bs.modal", () => {
+      this.setState({
+        modalLoader: true
+      });
+    });
   }
 
   async componentWillMount() {
@@ -63,7 +72,8 @@ export class PlayerLeaderboard extends Component {
       .then(res => res.json())
       .then(res => {
         this.setState({
-          stats: res
+          stats: res,
+          modalLoader: false
         });
       });
   }
@@ -115,6 +125,7 @@ export class PlayerLeaderboard extends Component {
           </div>
         </div>
         <PlayerModal
+          loader={this.state.modalLoader}
           stats={this.state.stats}
           image={this.state.stats
             ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]

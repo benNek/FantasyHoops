@@ -1,6 +1,7 @@
 ﻿using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,7 +131,7 @@ namespace fantasy_hoops.Controllers
                         REB = Math.Round(x.REB / maxRebounds * 100, 0),
                         BLK = Math.Round(x.BLK / maxBlocks * 100, 0),
                         STL = Math.Round(x.STL / maxSteals * 100, 0)
-                    },      
+                    },
                     Team = new
                     {
                         x.TeamID,
@@ -141,42 +142,43 @@ namespace fantasy_hoops.Controllers
                         x.Team.Color
                     },
                     Games = context.Stats.Where(s => s.PlayerID == x.PlayerID)
-                        .Select(s => new
-                        {
-                            s.StatsID,
-                            s.Date,
-                            Opponent = context.Teams.Where(t => t.NbaID == s.OppID)
-                                .Select(t => new
-                                {
-                                    t.NbaID,
-                                    t.Abbreviation
-                                })
-                                .FirstOrDefault(),
-                            s.Score,
-                            s.MIN,
-                            s.FGM,
-                            s.FGA,
-                            s.FGP,
-                            s.TPM,
-                            s.TPA,
-                            s.TPP,
-                            s.FTM,
-                            s.FTA,
-                            s.FTP,
-                            s.DREB,
-                            s.OREB,
-                            s.TREB,
-                            s.AST,
-                            s.BLK,
-                            s.STL,
-                            s.FLS,
-                            s.TOV,
-                            s.PTS,
-                            s.GS,
-                            s.FP,
-                            s.Price
-                        })
-                        .OrderByDescending(s => s.Date)
+                    .OrderByDescending(s => s.Date)
+                    .Take(10)
+                    .Select(s => new
+                    {
+                        s.StatsID,
+                        s.Date,
+                        Opponent = context.Teams.Where(t => t.NbaID == s.OppID)
+                            .Select(t => new
+                            {
+                                t.NbaID,
+                                t.Abbreviation
+                            })
+                            .FirstOrDefault(),
+                        s.Score,
+                        s.MIN,
+                        s.FGM,
+                        s.FGA,
+                        s.FGP,
+                        s.TPM,
+                        s.TPA,
+                        s.TPP,
+                        s.FTM,
+                        s.FTA,
+                        s.FTP,
+                        s.DREB,
+                        s.OREB,
+                        s.TREB,
+                        s.AST,
+                        s.BLK,
+                        s.STL,
+                        s.FLS,
+                        s.TOV,
+                        s.PTS,
+                        s.GS,
+                        s.FP,
+                        s.Price
+                    })
                 })
                 .ToList().FirstOrDefault();
             if (player == null)

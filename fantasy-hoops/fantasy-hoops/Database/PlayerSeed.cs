@@ -99,6 +99,8 @@ namespace fantasy_hoops.Database
             {
                 GSavg = context.Stats
                             .Where(x => x.Player.NbaID == p.NbaID)
+                            .OrderByDescending(s => s.Date)
+                            .Take(5)
                             .Select(s => s.GS)
                             .Average();
             }

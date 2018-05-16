@@ -105,7 +105,7 @@ namespace fantasy_hoops.Database
             };
             statsObj.Player = context.Players.Where(x => x.NbaID == statsObj.PlayerID).FirstOrDefault();
             bool shouldAdd = !context.Stats.Any(x => x.Date == date && x.Player.NbaID == statsObj.PlayerID);
-            int count = context.Stats.Where(x => x.Player.NbaID == statsObj.PlayerID).Count();
+
             if (shouldAdd)
             {
                 statsObj.GS = Math.Round(statsObj.PTS + 0.4 * statsObj.FGM + 0.7 * statsObj.OREB
@@ -116,27 +116,8 @@ namespace fantasy_hoops.Database
                     + 1.5 * statsObj.AST + 3 * statsObj.STL + 3 * statsObj.BLK - statsObj.TOV, 2);
 
                 statsObj.Price = (int)((statsObj.GS + statsObj.FP) * 7 / 5);
-
-                if (count < 5)
-                {
-                    context.Stats.Add(statsObj);
-                    return;
-                }
-                else
-                {
-                    var rmObj = context.Stats
-                        .Where(x => x.Player.NbaID == statsObj.PlayerID)
-                        .OrderBy(x => x.Date)
-                        .First();
-                    if (rmObj != null)
-                    {
-                        context.Stats.Remove(rmObj);
-                        context.Stats.Add(statsObj);
-                    }
-                    return;
-                }
+                context.Stats.Add(statsObj);
             }
-            else return;
         }
     }
 }

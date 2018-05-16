@@ -6,6 +6,7 @@ import { FriendRequestNotification } from './FriendRequestNotification';
 import { Loader } from '../Loader';
 import { EmptyJordan } from '../EmptyJordan';
 import shortid from 'shortid';
+const LOAD_COUNT = 5;
 
 const user = parse();
 
@@ -17,7 +18,7 @@ export class AllNotifications extends Component {
 
     this.state = {
       serverTime: '',
-      allNotifications: [],
+      loadCounter: 0,
       userNotifications: [],
       loader: true
     };
@@ -33,14 +34,13 @@ export class AllNotifications extends Component {
           serverTime: res.serverTime
         });
       })
-    await fetch(`http://localhost:51407/api/notification/${user.id}`)
+    await fetch(`http://localhost:51407/api/notification/${user.id}?count=10`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          allNotifications: res,
-          userNotifications: res.slice(0, 10),
+          userNotifications: res,
           loader: false
         });
       })
@@ -65,23 +65,23 @@ export class AllNotifications extends Component {
       .catch(err => {
       });
 
-    await fetch(`http://localhost:51407/api/notification/${user.id}`)
+    await fetch(`http://localhost:51407/api/notification/${user.id}?count=${this.state.userNotifications.length}`)
       .then(res => {
         return res.json()
       })
       .then(res => {
         this.setState({
-          allNotifications: res,
-          userNotifications: res.slice(0, this.state.userNotifications.length)
+          userNotifications: res
         });
       });
   }
 
   async loadMore() {
     this.setState({
-      loader: true
+      loader: true,
+      loadCounter: this.state.loadCounter + 1
     });
-    await fetch(`http://localhost:51407/api/notification/${user.id}?start=${this.state.userNotifications.length}&count=5`)
+    await fetch(`http://localhost:51407/api/notification/${user.id}?start=${this.state.userNotifications.length}&count=${LOAD_COUNT}`)
       .then(res => {
         return res.json()
       })
@@ -132,9 +132,9 @@ export class AllNotifications extends Component {
 
   render() {
     const notifications = this.getNotifications();
-    const btn = !this.state.loader && notifications.length != this.state.allNotifications.length && this.state.userNotifications.length > 0
-      ? <button className="btn btn-primary mt-2" onClick={this.loadMore}>See more</button>
-      : '';
+    const btn = this.state.loadCounter * LOAD_COUNT + 10 > this.state.userNotifications.length
+      ? ''
+      : <button className="btn btn-primary mt-2" onClick={this.loadMore}>See more</button>;
     return (
       <div className="container bg-light p-4">
         <h3 className="text-center"><i className="fa fa-bell"></i> User notifications</h3>
@@ -142,7 +142,7 @@ export class AllNotifications extends Component {
           {notifications}
         </div>
         <div className="text-center">
-          {btn}
+          {!this.state.loader ? btn : ''}
         </div>
         <Loader show={this.state.loader} />
       </div>
