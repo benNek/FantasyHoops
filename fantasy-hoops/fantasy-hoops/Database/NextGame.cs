@@ -17,6 +17,8 @@ namespace fantasy_hoops.Database
         public static DateTime NEXT_LAST_GAME = DateTime.UtcNow;
         public static DateTime PREVIOUS_GAME = DateTime.UtcNow;
         public static DateTime PREVIOUS_LAST_GAME = DateTime.UtcNow;
+
+        private const int GAME_OFFSET = 2;
         private static int offset = 0;
 
         public static void SetClientTime()
@@ -32,7 +34,7 @@ namespace fantasy_hoops.Database
             SetNextGame(gameDate);
             SetClientTime();
 
-            if (offset < 3)
+            if (offset < GAME_OFFSET)
             {
                 JobManager.AddJob(() => Initialize(context),
                     s => s.WithName(NEXT_GAME.ToLongDateString())
@@ -79,7 +81,7 @@ namespace fantasy_hoops.Database
 
         private static void SetNextGame(string gameDate)
         {
-            if(offset > 2)
+            if(offset >= GAME_OFFSET)
             {
                 NEXT_GAME = new DateTime();
                 NEXT_LAST_GAME = new DateTime();

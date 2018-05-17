@@ -41,7 +41,8 @@ export class Lineup extends Component {
       playerLoader: false,
       submit: true,
       isGame: true,
-      modalLoader: true
+      modalLoader: true,
+      poolLoader: true
     };
   }
 
@@ -58,11 +59,15 @@ export class Lineup extends Component {
           this.setState({
             nextGame: res.nextGame,
             serverTime: res.serverTime,
-            playerPoolDate: res.playerPoolDate
+            playerPoolDate: res.playerPoolDate,
+            poolLoader: false
           });
         }
         else {
-          this.setState({ isGame: false })
+          this.setState({
+            isGame: false,
+            poolLoader: false
+          })
         }
       });
 
@@ -132,6 +137,13 @@ export class Lineup extends Component {
   }
 
   render() {
+    if (this.state.poolLoader)
+      return (
+        <div className="p-5">
+          <Loader show={this.state.poolLoader} />
+        </div>
+      );
+
     if (!this.state.isGame)
       return (
         <div className="p-5">
