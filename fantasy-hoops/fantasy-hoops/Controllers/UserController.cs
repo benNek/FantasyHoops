@@ -143,7 +143,7 @@ namespace fantasy_hoops.Controllers
 
             // Getting all players that user has selected in recent 5 games
             var players = context.Lineups
-                .Where(x => x.UserID.Equals(id) && x.Date < NextGame.NEXT_GAME)
+                .Where(x => x.UserID.Equals(id) && x.Date <= NextGame.PREVIOUS_GAME)
                 .OrderByDescending(x => x.Date)
                 .Select(x => new
                 {
@@ -175,9 +175,11 @@ namespace fantasy_hoops.Controllers
                 .Where((x, index) => index % 5 == 0)
                 .ToList();
 
-            // Streak
+//TODO Streak needs to be fixed
             int streak = 0;
-            DateTime date = NextGame.NEXT_GAME.AddDays(-1);
+            DateTime date = NextGame.NEXT_GAME;
+            if(!NextGame.NEXT_GAME.Equals(new DateTime()))
+                date = NextGame.NEXT_GAME.AddDays(-1);
             while (context.Lineups.Where(x => x.UserID.Equals(id) && x.Date.DayOfYear.Equals(date.DayOfYear)).Any())
             {
                 streak++;
