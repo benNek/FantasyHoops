@@ -11,6 +11,7 @@ export class PlayerModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      stats: [],
       loader: true,
       criteria: 'ovr',
       criteriaTitle: 'Overall'
@@ -63,6 +64,14 @@ export class PlayerModal extends Component {
       }
     ];
     this.handleChange = this.handleChange.bind(this);
+    this.compare = this.compare.bind(this);
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.stats !== "")
+      await this.setState({
+        stats: nextProps.stats
+      })
   }
 
   getLogo(abbreviation) {
@@ -74,152 +83,163 @@ export class PlayerModal extends Component {
     }
   }
 
-  render() {
-    const content = () => {
-      if (this.props.loader) {
-        return (
-          <div className="p-5">
-            <Loader show={this.props.loader} />
+  compare(a, b) {
+    if (a.date < b.date)
+      return 1;
+    if (a.date > b.date)
+      return -1;
+    return 0;
+  }
+
+  getRows() {
+    if (this.props.loader)
+      return '';
+
+    const stats = this.state.stats;
+    const teamLogo = this.getLogo(stats.team.abbreviation);
+    const rows = stats.games.sort(this.compare).map((s) => {
+      const abbreviation = s.opponent ? s.opponent.abbreviation : '';
+      let score = '';
+      if (!s.score)
+        return;
+      var str = s.score.split('-');
+      if (parseInt(str[0]) > parseInt(str[1]))
+        score = <span className="text-success">W</span>;
+      else score = <span className="text-danger">L</span>;
+      return <tr key={shortid()} >
+        <td style={{ minWidth: '6rem' }}>{moment(s.date).format("ddd MM/DD")}</td>
+        <td><img src={this.getLogo(abbreviation)} alt={abbreviation} width='40rem' style={{ right: '0' }} /></td>
+        <td style={{ minWidth: '6rem' }}>{score} {s.score}</td>
+        <td>{s.min}</td>
+        <td>{s.fgm}</td>
+        <td>{s.fga}</td>
+        <td>{s.fgp}</td>
+        <td>{s.tpm}</td>
+        <td>{s.tpa}</td>
+        <td>{s.tpp}</td>
+        <td>{s.ftm}</td>
+        <td>{s.fta}</td>
+        <td>{s.ftp}</td>
+        <td>{s.dreb}</td>
+        <td>{s.oreb}</td>
+        <td>{s.treb}</td>
+        <td>{s.ast}</td>
+        <td>{s.blk}</td>
+        <td>{s.stl}</td>
+        <td>{s.fls}</td>
+        <td>{s.tov}</td>
+        <td>{s.pts}</td>
+        <td>{s.gs}</td>
+        <td>{s.fp}</td>
+      </tr>;
+    });
+    return rows;
+  }
+
+  getContent() {
+    if (this.props.loader) {
+      return (
+        <div className="p-5">
+          <Loader show={this.props.loader} />
+        </div>
+      );
+    }
+    else {
+      const stats = this.state.stats;
+      return (
+        <div>
+          <div className="row">
+            <div style={{ width: '16.25rem', height: '13.05rem' }}></div>
+            <img className="img-modal pt-4 mb-2" src={this.getLogo(stats.team.abbreviation)} />
+            <img className="ml-3 img-modal mb-2" src={this.props.image} style={{ zIndex: '1', paddingTop: '1.2rem' }} />
+            <div className="col">
+              <h1 className="">{stats ? stats.firstName : ''} {stats ? stats.lastName : ''}</h1>
+              <h5>{stats.position} | {stats ? stats.team.city + " " + stats.team.name : ''}</h5>
+              <h5>#{stats.number}</h5>
+            </div>
+            <div className="table-responsive">
+              <table className="table text-right" style={{ maxWidth: '50%' }}>
+                <thead>
+                  <tr>
+                    <th scope="col"><h6>PTS</h6><h2>{stats ? stats.pts : ''}</h2></th>
+                    <th scope="col"><h6>REB</h6><h2>{stats ? stats.reb : ''}</h2></th>
+                    <th scope="col"><h6>AST</h6><h2>{stats ? stats.ast : ''}</h2></th>
+                    <th scope="col"><h6>STL</h6><h2>{stats ? stats.stl : ''}</h2></th>
+                    <th scope="col"><h6>BLK</h6><h2>{stats ? stats.blk : ''}</h2></th>
+                    <th scope="col"><h6>TOV</h6><h2>{stats ? stats.tov : ''}</h2></th>
+                    <th scope="col"><h6>FPPG</h6><h2>{stats ? stats.fppg.toFixed(1) : ''}</h2></th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
           </div>
-        );
-      }
-      else {
-        return (
-          <div>
-            <div className="row">
-              <div style={{ width: '16.25rem', height: '13.05rem' }}></div>
-              <img className="img-modal pt-4 mb-2" src={teamLogo} />
-              <img className="ml-3 img-modal mb-2" src={this.props.image} style={{ zIndex: '1', paddingTop: '1.2rem' }} />
-              <div className="col">
-                <h1 className="">{stats ? stats.firstName : ''} {stats ? stats.lastName : ''}</h1>
-                <h5>{stats.position} | {stats ? stats.team.city + " " + stats.team.name : ''}</h5>
-                <h5>#{stats.number}</h5>
-              </div>
+          <nav>
+            <div className="nav nav-tabs" id="nav-tab" role="tablist">
+              <a className="nav-item nav-link active tab-no-outline" id="nav-gamelog-tab" data-toggle="tab" href="#nav-gamelog" role="tab" aria-controls="nav-gamelog" aria-selected="false">Gamelog</a>
+              <a className="nav-item nav-link tab-no-outline" id="nav-charts-tab" data-toggle="tab" href="#nav-charts" role="tab" aria-controls="nav-charts" aria-selected="false">Charts</a>
+            </div>
+          </nav>
+          <div className="tab-content" id="nav-tabContent">
+            <div className="tab-pane fade show active" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
               <div className="table-responsive">
-                <table className="table text-right" style={{ maxWidth: '50%' }}>
+                <table className="table table-sm table-hover table-bordered text-right">
                   <thead>
-                    <tr>
-                      <th scope="col"><h6>PTS</h6><h2>{stats ? stats.pts : ''}</h2></th>
-                      <th scope="col"><h6>REB</h6><h2>{stats ? stats.reb : ''}</h2></th>
-                      <th scope="col"><h6>AST</h6><h2>{stats ? stats.ast : ''}</h2></th>
-                      <th scope="col"><h6>STL</h6><h2>{stats ? stats.stl : ''}</h2></th>
-                      <th scope="col"><h6>BLK</h6><h2>{stats ? stats.blk : ''}</h2></th>
-                      <th scope="col"><h6>TOV</h6><h2>{stats ? stats.tov : ''}</h2></th>
-                      <th scope="col"><h6>FPPG</h6><h2>{stats ? stats.fppg.toFixed(1) : ''}</h2></th>
+                    <tr className="bg-dark text-light">
+                      <th scope="col" style={{ minWidth: '6rem' }}>DATE</th>
+                      <th scope="col">OPP</th>
+                      <th scope="col" style={{ minWidth: '6rem' }}>SCORE</th>
+                      <th scope="col">MIN</th>
+                      <th scope="col">FGM</th>
+                      <th scope="col">FGA</th>
+                      <th scope="col">FG%</th>
+                      <th scope="col">3PM</th>
+                      <th scope="col">3PA</th>
+                      <th scope="col">3P%</th>
+                      <th scope="col">FTM</th>
+                      <th scope="col">FTA</th>
+                      <th scope="col">FT%</th>
+                      <th scope="col">DREB</th>
+                      <th scope="col">OREB</th>
+                      <th scope="col">TREB</th>
+                      <th scope="col">AST</th>
+                      <th scope="col">BLK</th>
+                      <th scope="col">STL</th>
+                      <th scope="col">FLS</th>
+                      <th scope="col">TOV</th>
+                      <th scope="col">PTS</th>
+                      <th scope="col">GS</th>
+                      <th scope="col">FP</th>
                     </tr>
                   </thead>
+                  <tbody>
+                    {this.getRows()}
+                  </tbody>
                 </table>
               </div>
             </div>
-            <nav>
-              <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                <a className="nav-item nav-link active tab-no-outline" id="nav-gamelog-tab" data-toggle="tab" href="#nav-gamelog" role="tab" aria-controls="nav-gamelog" aria-selected="false">Gamelog</a>
-                <a className="nav-item nav-link tab-no-outline" id="nav-charts-tab" data-toggle="tab" href="#nav-charts" role="tab" aria-controls="nav-charts" aria-selected="false">Charts</a>
-              </div>
-            </nav>
-            <div className="tab-content" id="nav-tabContent">
-              <div className="tab-pane fade show active" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
-                <div className="table-responsive">
-                  <table className="table table-sm table-hover table-bordered text-right">
-                    <thead>
-                      <tr className="bg-dark text-light">
-                        <th scope="col" style={{ minWidth: '6rem' }}>DATE</th>
-                        <th scope="col">OPP</th>
-                        <th scope="col" style={{ minWidth: '6rem' }}>SCORE</th>
-                        <th scope="col">MIN</th>
-                        <th scope="col">FGM</th>
-                        <th scope="col">FGA</th>
-                        <th scope="col">FG%</th>
-                        <th scope="col">3PM</th>
-                        <th scope="col">3PA</th>
-                        <th scope="col">3P%</th>
-                        <th scope="col">FTM</th>
-                        <th scope="col">FTA</th>
-                        <th scope="col">FT%</th>
-                        <th scope="col">DREB</th>
-                        <th scope="col">OREB</th>
-                        <th scope="col">TREB</th>
-                        <th scope="col">AST</th>
-                        <th scope="col">BLK</th>
-                        <th scope="col">STL</th>
-                        <th scope="col">FLS</th>
-                        <th scope="col">TOV</th>
-                        <th scope="col">PTS</th>
-                        <th scope="col">GS</th>
-                        <th scope="col">FP</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
-                <Select
-                  options={this.options}
-                  id="criteria"
-                  value={this.state.criteriaTitle}
-                  defaultValue="Choose a category"
-                  onChange={this.handleChange}
-                />
-                <div className='mt-3 mx-auto' style={{ maxWidth: '50rem', width: '100%' }} >
-                  {
-                    this.state.criteria == 'ovr'
-                      ? <div style={{ overflow: 'auto' }}><Radar data={this.getRadarData()} options={this.getRadarOptions()} /></div>
-                      : <div style={{ overflow: 'auto' }}><Line data={this.getChartData()} options={this.getChartOptions()} /></div>
-                  }
-                </div>
+            <div className="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
+              <Select
+                options={this.options}
+                id="criteria"
+                value={this.state.criteriaTitle}
+                defaultValue="Choose a category"
+                onChange={this.handleChange}
+              />
+              <div className='mt-3 mx-auto' style={{ maxWidth: '50rem', width: '100%' }} >
+                {
+                  this.state.criteria == 'ovr'
+                    ? <div style={{ overflow: 'auto' }}><Radar data={this.getRadarData()} options={this.getRadarOptions()} /></div>
+                    : <div style={{ overflow: 'auto' }}><Line data={this.getChartData()} options={this.getChartOptions()} /></div>
+                }
               </div>
             </div>
           </div>
-        );
-      }
+        </div>
+      );
     }
+  }
 
-    let stats = '';
-    let teamLogo = '';
-    let rows = '';
-    if (this.props.stats) {
-      stats = this.props.stats;
-      teamLogo = this.getLogo(stats.team.abbreviation);
-      rows = _.map(stats.games, (s) => {
-        const abbreviation = s.opponent ? s.opponent.abbreviation : '';
-        let score = '';
-        if (!s.score)
-          return;
-        var str = s.score.split('-');
-        if (parseInt(str[0]) > parseInt(str[1]))
-          score = <span className="text-success">W</span>;
-        else score = <span className="text-danger">L</span>;
-        return <tr key={shortid()} >
-          <td style={{ minWidth: '6rem' }}>{moment(s.date).format("ddd MM/DD")}</td>
-          <td><img src={this.getLogo(abbreviation)} alt={abbreviation} width='40rem' style={{ right: '0' }} /></td>
-          <td style={{ minWidth: '6rem' }}>{score} {s.score}</td>
-          <td>{s.min}</td>
-          <td>{s.fgm}</td>
-          <td>{s.fga}</td>
-          <td>{s.fgp}</td>
-          <td>{s.tpm}</td>
-          <td>{s.tpa}</td>
-          <td>{s.tpp}</td>
-          <td>{s.ftm}</td>
-          <td>{s.fta}</td>
-          <td>{s.ftp}</td>
-          <td>{s.dreb}</td>
-          <td>{s.oreb}</td>
-          <td>{s.treb}</td>
-          <td>{s.ast}</td>
-          <td>{s.blk}</td>
-          <td>{s.stl}</td>
-          <td>{s.fls}</td>
-          <td>{s.tov}</td>
-          <td>{s.pts}</td>
-          <td>{s.gs}</td>
-          <td>{s.fp}</td>
-        </tr>;
-      });
-    }
+  render() {
     return (
       <div className="modal fade" id="playerModal" tabIndex="-1" role="dialog" aria-labelledby="playerModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg mx-auto" role="document">
@@ -230,7 +250,7 @@ export class PlayerModal extends Component {
                   <span aria-hidden="true">&times;</span>
                 </a>
               </div>
-              {content()}
+              {this.getContent()}
             </div>
           </div>
         </div>
