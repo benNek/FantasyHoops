@@ -287,6 +287,7 @@ export class PlayerModal extends Component {
     const options = {
       scale: {
         ticks: {
+          display: false,
           beginAtZero: true,
           min: 0,
           max: 100
@@ -295,6 +296,9 @@ export class PlayerModal extends Component {
       legend: {
         display: false
       },
+      tooltips: {
+        enabled: false
+      }
     }
     return options;
   }
