@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { UserScore } from './UserScore';
-import { PlayerModal } from '../PlayerModal';
+import { PlayerModal } from '../PlayerModal/PlayerModal';
 import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
 import { Loader } from '../Loader';

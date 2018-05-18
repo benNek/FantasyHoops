@@ -3,7 +3,7 @@ import { PlayerLeaderboardCard as Card } from './PlayerLeaderboardCard';
 import leaderboardLogo from '../../content/images/leaderboard.png';
 import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
-import { PlayerModal } from '../PlayerModal';
+import { PlayerModal } from '../PlayerModal/PlayerModal';
 import { Loader } from '../Loader';
 import { EmptyJordan } from '../EmptyJordan';
 

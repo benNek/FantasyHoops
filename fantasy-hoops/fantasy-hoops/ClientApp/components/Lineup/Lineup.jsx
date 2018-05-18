@@ -5,7 +5,7 @@ import { ProgressBar } from './ProgressBar';
 import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
 import { Alert } from '../Alert';
-import { PlayerModal } from '../PlayerModal';
+import { PlayerModal } from '../PlayerModal/PlayerModal';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
 import { InfoModal } from './InfoModal';
