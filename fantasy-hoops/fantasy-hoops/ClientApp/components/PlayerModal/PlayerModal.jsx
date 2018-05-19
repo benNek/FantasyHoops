@@ -8,9 +8,11 @@ import { Charts } from './Charts';
 export class PlayerModal extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       stats: [],
-      loader: true
+      loader: true,
+      renderChild: true
     }
   }
 
@@ -42,7 +44,7 @@ export class PlayerModal extends Component {
           </nav>
           <div className="tab-content" id="nav-tabContent">
             <div className="tab-pane fade show active" id="nav-gamelog" role="tabpanel" aria-labelledby="nav-gamelog-tab">
-              <Gamelog stats={this.state.stats} />
+              {this.props.renderChild ? <Gamelog stats={this.state.stats} /> : null}
             </div>
             <div className="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
               <Charts stats={this.state.stats} />
@@ -71,6 +73,4 @@ export class PlayerModal extends Component {
       </div>
     );
   }
-
-
 }

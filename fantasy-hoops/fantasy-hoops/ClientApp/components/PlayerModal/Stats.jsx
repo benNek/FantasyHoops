@@ -23,13 +23,13 @@ export class Stats extends Component {
           <table className="table text-right" style={{ maxWidth: '50%' }}>
             <thead>
               <tr>
-                <th scope="col"><h6>PTS</h6><h2>{stats.pts}</h2></th>
-                <th scope="col"><h6>REB</h6><h2>{stats.reb}</h2></th>
-                <th scope="col"><h6>AST</h6><h2>{stats.ast}</h2></th>
-                <th scope="col"><h6>STL</h6><h2>{stats.stl}</h2></th>
-                <th scope="col"><h6>BLK</h6><h2>{stats.blk}</h2></th>
-                <th scope="col"><h6>TOV</h6><h2>{stats.tov}</h2></th>
-                <th scope="col"><h6>FPPG</h6><h2>{stats.fppg.toFixed(1)}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>PTS</h6><h2>{stats.pts}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>REB</h6><h2>{stats.reb}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>AST</h6><h2>{stats.ast}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>STL</h6><h2>{stats.stl}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>BLK</h6><h2>{stats.blk}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>TOV</h6><h2>{stats.tov}</h2></th>
+                <th scope="col" style={{ width: '5rem' }}><h6>FPPG</h6><h2>{stats.fppg.toFixed(1)}</h2></th>
               </tr>
             </thead>
           </table>
@@ -46,5 +46,4 @@ export class Stats extends Component {
       return defaultLogo;
     }
   }
-
 }

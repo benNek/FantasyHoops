@@ -42,8 +42,18 @@ export class Lineup extends Component {
       submit: true,
       isGame: true,
       modalLoader: true,
-      poolLoader: true
+      poolLoader: true,
+      renderChild: true
     };
+  }
+
+  setModal() {
+    $("#playerModal").on("hidden.bs.modal", () => {
+      this.setState({
+        modalLoader: true,
+        renderChild: false
+      });
+    });
   }
 
   async componentWillMount() {
@@ -69,6 +79,7 @@ export class Lineup extends Component {
             poolLoader: false
           })
         }
+        this.setModal();
       });
 
     if (!this.state.isGame)
@@ -232,6 +243,7 @@ export class Lineup extends Component {
           {playerPool()}
         </div>
         <PlayerModal
+          renderChild={this.state.renderChild}
           loader={this.state.modalLoader}
           stats={this.state.stats}
           image={this.state.stats
@@ -278,7 +290,8 @@ export class Lineup extends Component {
       .then(res => {
         this.setState({
           stats: res,
-          modalLoader: false
+          modalLoader: false,
+          renderChild: true
         });
       });
   }

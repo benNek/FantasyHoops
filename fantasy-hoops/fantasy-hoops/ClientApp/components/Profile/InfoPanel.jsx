@@ -14,14 +14,16 @@ export class InfoPanel extends Component {
       stats: '',
       posIMG: this.getPosImages(),
       playerIMG: this.getPlayerImages(),
-      modalLoader: true
+      modalLoader: true,
+      renderChild: true
     }
   }
 
   componentDidMount() {
     $("#playerModal").on("hidden.bs.modal", () => {
       this.setState({
-        modalLoader: true
+        modalLoader: true,
+        renderChild: false
       });
     });
   }
@@ -32,7 +34,8 @@ export class InfoPanel extends Component {
       .then(res => {
         this.setState({
           stats: res,
-          modalLoader: false
+          modalLoader: false,
+          renderChild: true
         });
       });
   }
@@ -95,6 +98,7 @@ export class InfoPanel extends Component {
           </div>
         </div>
         <PlayerModal
+          renderChild={this.state.renderChild}
           loader={this.state.modalLoader}
           stats={this.state.stats}
           image={this.state.stats
