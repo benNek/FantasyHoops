@@ -91,7 +91,7 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(int id, int start = 0, int count = 10)
         {
             double maxPoints = 0, maxAssists = 0, maxTurnovers = 0,
             maxRebounds = 0, maxBlocks = 0, maxSteals = 0;
@@ -143,7 +143,8 @@ namespace fantasy_hoops.Controllers
                     },
                     Games = context.Stats.Where(s => s.PlayerID == x.PlayerID)
                     .OrderByDescending(s => s.Date)
-                    .Take(10)
+                    .Skip(start)
+                    .Take(count)
                     .Select(s => new
                     {
                         s.StatsID,
