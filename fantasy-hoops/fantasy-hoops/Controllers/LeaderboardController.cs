@@ -58,7 +58,10 @@ namespace fantasy_hoops.Controllers
 
             if (type.Equals("weekly"))
             {
-                int dayOffset = dayOfWeek == 1 ? 7 : dayOfWeek - 1;
+                int dayOffset = dayOfWeek == 1
+                    ? 7
+                    : dayOfWeek == 0 ? 6 : dayOfWeek - 1;
+
                 return easternDate.AddDays(-dayOffset);
             }
             if(type.Equals("monthly"))
