@@ -39,9 +39,16 @@ namespace fantasy_hoops.Database
             JArray injuries = GetInjuries();
             foreach (JObject injury in injuries)
             {
-                if (dayFrom.CompareTo(DateTime.Parse(injury["CreatedDate"].ToString()).ToUniversalTime()) > 0)
-                    break;
-                AddToDatabase(context, injury);
+                try
+                {
+                    if (dayFrom.CompareTo(DateTime.Parse(injury["CreatedDate"].ToString()).ToUniversalTime()) > 0)
+                        break;
+                    AddToDatabase(context, injury);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
             context.SaveChanges();
         }

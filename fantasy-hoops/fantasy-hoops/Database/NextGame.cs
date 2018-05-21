@@ -53,8 +53,8 @@ namespace fantasy_hoops.Database
                     .ToRunOnceAt(nextRun.AddHours(9)));
 
                 JobManager.AddJob(() => PlayerSeed.Initialize(context),
-                    s => s.WithName("playerSeed_" + nextRun.ToLongDateString())
-                    .ToRunNow());
+                     s => s.WithName("playerSeed_" + nextRun.ToLongDateString())
+                     .ToRunNow());
             }
             else
             {
@@ -81,7 +81,7 @@ namespace fantasy_hoops.Database
 
         private static void SetNextGame(string gameDate)
         {
-            if(offset >= GAME_OFFSET)
+            if (offset >= GAME_OFFSET)
             {
                 NEXT_GAME = new DateTime();
                 NEXT_LAST_GAME = new DateTime();

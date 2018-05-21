@@ -18,12 +18,12 @@ export class InfoModal extends Component {
             </div>
             <div className="modal-body">
               <table className="table table-hover">
-                <thead className='bg-secondary'>
+                <thead className='bg-secondary' style={{ width: '100%' }}>
                   <tr>
                     <th scope="row" colSpan="2" className='text-center text-light' >Offensive</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{ height: 'auto', overflow: 'auto' }}>
                   <tr>
                     <th scope="row" className='text-left'>Points</th>
                     <td className='text-right text-success'>1 FP</td>
@@ -37,12 +37,12 @@ export class InfoModal extends Component {
                     <td className='text-right text-danger'>-1 FP</td>
                   </tr>
                 </tbody>
-                <thead className='bg-secondary'>
+                <thead className='bg-secondary' style={{ width: '100%' }}>
                   <tr>
                     <th scope="row" colSpan="2" className='text-center text-light' >Defensive</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{ height: 'auto', overflow: 'auto' }}>
                   <tr>
                     <th scope="row" className='text-left'>Rebounds</th>
                     <td className='text-right text-success'>1.2 FP</td>
@@ -58,7 +58,7 @@ export class InfoModal extends Component {
                 </tbody>
               </table>
               <hr />
-                * FP - Fantasy Points
+              * FP - Fantasy Points
             </div>
           </div>
         </div>
