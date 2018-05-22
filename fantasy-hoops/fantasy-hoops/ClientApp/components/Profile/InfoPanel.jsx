@@ -46,7 +46,7 @@ export class InfoPanel extends Component {
     const recentActivity = () => {
       if (!this.props.loader) {
         const recentActivity = _.map(
-          user.recentActivity,
+          user.history,
           (activity) => {
             return (
               <UserScore
