@@ -4,6 +4,11 @@ import moment from 'moment';
 export class InjuryCard extends Component {
   constructor() {
     super();
+    this.showModal = this.showModal.bind(this);
+  }
+
+  showModal() {
+    this.props.showModal(this.props.injury.player);
   }
 
   getDate() {
@@ -42,10 +47,21 @@ export class InjuryCard extends Component {
             </div>
             <div className='post-content'>
               <div className={'category ' + status}>{this.props.injury.status}</div>
-              <h1 className='title'>{this.props.injury.player.firstName[0]}. {this.props.injury.player.lastName}</h1>
+              <h1 className='title'
+              >{this.props.injury.player.firstName[0]}. {this.props.injury.player.lastName}
+              </h1>
               <h2 className='sub_title line-clamp'>{this.props.injury.title}</h2>
               <p className='description'>{this.props.injury.description}</p>
               <div className='post-meta'>
+                <div
+                  data-toggle="modal"
+                  data-target="#playerModal"
+                  onClick={this.showModal}
+                  style={{ overflow: 'hidden', cursor: 'pointer' }}
+                >
+                  <i className='fa fa-bar-chart'></i>
+                  {' Stats'}
+                </div>
                 {link}
                 <span style={{ float: 'right' }} className='timestamp'>
                   <i className='fa fa-clock-o'></i> {moment(this.getDate()).fromNow()}

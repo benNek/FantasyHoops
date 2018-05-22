@@ -13,7 +13,7 @@ export class Main extends Component {
             Fantasy Hoops
           </p>
           <div className="text-center">
-            <a href="/lineup" className="btn btn-primary mt-4" role="button" style={{width: '20%'}}>
+            <a href="/lineup" className="btn btn-primary mt-4" role="button" style={{ width: '20%', fontSize: '80%' }}>
               Play Now!
             </a>
           </div>

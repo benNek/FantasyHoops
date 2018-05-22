@@ -16,7 +16,7 @@ namespace fantasy_hoops
 
             JobManager.AddJob(() => NextGame.Initialize(_context),
                 s => s.WithName("nextGame")
-                .ToRunOnceAt(DateTime.UtcNow.AddSeconds(5)));
+                .ToRunNow());
 
             JobManager.AddJob(() => InjuriesSeed.Initialize(_context),
                 s => s.WithName("injuries")
