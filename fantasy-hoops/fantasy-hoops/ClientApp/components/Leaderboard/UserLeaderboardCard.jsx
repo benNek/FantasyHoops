@@ -7,7 +7,7 @@ export class UserLeaderboardCard extends Component {
 
   render() {
     return (
-      <div className="card bg-white rounded mt-1 mx-auto" style={{ width: '30%', height: '4.5rem' }}>
+      <div className="card bg-white rounded mt-1 mx-auto" style={{ width: '20rem', height: '4.5rem' }}>
         <div className="card-body">
           <div className="d-inline-block align-middle mr-1">
             <h4>{this.props.index + 1}</h4>

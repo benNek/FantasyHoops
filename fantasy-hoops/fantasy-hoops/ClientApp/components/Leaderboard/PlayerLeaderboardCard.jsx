@@ -16,7 +16,7 @@ export class PlayerLeaderboardCard extends Component {
 
   render() {
     return (
-      <div className="card bg-white rounded mt-1 mx-auto" style={{ width: '40%', height: '4.5rem' }}>
+      <div className="card bg-white rounded mt-1 mx-auto" style={{ width: '25rem', height: '4.5rem' }}>
         <div className="card-body">
           <div className="row">
             <div className="align-middle text-right" style={{ width: '2rem' }}>

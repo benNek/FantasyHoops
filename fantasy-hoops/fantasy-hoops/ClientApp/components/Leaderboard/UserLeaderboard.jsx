@@ -112,13 +112,13 @@ export class UserLeaderboard extends Component {
 
     return (
       <div className="container bg-light pt-2 pb-3">
-        <div className="position-absolute m-5" style={{ transform: 'scale(0.8, 0.8)' }}>
+        <div className="" style={{ transform: 'scale(0.8, 0.8)' }}>
+          <span><h5>Friends only</h5></span>
           <label className="switch">
             <input type="checkbox" checked={this.state.friendsOnly} onChange={this.toggleFriendsOnly} />
             <span className="slider round"></span>
           </label>
         </div>
-        <h5 className="position-absolute" style={{ margin: '3.3rem 0 0 7.2rem' }}>Friends only</h5>
         <div className="text-center pb-3">
           <img src={leaderboardLogo}
             alt=""

@@ -4,18 +4,32 @@ import _ from 'lodash';
 import shortid from 'shortid';
 import { Loader } from '../Loader';
 import { importAll } from '../../utils/reusableFunctions';
+import { PlayerModal } from '../PlayerModal/PlayerModal';
 import { EmptyJordan } from '../EmptyJordan';
 
 export class InjuriesFeed extends Component {
   constructor(props) {
     super(props);
+    this.showModal = this.showModal.bind(this);
+
     this.state = {
       noInjuries: false,
       injuries: [],
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
       injuryLoader: true,
+      modalLoader: true,
+      renderChild: true
     }
+  }
+
+  componentDidMount() {
+    $("#playerModal").on("hidden.bs.modal", () => {
+      this.setState({
+        modalLoader: true,
+        renderChild: false
+      });
+    });
   }
 
   async componentWillMount() {
@@ -49,6 +63,18 @@ export class InjuriesFeed extends Component {
       });
   }
 
+  async showModal(player) {
+    await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          stats: res,
+          modalLoader: false,
+          renderChild: true
+        });
+      });
+  }
+
   render() {
     if (this.state.injuryLoader)
       return <div className="m-5"><Loader show={this.state.injuryLoader} /></div>;
@@ -68,6 +94,7 @@ export class InjuriesFeed extends Component {
           key={shortid()}
           image={this.state.playerIMG[`${injury.player.nbaID}.png`] || this.state.posIMG[`${pos}.png`]}
           injury={injury}
+          showModal={this.showModal}
         />
       }
     );
@@ -76,6 +103,14 @@ export class InjuriesFeed extends Component {
         <div className="row">
           {injuries}
         </div>
+        <PlayerModal
+          renderChild={this.state.renderChild}
+          loader={this.state.modalLoader}
+          stats={this.state.stats}
+          image={this.state.stats
+            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+            : ''}
+        />
       </div>
     );
   }
