@@ -69,10 +69,10 @@ namespace fantasy_hoops.Database
                         }
                         AddToDatabase(context, player, date, oppId, score);
                     }
-                    context.SaveChanges();
                 }
                 days--;
             }
+            context.SaveChanges();
         }
 
         private static void AddToDatabase(GameContext context, JToken player, DateTime date, int oppId, string score)
