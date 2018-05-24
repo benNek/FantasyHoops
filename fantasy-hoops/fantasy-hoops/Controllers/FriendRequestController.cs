@@ -6,6 +6,7 @@ using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.Notifications;
 using fantasy_hoops.Models.ViewModels;
+using fantasy_hoops.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fantasy_hoops.Controllers
@@ -15,31 +16,27 @@ namespace fantasy_hoops.Controllers
     {
 
         private readonly GameContext _context;
+        private FriendRepository _repository;
 
         public FriendRequestController()
         {
             _context = new GameContext();
+            _repository = new FriendRepository();
         }
 
         [HttpPost("status")]
         public IActionResult GetStatus([FromBody]FriendRequestViewModel model)
         {
-            var request = _context.FriendRequests
-                .Where(x => x.SenderID.Equals(model.SenderID) && x.ReceiverID.Equals(model.ReceiverID))
-                .FirstOrDefault();
-
-            if (request == null)
+            RequestStatus status = _repository.GetStatus(model.ReceiverID, model.SenderID);
+            switch(status)
             {
-                request = _context.FriendRequests
-                    .Where(x => x.SenderID.Equals(model.ReceiverID) && x.ReceiverID.Equals(model.SenderID))
-                    .FirstOrDefault();
-                if (request == null)
+                case RequestStatus.NO_REQUEST:
                     return Ok(-1);
-                if(request.Status == RequestStatus.PENDING)
+                case RequestStatus.PENDING_INCOMING:
                     return Ok(200);
-                return Ok(request.Status);
+                default:
+                    return Ok(status);
             }
-            return Ok(request.Status);
         }
 
         [HttpPost("send")]
@@ -190,6 +187,8 @@ namespace fantasy_hoops.Controllers
         [HttpGet("pending/{id}")]
         public IActionResult GetPendingRequests(String id)
         {
+            var o = _repository.GetPendingRequests(id);
+            /*
             var requests = _context.FriendRequests
                 .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
                 .Select(x => new
@@ -198,6 +197,7 @@ namespace fantasy_hoops.Controllers
                     x.Sender.Id
                 })
                 .ToList();
+                */
             return Ok(requests);
         }
 
