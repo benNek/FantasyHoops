@@ -8,14 +8,18 @@ using fantasy_hoops.Models;
 using System.Globalization;
 using fantasy_hoops.Helpers;
 using FluentScheduler;
+using fantasy_hoops.Services;
 
 namespace fantasy_hoops.Database
 {
     public class StatsSeed
     {
 
+        private static ScoreService _scoreService;
+
         public static void Initialize(GameContext context)
         {
+            _scoreService = new ScoreService();
             // Gets each day's stats the number of days before today
             int daysFromToday = 5;
             Calculate(context, daysFromToday);
@@ -108,14 +112,14 @@ namespace fantasy_hoops.Database
 
             if (shouldAdd)
             {
-                statsObj.GS = Math.Round(statsObj.PTS + 0.4 * statsObj.FGM + 0.7 * statsObj.OREB
-                    + 0.3 * statsObj.DREB + statsObj.STL + 0.7 * statsObj.AST + 0.7 * statsObj.BLK
-                    - 0.7 * statsObj.FGA - 0.4 * statsObj.FTM - 0.4 * statsObj.FLS - statsObj.TOV, 2);
+                statsObj.GS = _scoreService.GetGameScore(statsObj.PTS, statsObj.FGM, statsObj.DREB, statsObj.OREB,
+                    statsObj.STL, statsObj.AST, statsObj.BLK, statsObj.FGA, statsObj.FTA - statsObj.FTM,
+                    statsObj.FLS, statsObj.TOV);
 
-                statsObj.FP = Math.Round(statsObj.PTS + 1.2 * (statsObj.DREB + statsObj.OREB)
-                    + 1.5 * statsObj.AST + 3 * statsObj.STL + 3 * statsObj.BLK - statsObj.TOV, 2);
+                statsObj.FP = _scoreService.GetFantasyPoints(statsObj.PTS, statsObj.DREB, statsObj.OREB,
+                    statsObj.AST, statsObj.STL, statsObj.BLK, statsObj.TOV);
 
-                statsObj.Price = (int)((statsObj.GS + statsObj.FP) * 7 / 5);
+                statsObj.Price = _scoreService.GetPrice(statsObj.FP, statsObj.GS);
                 context.Stats.Add(statsObj);
             }
         }
