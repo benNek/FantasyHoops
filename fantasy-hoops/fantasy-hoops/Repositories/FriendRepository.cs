@@ -22,7 +22,7 @@ namespace fantasy_hoops.Repositories
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> GetPendingRequests(string id)
+        public List<FriendRequest> GetPendingRequests(string id)
         {
             /*
             var data = _context.FriendRequests
@@ -39,11 +39,11 @@ namespace fantasy_hoops.Repositories
             
             var data = _context.FriendRequests
                 .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
-                .Select(x => new
+                /*.Select(x => new
                 {
                     x.Sender.UserName,
                     x.Sender.Id
-                })
+                })*/
                 .ToList();
 
             return data;

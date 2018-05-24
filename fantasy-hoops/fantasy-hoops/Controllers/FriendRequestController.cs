@@ -187,7 +187,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("pending/{id}")]
         public IActionResult GetPendingRequests(String id)
         {
-            var o = _repository.GetPendingRequests(id);
+            return Ok(_repository.GetPendingRequests(id));
             /*
             var requests = _context.FriendRequests
                 .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
@@ -198,7 +198,6 @@ namespace fantasy_hoops.Controllers
                 })
                 .ToList();
                 */
-            return Ok(requests);
         }
 
         [HttpGet("requests/{id}")]
