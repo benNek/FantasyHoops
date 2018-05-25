@@ -21,7 +21,7 @@ export class UserLeaderboardCard extends Component {
             </div>
           </a>
           <div className="d-inline-block float-right" style={{ paddingTop: '0.3rem' }}>
-            <h5>{Math.round(this.props.fp, 2)} FP</h5>
+            <h5>{Math.round(this.props.fp * 100) / 100} FP</h5>
           </div>
         </div>
       </div>
