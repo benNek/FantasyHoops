@@ -7,10 +7,13 @@ export class UserScoreCard extends Component {
   }
 
   componentDidMount() {
-    $('[data-toggle="tooltip"]').tooltip()
+    $(document).ready(function () {
+      $('[data-toggle=tooltip]').tooltip({ trigger: "hover" });
+    });
   }
 
   showModal() {
+    $('[data-toggle="tooltip"]').tooltip("hide");
     this.props.showModal(this.props.player);
   }
 

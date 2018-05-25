@@ -11,6 +11,7 @@ export class PlayerLeaderboardCard extends Component {
   }
 
   showModal() {
+    $('[data-toggle="tooltip"]').tooltip("hide");
     this.props.showModal(this.props.player);
   }
 
