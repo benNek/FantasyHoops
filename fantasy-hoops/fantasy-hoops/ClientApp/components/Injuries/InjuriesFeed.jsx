@@ -64,6 +64,7 @@ export class InjuriesFeed extends Component {
   }
 
   async showModal(player) {
+    this.setState({ modalLoader: true })
     await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
       .then(res => res.json())
       .then(res => {

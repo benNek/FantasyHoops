@@ -113,6 +113,7 @@ export class PlayerCard extends Component {
   }
 
   async showModal() {
+    $('[data-toggle="tooltip"]').tooltip("hide");
     await this.props.showModal(this.props.player);
   }
 
