@@ -43,7 +43,7 @@ export class PlayerLeaderboardCard extends Component {
               </div>
             </a>
             <div className="mt-0 position-absolute  " style={{ right: '0rem', width: '8rem' }}>
-              <h4 className="text-center">{this.props.player.fp} FP</h4>
+              <h4 className="text-center">{Math.round(this.props.player.fp * 100) / 100} FP</h4>
             </div>
           </div>
         </div>
