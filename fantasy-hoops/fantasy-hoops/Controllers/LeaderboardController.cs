@@ -32,9 +32,9 @@ namespace fantasy_hoops.Controllers
                     x.LastName,
                     x.Position,
                     teamColor = x.Team.Color,
-                    FP = Math.Round(context.Stats
+                    FP = x.Stats
                         .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date >= date)
-                        .Select(y => y.FP).Sum(), 1)
+                        .Select(y => y.FP).Sum()
                 })
                 .Where(x => x.FP > 0)
                 .OrderByDescending(x => x.FP)
@@ -82,9 +82,9 @@ namespace fantasy_hoops.Controllers
             return context.Users.Select(x => new {
                 x.Id,
                 x.UserName,
-                Score = Math.Round(context.Lineups
+                Score = x.Lineups
                     .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
-                    .Select(y => y.FP).Sum(), 1)
+                    .Select(y => y.FP).Sum()
             })
             .Where(y => y.Score > 0)
             .OrderByDescending(x => x.Score)
@@ -113,9 +113,9 @@ namespace fantasy_hoops.Controllers
                 {
                     x.Id,
                     x.UserName,
-                    Score = Math.Round(context.Lineups
+                    Score = x.Lineups
                     .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
-                    .Select(y => y.FP).Sum(), 1)
+                    .Select(y => y.FP).Sum()
                 })
             .Where(y => y.Score > 0)
             .OrderByDescending(x => x.Score)
