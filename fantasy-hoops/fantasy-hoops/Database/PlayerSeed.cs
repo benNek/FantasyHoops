@@ -5,6 +5,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using fantasy_hoops.Models;
 using fantasy_hoops.Helpers;
+using fantasy_hoops.Services;
 
 namespace fantasy_hoops.Database
 {
@@ -13,8 +14,11 @@ namespace fantasy_hoops.Database
         public static DateTime PLAYER_POOL_DATE = DateTime.UtcNow;
         public static int PRICE_FLOOR = 10;
 
+        private static ScoreService _scoreService;
+
         public static void Initialize(GameContext context)
         {
+            _scoreService = new ScoreService();
             Calculate(context);
         }
 
@@ -105,7 +109,7 @@ namespace fantasy_hoops.Database
                             .Average();
             }
             catch { }
-            int price = (int)(GSavg + p.FPPG) * 7 / 5;
+            int price = _scoreService.GetPrice(p.FPPG, GSavg);
             if (price < PRICE_FLOOR)
                 return PRICE_FLOOR;
             return price;

@@ -10,8 +10,11 @@ namespace fantasy_hoops.Repositories
     {
 
         RequestStatus GetStatus(String receiverID, String senderID);
-        List<FriendRequest> GetPendingRequests(String id);
-        List<FriendRequest> GetAllRequests(String id);
+        IQueryable<FriendRequest> GetPendingRequests(String id);
+        IQueryable<FriendRequest> GetIncomingRequests(String id);
+        FriendRequest GetRequest(String senderID, String receiverID);
+        void CreateRequest(String senderID, String receiverID, RequestStatus status);
+        void UpdateRequest(FriendRequest request, String senderID, String receiverID, RequestStatus status);
 
     }
 }

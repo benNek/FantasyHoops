@@ -1,16 +1,15 @@
-﻿using fantasy_hoops.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using fantasy_hoops.Models;
+using fantasy_hoops.Models.ViewModels;
 
 namespace fantasy_hoops.Services
 {
     interface IFriendService
     {
 
-        void SendFriendRequest(FriendRequestViewModel model);
-        void AcceptFriendRequest(FriendRequestViewModel model);
+        void SendRequest(FriendRequestViewModel model);
+        void AcceptRequest(FriendRequestViewModel model, FriendRequest request);
+        void CancelRequest(FriendRequestViewModel model, FriendRequest request);
+        void RemoveRequest(FriendRequestViewModel model, FriendRequest request);
 
     }
 }
