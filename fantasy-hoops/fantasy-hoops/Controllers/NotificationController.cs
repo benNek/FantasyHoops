@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using fantasy_hoops.Database;
-using fantasy_hoops.Models;
-using fantasy_hoops.Models.Notifications;
 using fantasy_hoops.Models.ViewModels;
+using fantasy_hoops.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Controllers
 {
@@ -15,80 +11,41 @@ namespace fantasy_hoops.Controllers
     {
 
         private readonly GameContext context;
+        private readonly NotificationRepository _repository;
 
         public NotificationController()
         {
             context = new GameContext();
+            _repository = new NotificationRepository(context);
         }
 
         [HttpGet]
-        public IEnumerable<Object> Get()
+        public IActionResult Get()
         {
-            return context.Notifications.OfType<GameScoreNotification>()
-                    .Include(gs => gs.User)
-                    .AsEnumerable()
-                    .OfType<Notification>()
-                    .Union(context.Notifications
-                        .OfType<FriendRequestNotification>()
-                        .Include(fr => fr.Friend))
-                    .Union(context.Notifications
-                        .OfType<InjuryNotification>()
-                        .Include(inj => inj.Player)
-                        .ThenInclude(p => p.Team))
-                    .OrderByDescending(y => y.DateCreated)
-                    .ToList();
+            return Ok(_repository.GetAllNotifications());
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(string id, int start = 0, int count = 0)
         {
-            if (count == 0)
-                count = context.Notifications.Where(y => y.UserID.Equals(id)).Count();
-            var userNotifications = context.Notifications
-                    .OfType<GameScoreNotification>()
-                    .Include(gs => gs.User)
-                    .AsEnumerable()
-                    .OfType<Notification>()
-                    .Union(context.Notifications
-                        .OfType<FriendRequestNotification>()
-                        .Include(fr => fr.Friend))
-                    .Union(context.Notifications
-                        .OfType<InjuryNotification>()
-                        .Include(inj => inj.Player)
-                        .ThenInclude(p => p.Team))
-                    .Where(y => y.UserID.Equals(id))
-                    .OrderByDescending(y => y.DateCreated)
-                    .Skip(start)
-                    .Take(count)
-                    .ToList();
+            var notifications = _repository.GetNotifications(id, start, count);
 
-            if (userNotifications == null)
+            if (notifications == null)
                 return NotFound(new { error = String.Format("User with id {0} do not have any notifications!", id) });
-            return Ok(userNotifications);
+            return Ok(notifications);
         }
 
         [HttpPost("toggle")]
         public IActionResult ToggleNotification([FromBody]NotificationViewModel model)
         {
-            context.Notifications
-                .Where(x => x.NotificationID == model.NotificationID
-                        && x.UserID.Equals(model.UserID))
-                .FirstOrDefault()
-                .ReadStatus = true;
-
-            context.SaveChanges();
+            _repository.ReadNotification(model);
             return Ok();
         }
 
         [HttpPost("readall/{id}")]
         public IActionResult ReadAll(string id)
         {
-            context.Notifications
-                .Where(x => x.UserID.Equals(id) && x.ReadStatus == false)
-                .ToList()
-                .ForEach(n => n.ReadStatus = true);
-
-            context.SaveChanges();
+            _repository.ReadAllNotifications(id);
             return Ok();
         }
     }

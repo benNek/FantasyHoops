@@ -1,6 +1,8 @@
 ﻿using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
+using fantasy_hoops.Repositories;
+using fantasy_hoops.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -11,18 +13,23 @@ namespace fantasy_hoops.Controllers
     [Route("api/[controller]")]
     public class LineupController : Controller
     {
-        private readonly GameContext context;
+
+        public readonly int MAX_PRICE = 300;
+
+        private readonly LineupService _service;
+        private readonly LineupRepository _repository;
 
         public LineupController()
         {
-            context = new GameContext();
+            GameContext context = new GameContext();
+            _service = new LineupService(context);
+            _repository = new LineupRepository(context);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(String id)
         {
-            var players = context.Lineups
-                .Where(x => x.UserID.Equals(id) && x.Date == Database.NextGame.NEXT_GAME)
+            var players = _repository.GetLineup(id)
                 .Select(x => new
                 {
                     id = x.Player.NbaID,
@@ -38,52 +45,16 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpPost("submit")]
-        public async Task<IActionResult> SubmitLineup([FromBody]SumbitLineupViewModel model)
+        public IActionResult SubmitLineup([FromBody]SubmitLineupViewModel model)
         {
-            bool updating = context.Lineups
-                .Where(x => x.UserID.Equals(model.UserID)
-                        && x.Date == Database.NextGame.NEXT_GAME)
-                .Any();
-
-            // Checking if price sum is not higher than 300K
-            int priceSum = context.Players.Where(pg => pg.PlayerID == model.PgID).Select(p => p.Price)
-                .Union(context.Players.Where(sg => sg.PlayerID == model.SgID).Select(p => p.Price))
-                .Union(context.Players.Where(sf => sf.PlayerID == model.SfID).Select(p => p.Price))
-                .Union(context.Players.Where(pf => pf.PlayerID == model.PfID).Select(p => p.Price))
-                .Union(context.Players.Where(c => c.PlayerID == model.CID).Select(p => p.Price))
-                .Sum();
-
-            if (priceSum > 300)
+            if(_repository.GetLineupPrice(model) > MAX_PRICE)
                 return StatusCode(422, "Lineup price exceeds the budget! Lineup was not submitted.");
-
-            // Checking if players' prices are correct
-            if (context.Players.Where(pg => pg.PlayerID == model.PgID).Select(p => p.Price).FirstOrDefault() != model.PgPrice
-                || context.Players.Where(sg => sg.PlayerID == model.SgID).Select(p => p.Price).FirstOrDefault() != model.SgPrice
-                || context.Players.Where(sf => sf.PlayerID == model.SfID).Select(p => p.Price).FirstOrDefault() != model.SfPrice
-                || context.Players.Where(pf => pf.PlayerID == model.PfID).Select(p => p.Price).FirstOrDefault() != model.PfPrice
-                || context.Players.Where(c => c.PlayerID == model.CID).Select(p => p.Price).FirstOrDefault() != model.CPrice)
+            if (!_repository.ArePricesCorrect(model))
                 return StatusCode(422, "Wrong player prices! Lineup was not submitted.");
             if (!PlayerSeed.PLAYER_POOL_DATE.Equals(Database.NextGame.NEXT_GAME))
-                return StatusCode(422, "Player pool not updated! Try again in a moment.");
+                return StatusCode(500, "Player pool not updated! Try again in a moment.");
 
-            if (!updating)
-            {
-                Add(model.UserID, "PG", model.PgID);
-                Add(model.UserID, "SG", model.SgID);
-                Add(model.UserID, "SF", model.SfID);
-                Add(model.UserID, "PF", model.PfID);
-                Add(model.UserID, "C", model.CID);
-            }
-            else
-            {
-                Update(model.UserID, "PG", model.PgID);
-                Update(model.UserID, "SG", model.SgID);
-                Update(model.UserID, "SF", model.SfID);
-                Update(model.UserID, "PF", model.PfID);
-                Update(model.UserID, "C", model.CID);
-            }
-
-            await context.SaveChangesAsync();
+            _service.SubmitLineup(model);
 
             return Ok("Lineup was updated successfully");
         }
@@ -99,29 +70,5 @@ namespace fantasy_hoops.Controllers
             });
         }
 
-        public void Add(String UserID, String position, int id)
-        {
-            var player = new Lineup
-            {
-                UserID = UserID,
-                PlayerID = id,
-                Position = position,
-                Date = Database.NextGame.NEXT_GAME,
-                Calculated = false
-            };
-            context.Lineups.Add(player);
-        }
-
-        public void Update(String UserID, String position, int newId)
-        {
-            var player = context.Lineups
-                    .Where(x => x.UserID.Equals(UserID)
-                            && x.Position.Equals(position)
-                            && x.Date == Database.NextGame.NEXT_GAME)
-                    .FirstOrDefault();
-            player.PlayerID = newId;
-            player.FP = 0.0;
-            player.Calculated = false;
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using fantasy_hoops.Models;
+using fantasy_hoops.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +10,12 @@ namespace fantasy_hoops.Repositories
     interface INotificationRepository
     {
 
-        void AddFriendRequestNotification(String userID, String friendID, String message);
-        void RemoveFriendRequestNotification(String userID, String friendID);
+        IEnumerable<Notification> GetAllNotifications();
+        IEnumerable<Notification> GetNotifications(string userID, int start, int count);
+        void AddFriendRequestNotification(string userID, string friendID, string message);
+        void RemoveFriendRequestNotification(string userID, string friendID);
+        void ReadNotification(NotificationViewModel model);
+        void ReadAllNotifications(string userID);
 
     }
 }
