@@ -2,7 +2,7 @@ using System;
 
 namespace fantasy_hoops.Models.ViewModels
 {
-    public class EditProfileView
+    public class EditProfileViewModel
     {
         public String Id { get; set; }
         public String UserName { get; set; }

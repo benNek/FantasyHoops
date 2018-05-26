@@ -76,7 +76,7 @@ export class Registration extends Component {
         this.setState({
           showAlert: true,
           alertType: 'alert-danger',
-          alertText: err.message
+          alertText: err.message.substring(4)
         });
       });
   }

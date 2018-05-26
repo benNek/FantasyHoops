@@ -97,9 +97,9 @@ export class EditProfile extends Component {
       body: JSON.stringify(data)
     })
       .then(res => handleErrors(res))
-      .then(res => res.json())
+      .then(res => res.text())
       .then(res => {
-        localStorage.setItem('accessToken', res.value.token);
+        localStorage.setItem('accessToken', res);
         location.reload();
       })
       .catch(err => {

@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace fantasy_hoops.Repositories
 {
-    interface ITeamRepository
+    interface IPlayerRepository
     {
 
-        IQueryable<Team> GetTeams();
-        Team GetTeam(int nbaID);
-        Team GetTeamById(int id);
+        IQueryable<Player> GetActivePlayers();
+        IQueryable<Player> GetPlayer(int id);
 
     }
 }

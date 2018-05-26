@@ -17,6 +17,11 @@ namespace fantasy_hoops.Repositories
             _context = context;
         }
 
+        public IQueryable<Team> GetTeams()
+        {
+            return _context.Teams;
+        }
+
         public Team GetTeam(int nbaID)
         {
             return _context.Teams
@@ -24,9 +29,11 @@ namespace fantasy_hoops.Repositories
                 .FirstOrDefault();
         }
 
-        public IQueryable<Team> GetTeams()
+        public Team GetTeamById(int id)
         {
-            return _context.Teams;
+            return _context.Teams
+                .Where(x => x.TeamID == id)
+                .FirstOrDefault();
         }
     }
 }
