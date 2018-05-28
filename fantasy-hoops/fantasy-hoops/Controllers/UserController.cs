@@ -50,8 +50,8 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(422, "Username must be between 4 and 11 symbols long!");
 
             // Password validation
-            if (!Regex.IsMatch(model.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$"))
-                return StatusCode(422, "Password must contain: 8-20 characters. At least one uppercase letter. At least one number.");
+            if (!Regex.IsMatch(model.Password, @"^.{8,20}$"))
+                return StatusCode(422, "Password must contain 8-20 characters.");
 
             // Checking for duplicate email addresses
             if (_repository.EmailExists(model.Email))
@@ -119,8 +119,8 @@ namespace fantasy_hoops.Controllers
 
             // Password validation
             if (model.CurrentPassword.Length > 0 && model.NewPassword.Length > 0
-                && !Regex.IsMatch(model.NewPassword, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$"))
-                return StatusCode(422, "Password must contain: 8-20 characters. At least one uppercase letter. At least one number.");
+                && !Regex.IsMatch(model.NewPassword, @"^.{8,20}$"))
+                return StatusCode(422, "Password must contain 8-20 characters.");
 
             User user = _repository.GetUser(model.Id);
             if (user == null)
