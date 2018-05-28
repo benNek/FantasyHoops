@@ -31,7 +31,7 @@ namespace fantasy_hoops.Repositories
                     x.Position,
                     teamColor = x.Team.Color,
                     FP = x.Stats
-                        .Where(y => y.PlayerID.Equals(x.PlayerID) && y.Date >= date)
+                        .Where(y => y.Date >= date)
                         .Select(y => y.FP).Sum()
                 })
                 .Where(x => x.FP > 0)
@@ -50,7 +50,7 @@ namespace fantasy_hoops.Repositories
                     x.Id,
                     x.UserName,
                     Score = x.Lineups
-                        .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
+                        .Where(y => y.Date >= date)
                         .Select(y => y.FP).Sum()
                 })
                 .Where(y => y.Score > 0)
@@ -79,7 +79,7 @@ namespace fantasy_hoops.Repositories
                     x.Id,
                     x.UserName,
                     Score = x.Lineups
-                    .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
+                    .Where(y => y.Date >= date)
                     .Select(y => y.FP).Sum()
                 })
                 .Where(y => y.Score > 0)
