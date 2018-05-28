@@ -77,7 +77,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(String id, int start = 0, int count = 0)
         {
-            var profile = _repository.GetProfile(id).FirstOrDefault();
+            var profile = _repository.GetProfile(id, start, count).FirstOrDefault();
             if(profile == null)
                 return NotFound(String.Format("User with id {0} has not been found!", id));
             return Ok(profile);

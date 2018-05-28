@@ -7,7 +7,7 @@ namespace fantasy_hoops.Repositories
     interface IUserRepository
     {
 
-        IQueryable<Object> GetProfile(string id);
+        IQueryable<Object> GetProfile(string id, int start, int count);
         User GetUser(string id);
         User GetUserByName(string username);
         IQueryable<Object> GetFriends(string id);

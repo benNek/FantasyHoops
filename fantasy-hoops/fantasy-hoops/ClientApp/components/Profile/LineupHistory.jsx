@@ -37,7 +37,7 @@ export class LineupHistory extends Component {
   }
 
   async showModal(player) {
-    $('[data-toggle="tooltip"]').tooltip("hide"); 
+    $('[data-toggle="tooltip"]').tooltip("hide");
     this.setState({ modalLoader: true })
     await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
       .then(res => res.json())
@@ -93,7 +93,6 @@ export class LineupHistory extends Component {
           />
         )
       });
-
     const btn = this.state.loadCounter * LOAD_COUNT + 10 > this.state.history.length
       ? ''
       : <button className="btn btn-primary m-3" onClick={this.loadMore}>See more</button>;
