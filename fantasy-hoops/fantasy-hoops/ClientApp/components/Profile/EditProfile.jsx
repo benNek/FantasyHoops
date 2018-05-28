@@ -202,8 +202,8 @@ export class EditProfile extends Component {
                 id="newPassword"
                 value={this.state.newPassword}
                 onChange={this.handleChange}
-                regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$|^$/}
-                error="Password must contain: 8-20 characters. At least one uppercase letter. At least one number."
+                regex={/^.{8,20}$/}
+                error="Password must contain 8-20 characters."
                 notRequired={changingPassword}
                 children="confirmNewPassword"
               />
