@@ -1,9 +1,6 @@
 ﻿using fantasy_hoops.Database;
-using fantasy_hoops.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace fantasy_hoops.Repositories
 {
@@ -17,9 +14,20 @@ namespace fantasy_hoops.Repositories
             _context = context;
         }
 
-        public IQueryable<News> GetNews()
+        public IQueryable<Object> GetNews(int start, int count)
         {
-            return _context.News;
+            return _context.News
+                .Select(x => new
+                {
+                    id = x.NewsID,
+                    x.Title,
+                    Paragraphs = x.Paragraphs.Select(y => y.Content).ToList(),
+                    date = x.Date.ToString("yyyy-MM-dd"),
+                    hTeam = _context.Teams.Where(y => y.NbaID == x.hTeamID).FirstOrDefault().Abbreviation,
+                    vTeam = _context.Teams.Where(y => y.NbaID == x.vTeamID).FirstOrDefault().Abbreviation
+                })
+                .OrderByDescending(x => x.date)
+                .Skip(start).Take(count);
         }
 
     }

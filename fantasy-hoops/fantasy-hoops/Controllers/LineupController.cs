@@ -1,12 +1,10 @@
 ﻿using fantasy_hoops.Database;
-using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
 using fantasy_hoops.Repositories;
 using fantasy_hoops.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace fantasy_hoops.Controllers
 {
@@ -29,19 +27,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(String id)
         {
-            var players = _repository.GetLineup(id)
-                .Select(x => new
-                {
-                    id = x.Player.NbaID,
-                    firstName = x.Player.FirstName,
-                    lastName = x.Player.LastName,
-                    position = x.Player.Position,
-                    price = x.Player.Price,
-                    fppg = x.Player.FPPG,
-                    playerId = x.PlayerID,
-                    teamColor = x.Player.Team.Color
-                }).ToList();
-            return Ok(players);
+            return Ok(_repository.GetLineup(id).ToList());
         }
 
         [HttpPost("submit")]

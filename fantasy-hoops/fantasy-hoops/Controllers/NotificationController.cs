@@ -31,7 +31,7 @@ namespace fantasy_hoops.Controllers
             var notifications = _repository.GetNotifications(id, start, count);
 
             if (notifications == null)
-                return NotFound(new { error = String.Format("User with id {0} do not have any notifications!", id) });
+                return NotFound(String.Format("User with id {0} do not have any notifications!", id));
             return Ok(notifications);
         }
 

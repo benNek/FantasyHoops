@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
-using fantasy_hoops.Models.ViewModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Repositories
 {
@@ -31,16 +27,26 @@ namespace fantasy_hoops.Repositories
             _context.FriendRequests.Add(request);
         }
 
-        public IQueryable<FriendRequest> GetIncomingRequests(string id)
+        public IQueryable<Object> GetIncomingRequests(string id)
         {
             return _context.FriendRequests
-                .Where(x => x.SenderID.Equals(id) && x.Status.Equals(RequestStatus.PENDING));
+                .Where(x => x.SenderID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
+                .Select(x => new
+                {
+                    x.Receiver.UserName,
+                    x.Receiver.Id
+                });
         }
 
-        public IQueryable<FriendRequest> GetPendingRequests(string id)
+        public IQueryable<Object> GetPendingRequests(string id)
         {            
             return _context.FriendRequests
-                .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.PENDING));
+                .Where(x => x.ReceiverID.Equals(id) && x.Status.Equals(RequestStatus.PENDING))
+                .Select(x => new
+                {
+                    x.Sender.UserName,
+                    x.Sender.Id
+                });
         }
 
         public FriendRequest GetRequest(string senderID, string receiverID)

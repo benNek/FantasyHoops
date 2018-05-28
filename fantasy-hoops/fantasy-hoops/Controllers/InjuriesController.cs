@@ -22,29 +22,7 @@ namespace fantasy_hoops.Controllers
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return _repository.GetInjuries()
-                .Select(x => new {
-                    x.InjuryID,
-                    date = x.Date,
-                    Player = new {
-                        x.Player.NbaID,
-                        x.Player.FirstName,
-                        x.Player.LastName,
-                        x.Player.Position,
-                        Team = new {
-                            x.Player.Team.NbaID,
-                            x.Player.Team.City,
-                            x.Player.Team.Name,
-                            x.Player.Team.Color
-                        }
-                    },
-                    x.Status,
-                    x.Injury,
-                    x.Title,
-                    x.Description,
-                    x.Link})
-                    .OrderByDescending(inj => inj.date)
-                    .ToList();
+            return _repository.GetInjuries().ToList();
         }
 
     }

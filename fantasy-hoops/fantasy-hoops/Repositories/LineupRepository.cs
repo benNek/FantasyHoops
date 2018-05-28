@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
@@ -18,10 +16,21 @@ namespace fantasy_hoops.Repositories
             _context = context;
         }
 
-        public IQueryable<Lineup> GetLineup(string id)
+        public IQueryable<Object> GetLineup(string id)
         {
             return _context.Lineups
-                .Where(x => x.UserID.Equals(id) && x.Date == Database.NextGame.NEXT_GAME);
+                .Where(x => x.UserID.Equals(id) && x.Date == Database.NextGame.NEXT_GAME)
+                .Select(x => new
+                {
+                    id = x.Player.NbaID,
+                    firstName = x.Player.FirstName,
+                    lastName = x.Player.LastName,
+                    position = x.Player.Position,
+                    price = x.Player.Price,
+                    fppg = x.Player.FPPG,
+                    playerId = x.PlayerID,
+                    teamColor = x.Player.Team.Color
+                });
         }
 
         public void AddPlayer(String userID, String position, int playerID)

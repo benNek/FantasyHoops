@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
-using fantasy_hoops.Models.Notifications;
 using fantasy_hoops.Models.ViewModels;
 using fantasy_hoops.Repositories;
 using fantasy_hoops.Services;
@@ -88,27 +85,14 @@ namespace fantasy_hoops.Controllers
         [HttpGet("pending/{id}")]
         public IActionResult GetPendingRequests(String id)
         {
-            var requests = _repository.GetPendingRequests(id)
-                .Select(x => new
-                {
-                    x.Sender.UserName,
-                    x.Sender.Id
-                })
-                .ToList();
-
+            var requests = _repository.GetPendingRequests(id).ToList();
             return Ok(requests);
         }
 
         [HttpGet("requests/{id}")]
         public IActionResult GetRequests(String id)
         {
-            var requests = _repository.GetIncomingRequests(id)
-                .Select(x => new
-                {
-                    x.Receiver.UserName,
-                    x.Receiver.Id
-                })
-                .ToList();
+            var requests = _repository.GetIncomingRequests(id).ToList();
             return Ok(requests);
         }
 
