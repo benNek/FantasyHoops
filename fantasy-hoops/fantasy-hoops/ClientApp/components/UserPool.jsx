@@ -65,7 +65,6 @@ export class UserPool extends Component {
           <span className="fa fa-search"></span>
           <DebounceInput
             className="form-control" type="search" name="search" placeholder="Search..."
-            minLength={2}
             debounceTimeout={600}
             onChange={this.filterList} />
         </div>
