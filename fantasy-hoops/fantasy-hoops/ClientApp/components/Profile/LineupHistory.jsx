@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import { importAll } from '../../utils/reusableFunctions';
 import { Loader } from '../Loader';
 import { UserScore } from './UserScore';
+import { PlayerModal } from '../PlayerModal/PlayerModal';
 import icon from '../../content/basketball-player-scoring.svg';
 import { parse } from '../../utils/auth';
 const user = parse();
@@ -12,15 +13,41 @@ export class LineupHistory extends Component {
   constructor(props) {
     super(props);
     this.loadMore = this.loadMore.bind(this);
+    this.showModal = this.showModal.bind(this);
 
     this.state = {
+      stats: '',
       loadCounter: 0,
       user: user,
       history: [],
       loader: true,
+      modalLoader: true,
       posIMG: this.getPosImages(),
       playerIMG: this.getPlayerImages()
     }
+  }
+
+  setModal() {
+    $("#playerModal").on("hidden.bs.modal", () => {
+      this.setState({
+        modalLoader: true,
+        renderChild: false
+      });
+    });
+  }
+
+  async showModal(player) {
+    $('[data-toggle="tooltip"]').tooltip("hide"); 
+    this.setState({ modalLoader: true })
+    await fetch(`http://localhost:51407/api/stats/${player.nbaID}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          stats: res,
+          modalLoader: false,
+          renderChild: true
+        });
+      });
   }
 
   async componentWillMount() {
@@ -81,6 +108,14 @@ export class LineupHistory extends Component {
         <div className="text-center">
           {!this.state.loader ? btn : ''}
         </div>
+        <PlayerModal
+          renderChild={this.state.renderChild}
+          loader={this.state.modalLoader}
+          stats={this.state.stats}
+          image={this.state.stats
+            ? this.state.playerIMG[`${this.state.stats.nbaID}.png`] || this.state.posIMG[`${this.state.stats.position.toLowerCase()}.png`]
+            : ''}
+        />
       </div>
     );
   }
