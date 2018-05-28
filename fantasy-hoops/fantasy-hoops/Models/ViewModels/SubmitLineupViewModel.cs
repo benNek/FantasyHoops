@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace fantasy_hoops.Models.ViewModels
 {
-    public class SumbitLineupViewModel
+    public class SubmitLineupViewModel
     {
         public string UserID { get; set; }
         public int PgID { get; set; }

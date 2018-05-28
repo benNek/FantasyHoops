@@ -1,11 +1,9 @@
 ﻿using fantasy_hoops.Database;
-using fantasy_hoops.Models;
+using fantasy_hoops.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace fantasy_hoops.Controllers
 {
@@ -14,174 +12,24 @@ namespace fantasy_hoops.Controllers
     {
 
         private readonly GameContext context;
+        private readonly StatsRepository _repository;
 
         public StatsController()
         {
             context = new GameContext();
+            _repository = new StatsRepository(context);
         }
 
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Players
-                .Select(x => new
-                {
-                    x.PlayerID,
-                    x.NbaID,
-                    x.FirstName,
-                    x.LastName,
-                    x.Number,
-                    x.Position,
-                    x.PTS,
-                    x.REB,
-                    x.AST,
-                    x.STL,
-                    x.BLK,
-                    x.TOV,
-                    x.FPPG,
-                    x.Price,
-                    Team = new
-                    {
-                        x.TeamID,
-                        x.Team.NbaID,
-                        x.Team.Abbreviation,
-                        x.Team.City,
-                        x.Team.Name,
-                        x.Team.Color
-                    },
-                    Games = context.Stats.Where(s => s.PlayerID == x.PlayerID)
-                        .Select(s => new
-                        {
-                            s.StatsID,
-                            s.Date,
-                            Opponent = context.Teams.Where(t => t.NbaID == s.OppID)
-                                .Select(t => new
-                                {
-                                    t.NbaID,
-                                    t.Abbreviation
-                                })
-                                .FirstOrDefault(),
-                            s.Score,
-                            s.MIN,
-                            s.FGM,
-                            s.FGA,
-                            s.FGP,
-                            s.TPM,
-                            s.TPA,
-                            s.TPP,
-                            s.FTM,
-                            s.FTA,
-                            s.FTP,
-                            s.DREB,
-                            s.OREB,
-                            s.TREB,
-                            s.AST,
-                            s.BLK,
-                            s.STL,
-                            s.FLS,
-                            s.TOV,
-                            s.PTS,
-                            s.GS,
-                            s.FP,
-                            s.Price
-                        })
-                        .OrderByDescending(s => s.Date)
-                })
-                .ToList();
+            return _repository.GetStats().ToList();
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id, int start = 0, int count = 10)
         {
-            double maxPoints = 0, maxAssists = 0, maxTurnovers = 0,
-            maxRebounds = 0, maxBlocks = 0, maxSteals = 0;
-            foreach (Player p in context.Players)
-            {
-                maxPoints = Math.Max(maxPoints, p.PTS);
-                maxAssists = Math.Max(maxAssists, p.AST);
-                maxTurnovers = Math.Max(maxTurnovers, p.TOV);
-                maxRebounds = Math.Max(maxRebounds, p.REB);
-                maxBlocks = Math.Max(maxBlocks, p.BLK);
-                maxSteals = Math.Max(maxSteals, p.STL);
-            }
-
-            var player = context.Players
-                .Where(x => x.NbaID == id)
-                .Select(x => new
-                {
-                    x.PlayerID,
-                    x.NbaID,
-                    x.FirstName,
-                    x.LastName,
-                    x.Number,
-                    x.Position,
-                    x.PTS,
-                    x.REB,
-                    x.AST,
-                    x.STL,
-                    x.BLK,
-                    x.TOV,
-                    x.FPPG,
-                    x.Price,
-                    Percentages = new
-                    {
-                        PTS = Math.Round(x.PTS / maxPoints * 100, 0),
-                        AST = Math.Round(x.AST / maxAssists * 100, 0),
-                        TOV = Math.Round(x.TOV / maxTurnovers * 100, 0),
-                        REB = Math.Round(x.REB / maxRebounds * 100, 0),
-                        BLK = Math.Round(x.BLK / maxBlocks * 100, 0),
-                        STL = Math.Round(x.STL / maxSteals * 100, 0)
-                    },
-                    Team = new
-                    {
-                        x.TeamID,
-                        x.Team.NbaID,
-                        x.Team.Abbreviation,
-                        x.Team.City,
-                        x.Team.Name,
-                        x.Team.Color
-                    },
-                    Games = context.Stats.Where(s => s.PlayerID == x.PlayerID)
-                    .OrderByDescending(s => s.Date)
-                    .Skip(start)
-                    .Take(count)
-                    .Select(s => new
-                    {
-                        s.StatsID,
-                        s.Date,
-                        Opponent = context.Teams.Where(t => t.NbaID == s.OppID)
-                            .Select(t => new
-                            {
-                                t.NbaID,
-                                t.Abbreviation
-                            })
-                            .FirstOrDefault(),
-                        s.Score,
-                        s.MIN,
-                        s.FGM,
-                        s.FGA,
-                        s.FGP,
-                        s.TPM,
-                        s.TPA,
-                        s.TPP,
-                        s.FTM,
-                        s.FTA,
-                        s.FTP,
-                        s.DREB,
-                        s.OREB,
-                        s.TREB,
-                        s.AST,
-                        s.BLK,
-                        s.STL,
-                        s.FLS,
-                        s.TOV,
-                        s.PTS,
-                        s.GS,
-                        s.FP,
-                        s.Price
-                    })
-                })
-                .ToList().FirstOrDefault();
+            var player = _repository.GetStats(id, start, count).FirstOrDefault();
             if (player == null)
                 return NotFound(String.Format("Player with id {0} has not been found!", id));
             return Ok(player);

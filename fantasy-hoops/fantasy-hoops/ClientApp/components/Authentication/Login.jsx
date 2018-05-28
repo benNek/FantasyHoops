@@ -64,9 +64,9 @@ export class Login extends Component {
       body: JSON.stringify(data)
     })
       .then(res => handleErrors(res))
-      .then(res => res.json())
+      .then(res => res.text())
       .then(res => {
-        localStorage.setItem('accessToken', res.token);
+        localStorage.setItem('accessToken', res);
 
         // If user was redirected to login because of authentication errors,
         // he is now being redirected back
@@ -80,7 +80,7 @@ export class Login extends Component {
         this.setState({
           showAlert: true,
           alertType: 'alert-danger',
-          alertText: err.message
+          alertText: err.message.substring(4)
         })
       });
   }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using fantasy_hoops.Database;
+using fantasy_hoops.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fantasy_hoops.Controllers
@@ -10,48 +11,19 @@ namespace fantasy_hoops.Controllers
     public class InjuriesController : Controller
     {
 
-        private readonly GameContext context;
+        private readonly InjuryRepository _repository;
 
         public InjuriesController()
         {
-            context = new GameContext();
+            GameContext context = new GameContext();
+            _repository = new InjuryRepository(context);
         }
 
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Injuries
-                .Select(x => new {
-                    x.InjuryID,
-                    date = x.Date,
-                    Player = new {
-                        x.Player.NbaID,
-                        x.Player.FirstName,
-                        x.Player.LastName,
-                        x.Player.Position,
-                        Team = new {
-                            x.Player.Team.NbaID,
-                            x.Player.Team.City,
-                            x.Player.Team.Name,
-                            x.Player.Team.Color
-                        }
-                    },
-                    x.Status,
-                    x.Injury,
-                    x.Title,
-                    x.Description,
-                    x.Link})
-                    .OrderByDescending(inj => inj.date)
-                    .ToList();
+            return _repository.GetInjuries().ToList();
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            var injury = context.Injuries.Where(x => x.InjuryID == id).ToList().FirstOrDefault();
-            if (injury == null)
-                return NotFound(new { error = String.Format("Injury with id {0} has not been found!", id) });
-            return Ok(injury);
-        }
     }
 }

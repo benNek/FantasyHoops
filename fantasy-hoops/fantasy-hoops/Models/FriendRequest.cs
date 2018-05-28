@@ -9,7 +9,7 @@ namespace fantasy_hoops.Models
 
     public enum RequestStatus
     {
-        PENDING, ACCEPTED, DECLINED, CANCELED
+        PENDING, ACCEPTED, DECLINED, CANCELED, NO_REQUEST, PENDING_INCOMING
     }
 
     public class FriendRequest

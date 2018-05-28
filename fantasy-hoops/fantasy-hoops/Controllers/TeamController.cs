@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using fantasy_hoops.Database;
+using fantasy_hoops.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fantasy_hoops.Controllers
@@ -10,34 +11,27 @@ namespace fantasy_hoops.Controllers
     public class TeamController : Controller
     {
 
-        private readonly GameContext context;
+        private readonly TeamRepository _repository;
 
         public TeamController()
         {
-            context = new GameContext();
+            _repository = new TeamRepository(new GameContext());
         }
 
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return context.Teams.Select(x => new
-            {
-                x.TeamID,
-                x.NbaID,
-                x.City,
-                x.Name,
-                x.Color
-            }).OrderBy(x => x.Name)
-            .ToList();
+            return _repository.GetTeams().ToList();
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var team = context.Teams.Where(x => x.NbaID == id).ToList().FirstOrDefault();
+            var team = _repository.GetTeam(id);
             if (team == null)
-                return NotFound(new { error = String.Format("Team with id {0} has not been found!", id) });
+                return NotFound(String.Format("Team with id {0} has not been found!", id));
             return Ok(team);
         }
+
     }
 }
