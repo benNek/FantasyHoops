@@ -3,7 +3,7 @@ using fantasy_hoops.Models.ViewModels;
 
 namespace fantasy_hoops.Services
 {
-    interface IFriendService
+    public interface IFriendService
     {
 
         void SendRequest(FriendRequestViewModel model);

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace fantasy_hoops.Repositories
 {
-    interface IFriendRepository
+    public interface IFriendRepository
     {
 
         RequestStatus GetStatus(String receiverID, String senderID);
