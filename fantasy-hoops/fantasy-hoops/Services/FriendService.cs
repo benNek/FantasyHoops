@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using fantasy_hoops.Database;
+﻿using fantasy_hoops.Database;
 using fantasy_hoops.Models;
-using fantasy_hoops.Models.Notifications;
 using fantasy_hoops.Models.ViewModels;
 using fantasy_hoops.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace fantasy_hoops.Services
 {
