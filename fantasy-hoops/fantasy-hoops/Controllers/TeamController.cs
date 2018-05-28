@@ -11,27 +11,17 @@ namespace fantasy_hoops.Controllers
     public class TeamController : Controller
     {
 
-        private readonly GameContext _context;
         private readonly TeamRepository _repository;
 
         public TeamController()
         {
-            _context = new GameContext();
-            _repository = new TeamRepository(_context);
+            _repository = new TeamRepository(new GameContext());
         }
 
         [HttpGet]
         public IEnumerable<Object> Get()
         {
-            return _repository.GetTeams().Select(x => new
-            {
-                x.TeamID,
-                x.NbaID,
-                x.City,
-                x.Name,
-                x.Color
-            }).OrderBy(x => x.Name)
-            .ToList();
+            return _repository.GetTeams().ToList();
         }
 
         [HttpGet("{id}")]

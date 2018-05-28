@@ -1,21 +1,13 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using fantasy_hoops.Database;
 using fantasy_hoops.Models;
 using fantasy_hoops.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics;
-using System.IO;
 using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
 using fantasy_hoops.Services;
 using fantasy_hoops.Repositories;
 
@@ -24,19 +16,15 @@ namespace fantasy_hoops.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly GameContext context;
+        private readonly GameContext _context;
         private readonly UserRepository _repository;
         private readonly UserService _service;
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
 
         public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            context = new GameContext();
-            _repository = new UserRepository(context);
-            _service = new UserService(context, userManager, signInManager);
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _context = new GameContext();
+            _repository = new UserRepository(_context);
+            _service = new UserService(_context, userManager, signInManager);
         }
 
         [HttpPost("login")]
@@ -114,7 +102,7 @@ namespace fantasy_hoops.Controllers
         public async Task<IActionResult> EditProfile([FromBody]EditProfileViewModel model)
         {
             // No duplicate usernames
-            if (context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower()) && !x.Id.Equals(model.Id)).Any())
+            if (_context.Users.Where(x => x.UserName.ToLower().Equals(model.UserName.ToLower()) && !x.Id.Equals(model.Id)).Any())
                 return StatusCode(409, "Username is already taken!");
 
             // Check for username length
@@ -122,7 +110,7 @@ namespace fantasy_hoops.Controllers
                 return StatusCode(422, "Username must be between 4 and 11 symbols long!");
 
             // No duplicate emails
-            if (context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.Equals(model.Id)).Any())
+            if (_context.Users.Where(x => x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.Equals(model.Id)).Any())
                 return StatusCode(409, "Email already has an user associated to it!");
 
             // Check if email is valid
