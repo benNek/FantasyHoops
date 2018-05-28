@@ -6,14 +6,15 @@ import { importAll } from '../../utils/reusableFunctions';
 import { PlayerModal } from '../PlayerModal/PlayerModal';
 import { Loader } from '../Loader';
 import { EmptyJordan } from '../EmptyJordan';
+const LOAD_COUNT = 10;
 
 export class PlayerLeaderboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dailyPlayers: '',
-      weeklyPlayers: '',
-      monthlyPlayers: '',
+      dailyPlayers: [],
+      weeklyPlayers: [],
+      monthlyPlayers: [],
       playerIMG: this.getPlayerImages(),
       posIMG: this.getPosImages(),
       stats: '',
@@ -21,10 +22,17 @@ export class PlayerLeaderboard extends Component {
       weeklyLoader: true,
       monthlyLoader: true,
       modalLoader: true,
-      renderChild: true
+      renderChild: true,
+      loader: false,
+      dailyLoadCounter: 0,
+      weeklyLoadCounter: 0,
+      monthlyLoadCounter: 0
     }
 
     this.showModal = this.showModal.bind(this);
+    this.loadDaily = this.loadDaily.bind(this);
+    this.loadWeekly = this.loadWeekly.bind(this);
+    this.loadMonthly = this.loadMonthly.bind(this);
   }
 
   componentDidMount() {
@@ -82,10 +90,74 @@ export class PlayerLeaderboard extends Component {
       });
   }
 
+  async loadDaily() {
+    this.setState({
+      loader: true,
+      dailyLoadCounter: this.state.dailyLoadCounter + 1
+    });
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=daily&from=${this.state.dailyPlayers.length}&limit=${LOAD_COUNT}`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          dailyPlayers: this.state.dailyPlayers.concat(res),
+          loader: false
+        });
+      });
+  }
+
+  async loadWeekly() {
+    this.setState({
+      loader: true,
+      weeklyLoadCounter: this.state.weeklyLoadCounter + 1
+    });
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=weekly&from=${this.state.weeklyPlayers.length}&limit=${LOAD_COUNT}`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          weeklyPlayers: this.state.weeklyPlayers.concat(res),
+          loader: false
+        });
+      });
+  }
+
+  async loadMonthly() {
+    this.setState({
+      loader: true,
+      monthlyLoadCounter: this.state.monthlyLoadCounter + 1
+    });
+    await fetch(`http://localhost:51407/api/leaderboard/player?type=monthly&from=${this.state.monthlyPlayers.length}&limit=${LOAD_COUNT}`)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        this.setState({
+          monthlyPlayers: this.state.monthlyPlayers.concat(res),
+          loader: false
+        });
+      });
+  }
+
   render() {
-    const dailyPlayers = this.createPlayers(this.state.dailyPlayers)
-    const weeklyPlayers = this.createPlayers(this.state.weeklyPlayers)
-    const monthlyPlayers = this.createPlayers(this.state.monthlyPlayers)
+    const dailyPlayers = this.createPlayers(this.state.dailyPlayers);
+    const weeklyPlayers = this.createPlayers(this.state.weeklyPlayers);
+    const monthlyPlayers = this.createPlayers(this.state.monthlyPlayers);
+
+    const dailyBtn = this.state.dailyLoadCounter * LOAD_COUNT + 10 > this.state.dailyPlayers.length
+      ? ''
+      : <button className="btn btn-primary mt-2" onClick={this.loadDaily}>See more</button>;
+
+    const weeklyBtn = this.state.weeklyLoadCounter * LOAD_COUNT + 10 > this.state.weeklyPlayers.length
+      ? ''
+      : <button className="btn btn-primary mt-2" onClick={this.loadWeekly}>See more</button>;
+
+    const monthlyBtn = this.state.monthlyLoadCounter * LOAD_COUNT + 10 > this.state.monthlyPlayers.length
+      ? ''
+      : <button className="btn btn-primary mt-2" onClick={this.loadMonthly}>See more</button>;
+
     return (
       <div className="container bg-light pt-2 pb-3">
         <div className="text-center pb-3">
@@ -112,6 +184,10 @@ export class PlayerLeaderboard extends Component {
                 ? dailyPlayers
                 : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.dailyLoader} />}
+            <div className="text-center">
+              {!this.state.loader ? dailyBtn : ''}
+            </div>
+            <Loader show={this.state.loader} />
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="weekly" role="tabpanel">
             {!this.state.weeklyLoader
@@ -119,6 +195,10 @@ export class PlayerLeaderboard extends Component {
                 ? weeklyPlayers
                 : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.weeklyLoader} />}
+            <div className="text-center">
+              {!this.state.loader ? weeklyBtn : ''}
+            </div>
+            <Loader show={this.state.loader} />
           </div>
           <div className="pt-4 pb-1 tab-pane fade" id="monthly" role="tabpanel">
             {!this.state.monthlyLoader
@@ -126,6 +206,10 @@ export class PlayerLeaderboard extends Component {
                 ? monthlyPlayers
                 : <EmptyJordan message="Such empty..." />
               : <Loader show={this.state.monthlyLoader} />}
+            <div className="text-center">
+              {!this.state.loader ? monthlyBtn : ''}
+            </div>
+            <Loader show={this.state.loader} />
           </div>
         </div>
         <PlayerModal

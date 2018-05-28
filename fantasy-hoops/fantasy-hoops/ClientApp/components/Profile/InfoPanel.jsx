@@ -90,7 +90,7 @@ export class InfoPanel extends Component {
             </div>
             <hr />
             <span className="badge badge-primary"><i className="fa fa-ban"></i> Streak: {user.streak}</span>
-            <span className="badge badge-success"><i className="fa fa-cog"></i> Weekly Score: {user.totalScore}</span>
+            <span className="badge badge-success"><i className="fa fa-cog"></i> Weekly Score: {Math.round(user.totalScore * 100) / 100}</span>
             <span className="badge badge-danger"><i className="fa fa-eye"></i> Ranking: {user.position}</span>
           </div>
           <div className="col-md-12">
