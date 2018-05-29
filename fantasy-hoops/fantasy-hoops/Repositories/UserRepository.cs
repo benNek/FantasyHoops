@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using fantasy_hoops.Database;
+using fantasy_hoops.Helpers;
 using fantasy_hoops.Models;
 
 namespace fantasy_hoops.Repositories
@@ -10,6 +11,7 @@ namespace fantasy_hoops.Repositories
 
         private readonly GameContext _context;
         private readonly TeamRepository _teamRepository;
+        DateTime date = CommonFunctions.GetDate("weekly");
 
         public UserRepository(GameContext context)
         {
@@ -185,16 +187,17 @@ namespace fantasy_hoops.Repositories
         private double GetWeeklyScore(string id)
         {
             return _context.Lineups
-                    .Where(x => x.UserID.Equals(id) && x.Date >= NextGame.PREVIOUS_LAST_GAME.AddDays(-7))
+                    .Where(x => x.UserID.Equals(id) && x.Date >= date)
                     .Select(x => x.FP).Sum();
         }
 
         private int GetWeeklyRanking(string id)
         {
+
             var ranking = _context.Users.Select(x => new {
                 x.Id,
                 Score = _context.Lineups
-                    .Where(y => y.UserID.Equals(x.Id) && y.Date >= NextGame.PREVIOUS_LAST_GAME.AddDays(-7))
+                    .Where(y => y.UserID.Equals(x.Id) && y.Date >= date)
                     .Select(y => y.FP).Sum(),
                 Ranking = 0
             })
