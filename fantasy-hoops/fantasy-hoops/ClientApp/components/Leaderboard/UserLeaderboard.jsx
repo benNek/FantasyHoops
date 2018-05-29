@@ -238,19 +238,25 @@ export class UserLeaderboard extends Component {
 
     return (
       <div className="container bg-light pt-2 pb-3">
-        <div className="" style={{ transform: 'scale(0.8, 0.8)' }}>
-          <span><h5>Friends only</h5></span>
-          <label className="switch">
-            <input type="checkbox" checked={this.state.friendsOnly} onChange={this.toggleFriendsOnly} />
-            <span className="slider round"></span>
-          </label>
-        </div>
-        <div className="text-center pb-3">
+        <div className="text-center pb-1">
           <img src={leaderboardLogo}
             alt=""
             width="60rem"
           />
           <h3>Top Users</h3>
+        </div>
+        <div className="row justify-content-center">
+          <div className="col-xs">
+            <div style={{ transform: 'scale(0.7, 0.7)' }}>
+              <label className="switch">
+                <input type="checkbox" checked={this.state.friendsOnly} onChange={this.toggleFriendsOnly} />
+                <span className="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <div className="col-xs pt-2">
+            <h6>Friends only</h6>
+          </div>
         </div>
         <ul className="nav nav-tabs justify-content-center mx-auto" id="myTab" role="tablist" style={{ width: '30%' }}>
           <li className="nav-item">
@@ -298,7 +304,7 @@ export class UserLeaderboard extends Component {
             <Loader show={this.state.loader} />
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 
