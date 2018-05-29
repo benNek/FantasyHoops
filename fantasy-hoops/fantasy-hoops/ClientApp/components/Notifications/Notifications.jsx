@@ -100,7 +100,7 @@ export class Notifications extends Component {
     if (this.state.userNotifications.length < 1)
       return <a className="dropdown-item cursor-default text-center">No notifications</a>;
     const cardWidth = 25;
-    return _.slice(this.state.userNotifications, 0, 5)
+    return _.slice(this.state.userNotifications, 0, 4)
       .map(notification => {
         if (notification.score)
           return <GameScoreNotification
@@ -150,7 +150,7 @@ export class Notifications extends Component {
           style={{ fontSize: '2rem' }}
         >{badge}
         </a>
-        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '25.1rem' }}>
+        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" style={{ width: '25rem' }}>
           <h6 className="dropdown-header">Notifications
           <a
               onClick={this.readAll}

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using fantasy_hoops.Database;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -55,6 +56,36 @@ namespace fantasy_hoops.Helpers
             string apiResponse = ResponseToString(webResponse);
             JObject json = JObject.Parse(apiResponse);
             return (JArray)json["games"];
+        }
+
+        public static int DaysInMonth()
+        {
+            int year = UTCToEastern(DateTime.UtcNow).Year;
+            int month = UTCToEastern(DateTime.UtcNow).Month;
+            return DateTime.DaysInMonth(year, month);
+        }
+
+        // Leaderboards and weekly scores
+        public static DateTime GetDate(string type)
+        {
+            DateTime easternDate = UTCToEastern(DateTime.UtcNow);
+            int dayOfWeek = (int)UTCToEastern(DateTime.UtcNow).DayOfWeek;
+            int dayOfMonth = UTCToEastern(DateTime.UtcNow).Day;
+
+            if (type.Equals("weekly"))
+            {
+                int dayOffset = dayOfWeek == 1
+                    ? 7
+                    : dayOfWeek == 0 ? 6 : dayOfWeek - 1;
+
+                return easternDate.AddDays(-dayOffset);
+            }
+            if (type.Equals("monthly"))
+            {
+                int dayOffset = dayOfMonth == 1 ? DaysInMonth() : dayOfMonth - 1;
+                return easternDate.AddDays(-dayOffset);
+            }
+            return NextGame.PREVIOUS_GAME;
         }
     }
 }

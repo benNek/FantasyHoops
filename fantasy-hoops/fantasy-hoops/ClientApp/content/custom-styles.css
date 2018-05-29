@@ -279,10 +279,6 @@
 }
 
 /*My profile*/
-.team-badge {
-  transform: scale(2);
-  padding-left: 5.5rem;
-}
 .about-me {
   display: block;
   word-wrap: break-word;
