@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { PlayerCard } from './PlayerCard';
+import shortid from 'shortid';
 import _ from 'lodash';
 
 export class PlayerPool extends Component {
@@ -27,7 +28,7 @@ export class PlayerPool extends Component {
         if (player.position === this.props.position
           || this.props.position === '') {
           const pos = this.props.position.toLowerCase();
-          return <div className="ml-3 mt-3">
+          return <div className="ml-3 mt-3" key={shortid()}>
             <PlayerCard
               key={player.id}
               id={player.id}
