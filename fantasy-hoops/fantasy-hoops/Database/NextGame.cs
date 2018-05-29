@@ -18,7 +18,7 @@ namespace fantasy_hoops.Database
         public static DateTime PREVIOUS_GAME = DateTime.UtcNow;
         public static DateTime PREVIOUS_LAST_GAME = DateTime.UtcNow;
 
-        private const int GAME_OFFSET = 2;
+        private const int GAME_OFFSET = 3;
         private static int offset = 0;
 
         public static void SetClientTime()

@@ -21,6 +21,8 @@ export class Lineup extends Component {
     this.selectPlayer = this.selectPlayer.bind(this);
     this.filter = this.filter.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDemoSubmit = this.handleDemoSubmit.bind(this);
+    this.handleDemoInjury = this.handleDemoInjury.bind(this);
     this.showModal = this.showModal.bind(this);
 
     this.state = {
@@ -237,6 +239,12 @@ export class Lineup extends Component {
               <form onSubmit={this.handleSubmit}>
                 <button id='submit' disabled className="btn btn-outline-primary btn-lg btn-block">Submit</button>
               </form>
+              <form onSubmit={this.handleDemoSubmit}>
+                <button id='submit' className="btn btn-outline-warning btn-lg btn-block mt-1">DEMO SUBMIT</button>
+              </form>
+              <form onSubmit={this.handleDemoInjury}>
+                <button id='submit' className="btn btn-outline-warning btn-lg btn-block mt-1">DEMO INJURY</button>
+              </form>
             </div>
           </div>
           <Loader show={this.state.playerLoader} />
@@ -332,6 +340,80 @@ export class Lineup extends Component {
     };
 
     fetch('/api/lineup/submit', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.text())
+      .then(res => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: res
+        });
+      })
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        });
+      });
+  }
+
+  handleDemoInjury(e) {
+    e.preventDefault();
+    const user = parse();
+    const data = {
+      UserID: user.id,
+      PgID: this.state.pg.props.player.playerId,
+      SgID: this.state.sg.props.player.playerId,
+      SfID: this.state.sf.props.player.playerId,
+      PfID: this.state.pf.props.player.playerId,
+      CID: this.state.c.props.player.playerId
+    };
+
+    fetch('/api/lineup/demo/injury', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => handleErrors(res))
+      .then(res => res.text())
+      .then(res => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-success',
+          alertText: res
+        });
+      })
+      .catch(err => {
+        this.setState({
+          showAlert: true,
+          alertType: 'alert-danger',
+          alertText: err.message
+        });
+      });
+  }
+
+  handleDemoSubmit(e) {
+    e.preventDefault();
+    const user = parse();
+    const data = {
+      UserID: user.id,
+      PgID: this.state.pg.props.player.playerId,
+      SgID: this.state.sg.props.player.playerId,
+      SfID: this.state.sf.props.player.playerId,
+      PfID: this.state.pf.props.player.playerId,
+      CID: this.state.c.props.player.playerId
+    };
+
+    fetch('/api/lineup/demo/submit', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
