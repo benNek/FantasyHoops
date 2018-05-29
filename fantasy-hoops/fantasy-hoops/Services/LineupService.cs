@@ -20,7 +20,7 @@ namespace fantasy_hoops.Services
             _repository = new LineupRepository(_context);
         }
 
-        public async void SubmitLineup(SubmitLineupViewModel model)
+        public void SubmitLineup(SubmitLineupViewModel model)
         {
             if (!_repository.IsUpdating(model.UserID))
             {
@@ -39,7 +39,7 @@ namespace fantasy_hoops.Services
                 _repository.UpdatePlayer(model.UserID, "C", model.CID);
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
     }

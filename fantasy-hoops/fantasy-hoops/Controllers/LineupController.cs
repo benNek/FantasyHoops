@@ -61,7 +61,7 @@ namespace fantasy_hoops.Controllers
         }
 
         [HttpPost("demo/submit")]
-        public async Task<IActionResult> DEMOSubmitLineup([FromBody]SubmitLineupViewModel model)
+        public IActionResult DEMOSubmitLineup([FromBody]SubmitLineupViewModel model)
         {
             if (_repository.GetLineupPrice(model) > MAX_PRICE)
                 return StatusCode(422, "Lineup price exceeds the budget! Lineup was not submitted.");
@@ -78,7 +78,7 @@ namespace fantasy_hoops.Controllers
                 Score = new Random().Next(1, 200)
             });
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return Ok("Demo Lineup was updated successfully");
         }
