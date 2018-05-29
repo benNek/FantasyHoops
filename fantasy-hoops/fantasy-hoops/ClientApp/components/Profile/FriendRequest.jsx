@@ -52,7 +52,7 @@ export class FriendRequest extends Component {
     let btn;
     switch (this.state.status) {
       case '-2':
-        btn = <Loader show={true} />;
+        btn = this.props.readOnly ? <Loader show={true} /> : '';
         break;
       case '0':
         btn = <button
