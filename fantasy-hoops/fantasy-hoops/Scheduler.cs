@@ -23,13 +23,6 @@ namespace fantasy_hoops
                 .ToRunOnceAt(DateTime.UtcNow.AddSeconds(10))
                 .AndEvery(30)
                 .Minutes());
-
-            JobManager.AddJob(() => PhotosSeed.Initialize(_context),
-                s => s.WithName("photos")
-                .ToRunOnceAt(DateTime.UtcNow.AddMinutes(5))
-                .AndEvery(1)
-                .Days()
-                .At(00, 00));   // 20p.m. Eastern Time
         }
     }
 }
