@@ -26,7 +26,7 @@ export class Avatar extends Component {
           className="mx-auto img-fluid img-circle d-block round-img"
           style={{ width: '10rem' }}
         />
-        {this.props.readOnly && <FriendRequest user={user} />}
+        <FriendRequest user={user} readOnly={this.props.readOnly} />
         {!this.props.readOnly &&
           <div className="row">
             <button type="button" className="btn btn-outline-primary mx-auto" data-toggle="modal" data-target="#changeImage">

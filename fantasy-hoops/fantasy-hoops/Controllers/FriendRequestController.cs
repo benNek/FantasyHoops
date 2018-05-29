@@ -16,17 +16,19 @@ namespace fantasy_hoops.Controllers
         private readonly IFriendRepository _repository;
         private readonly IFriendService _service;
 
-        public FriendRequestController()
+        public FriendRequestController(IFriendRepository repository = null, IFriendService service = null)
         {
-            GameContext context = new GameContext();
-            _repository = new FriendRepository(context);
-            _service = new FriendService(context);
-        }
-
-        public FriendRequestController(IFriendRepository repository, IFriendService service)
-        {
-            _repository = repository;
-            _service = service;
+            if (repository != null && service != null)
+            {
+                _repository = repository;
+                _service = service;
+            }
+            else
+            {
+                GameContext context = new GameContext();
+                _repository = new FriendRepository(context);
+                _service = new FriendService(context);
+            }
         }
 
         [HttpPost("status")]

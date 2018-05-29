@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { parse } from '../../utils/auth';
 import { handleErrors } from '../../utils/errors';
+import { Loader } from '../Loader';
 
 export class FriendRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: '-1'
+      status: '-2'
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (prevProps == this.props)
       return;
 
@@ -31,7 +32,7 @@ export class FriendRequest extends Component {
       receiverID: receiver.id
     }
 
-    fetch('/api/friendrequest/status', {
+    await fetch('/api/friendrequest/status', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -51,7 +52,7 @@ export class FriendRequest extends Component {
     let btn;
     switch (this.state.status) {
       case '-2':
-        btn = '';
+        btn = this.props.readOnly ? <Loader show={true} /> : '';
         break;
       case '0':
         btn = <button
@@ -88,7 +89,7 @@ export class FriendRequest extends Component {
     );
   }
 
-  sendFriendRequest(receiver) {
+  async sendFriendRequest(receiver) {
     const sender = parse();
     if (!sender)
       return;
@@ -98,7 +99,7 @@ export class FriendRequest extends Component {
       receiverID: receiver.id
     }
 
-    fetch('/api/friendrequest/send', {
+    await fetch('/api/friendrequest/send', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -112,7 +113,7 @@ export class FriendRequest extends Component {
       });
   }
 
-  acceptFriendRequest(receiver) {
+  async acceptFriendRequest(receiver) {
     const sender = parse();
     if (!sender)
       return;
@@ -122,7 +123,7 @@ export class FriendRequest extends Component {
       receiverID: receiver.id
     }
 
-    fetch('/api/friendrequest/accept', {
+    await fetch('/api/friendrequest/accept', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -136,7 +137,7 @@ export class FriendRequest extends Component {
       });
   }
 
-  cancelFriendRequest(receiver) {
+  async cancelFriendRequest(receiver) {
     const sender = parse();
     if (!sender)
       return;
@@ -146,7 +147,7 @@ export class FriendRequest extends Component {
       receiverID: receiver.id
     }
 
-    fetch('/api/friendrequest/cancel', {
+    await fetch('/api/friendrequest/cancel', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -160,7 +161,7 @@ export class FriendRequest extends Component {
       });
   }
 
-  removeFriend(receiver) {
+  async removeFriend(receiver) {
     const sender = parse();
     if (!sender)
       return;
@@ -170,7 +171,7 @@ export class FriendRequest extends Component {
       receiverID: receiver.id
     }
 
-    fetch('/api/friendrequest/remove', {
+    await fetch('/api/friendrequest/remove', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
