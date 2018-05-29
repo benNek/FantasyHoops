@@ -6,7 +6,6 @@ import { InfoPanel } from './InfoPanel';
 import { Friends } from './Friends/Friends';
 import { Error } from '../Error';
 import { handleErrors } from '../../utils/errors';
-import { Loader } from '../Loader';
 
 export class UserProfile extends Component {
   constructor(props) {
@@ -72,13 +71,10 @@ export class UserProfile extends Component {
         <Error status={this.state.errorStatus} message={this.state.errorMessage} />
       );
     }
-    const avatar = this.state.loader
-      ? <Loader show={this.state.loader} />
-      : <Avatar user={this.state.user} readOnly={this.state.readOnly} />;
     return (
       <div className="container bg-light pt-1">
         <div className="row p-4">
-          {avatar}
+          <Avatar user={this.state.user} readOnly={this.state.readOnly} />
           <div className="col-lg-8 order-lg-2 mt-5">
             <ul className="nav nav-tabs">
               <li className="nav-item">
