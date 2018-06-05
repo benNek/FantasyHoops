@@ -24,9 +24,9 @@
 Feel free to look around in our wiki to find all the information how to launch and use the project.
 
 ### Team members ###
-- [Marius Jurkėnas](https://github.com/Jurkenas)		      - mjurkenas@gmail.com			      - +37060413922
-- [Donatas Kareckas](https://github.com/donciakss)		    - donatas.kareckas@gmail.com	  - +37067732515
-- [Mantas Naidzinavičius](https://github.com/Naidze)	  - naidzinavicius.m@gmail.com 	  - +37063361827
-- [Benas Nekrošius](https://github.com/benNek)		      - benas@nekrosius.com			      - +37064355380
-- [Paulius Prakapavičius](https://github.com/Prakapavicius)	  - p.prakapavicius@gmail.com     - +37063997646
-- [Vilius Šapauskas](https://github.com/viliuusss) 		    - viliussapauskas2g2@gmail.com  - +37061251005
+- [Marius Jurkėnas](https://github.com/Jurkenas)
+- [Donatas Kareckas](https://github.com/donciakss)
+- [Mantas Naidzinavičius](https://github.com/Naidze)
+- [Benas Nekrošius](https://github.com/benNek)
+- [Paulius Prakapavičius](https://github.com/Prakapavicius)
+- [Vilius Šapauskas](https://github.com/viliuusss)
