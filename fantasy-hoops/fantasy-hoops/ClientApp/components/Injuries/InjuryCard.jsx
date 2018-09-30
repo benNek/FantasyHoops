@@ -59,7 +59,7 @@ export class InjuryCard extends Component {
                   onClick={this.showModal}
                   style={{ overflow: 'hidden', cursor: 'pointer' }}
                 >
-                  <i className='fa fa-bar-chart'></i>
+                  <i className='fa fa-chart-bar'></i>
                   {' Stats'}
                 </div>
                 {link}

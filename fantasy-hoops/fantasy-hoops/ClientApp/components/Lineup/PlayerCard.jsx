@@ -18,7 +18,7 @@ export class PlayerCard extends Component {
     if (this.props.status > 0) {
       const pos = this.props.player.position.toLowerCase();
       const innerHTML = this.props.player.selected
-        ? <a className="fa fa-remove"></a>
+        ? <a className="fa fa-times"></a>
         : <i className="fa fa-plus"></i>;
       const buttonState = this.props.status == 1
         ? <div className="button">

@@ -46,18 +46,28 @@ namespace fantasy_hoops.Database
                     continue;
                 }
 
-                JToken stats = p["league"]["standard"]["stats"]["latest"];
-                int gamesPlayed = (int)stats["gamesPlayed"];
-                player.PTS = gamesPlayed <= 0 ? 0 : (double)stats["ppg"];
-                player.REB = gamesPlayed <= 0 ? 0 : (double)stats["rpg"];
-                player.AST = gamesPlayed <= 0 ? 0 : (double)stats["apg"];
-                player.STL = gamesPlayed <= 0 ? 0 : (double)stats["spg"];
-                player.BLK = gamesPlayed <= 0 ? 0 : (double)stats["bpg"];
-                player.TOV = gamesPlayed <= 0 ? 0 : (double)stats["topg"];
-                player.GP = gamesPlayed <= 0 ? 0 : gamesPlayed;
-                player.FPPG = gamesPlayed <= 0 ? 0 : FPPG(player);
-                player.Price = gamesPlayed <= 0 ? PRICE_FLOOR : Price(context, player);
-                player.IsPlaying = IsPlaying(player, games);
+                try
+                {
+                    JToken stats = p["league"]["standard"]["stats"]["latest"];
+                    int gamesPlayed = (int)stats["gamesPlayed"];
+                    player.PTS = gamesPlayed <= 0 ? 0 : (double)stats["ppg"];
+                    player.REB = gamesPlayed <= 0 ? 0 : (double)stats["rpg"];
+                    player.AST = gamesPlayed <= 0 ? 0 : (double)stats["apg"];
+                    player.STL = gamesPlayed <= 0 ? 0 : (double)stats["spg"];
+                    player.BLK = gamesPlayed <= 0 ? 0 : (double)stats["bpg"];
+                    player.TOV = gamesPlayed <= 0 ? 0 : (double)stats["topg"];
+                    player.GP = gamesPlayed <= 0 ? 0 : gamesPlayed;
+                    player.FPPG = gamesPlayed <= 0 ? 0 : FPPG(player);
+                    player.Price = gamesPlayed <= 0 ? PRICE_FLOOR : Price(context, player);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+                finally
+                {
+                    player.IsPlaying = IsPlaying(player, games);
+                }
             }
             context.SaveChanges();
             NextGame.NEXT_GAME_CLIENT = NextGame.NEXT_GAME;
@@ -67,8 +77,7 @@ namespace fantasy_hoops.Database
         private static bool IsPlaying(Player player, JArray games)
         {
             // Don't show players out for more that 5 days
-            if (player.StatusDate.HasValue
-                && (player.StatusDate.Value.AddDays(5) < NextGame.NEXT_GAME)
+            if ((player.StatusDate.AddDays(5) < NextGame.NEXT_GAME)
                 && (player.Status.ToLower().Contains("out")
                  || player.Status.ToLower().Contains("injured")))
                 return false;
