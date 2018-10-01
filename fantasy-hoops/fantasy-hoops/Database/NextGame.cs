@@ -44,6 +44,10 @@ namespace fantasy_hoops.Database
                 if (DateTime.UtcNow < PREVIOUS_LAST_GAME.AddHours(5))
                     nextRun = PREVIOUS_LAST_GAME;
 
+                if (context.Lineups.Any(l => l.Calculated == false)
+                    && DateTime.UtcNow > PREVIOUS_LAST_GAME.AddHours(5))
+                    StatsSeed.Initialize(context);
+
                 JobManager.AddJob(() => StatsSeed.Initialize(context),
                     s => s.WithName("statsSeed_" + nextRun.ToLongDateString())
                     .ToRunOnceAt(nextRun.AddHours(5)));
