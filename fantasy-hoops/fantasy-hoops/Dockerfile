@@ -4,8 +4,8 @@ EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
-COPY ["fantasy-hoops.csproj", "./"]
-RUN dotnet restore "fantasy-hoops.csproj"
+COPY ["fantasy-hoops/fantasy-hoops.csproj", "fantasy-hoops/"]
+RUN dotnet restore "fantasy-hoops/fantasy-hoops.csproj"
 COPY . .
 WORKDIR "/src/fantasy-hoops"
 COPY . .
