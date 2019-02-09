@@ -1,6 +1,6 @@
 #Build
 FROM microsoft/aspnetcore-build:1.0-2.0 AS build-env
-COPY src /app
+COPY . /app
 WORKDIR /app
 RUN ["dotnet", "restore", "fantasy-hoops.sln"]
 RUN set -ex; \
