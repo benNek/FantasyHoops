@@ -4,15 +4,15 @@ EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
-
-COPY *.csproj ./
-RUN dotnet restore 
-
-COPY . ./
-RUN dotnet build -c Release -o /app
+COPY ["fantasy-hoops.csproj", "./"]
+RUN dotnet restore "fantasy-hoops.csproj"
+COPY . .
+WORKDIR "/src/fantasy-hoops"
+COPY . .
+RUN dotnet build "fantasy-hoops.csproj" -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish "fantasy-hoops.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
